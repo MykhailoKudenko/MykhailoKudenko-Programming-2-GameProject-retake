@@ -4,15 +4,15 @@
 <br />
 <div align="center">
 
-  <h2 align="center">NAME OF CHOSEN GAME</h2>
+  <h2 align="center">Ghosts 'n Goblins (nes)</h2>
 
   <p align="center">
     Short description of the game.
     <br />
-    <strong>Original game : </strong>
-    <a href="https://www.google.be/"><strong>General info »</strong></a>
+    <strong>Original game : Ghosts 'n Goblins (NES) </strong>
+    <a href="https://ghostsngoblins.fandom.com/wiki/Ghosts_%27n_Goblins"><strong>General info »</strong></a>
     ·
-    <a href="https://www.google.be/"><strong>Youtube video »<strong></a>
+    <a href="https://www.youtube.com/watch?v=m2iehSbgkto&t=255s"><strong>Youtube video »<strong></a>
     <br />
     <br />
   </p>
@@ -46,12 +46,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-TODO: add screenshot 
+![alt text](image.png)
 
 Here's why:
-TODO: describe why you chose this game 
-* reason 1
-* reason .. 
+* I personaly Liked this game
+* This game met all criteria
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -61,16 +60,20 @@ TODO: describe why you chose this game
 This section gives a clear and detailed overview of which parts of the original game I planned to make.
 
 ### The minimum I will most certainly develop:
-* .. 
-* .. 
+* Player Movement
+* Player Lance
+* One enemy type
+* Miniboss
 
 ### What I will probably make as well:
-* .. 
-* .. 
+* Final boss
+* All enemy types
+* Different weapons
+* Respawn System
+* Sounds
 
 ### What I plan to create if I have enough time left:
-* .. 
-* .. 
+* Easter eggs
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -144,9 +147,9 @@ Explain where you applied inheritance (mandatory).
 <!-- CONTACT -->
 ## Contact
 
-Your Name - email@student.howest.be
+Mykhailo Kudenko - Mykhailo.KUDENKO@student.howest.be
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: https://github.com/HowestDAE/gd14-MykhailoKudenko
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
