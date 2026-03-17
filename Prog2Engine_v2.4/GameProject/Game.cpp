@@ -14,7 +14,44 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	
+	std::vector<Vector2f> m_Ground
+	{
+		Vector2f{ 0 , 94 },
+		Vector2f{ 94 , 94 },
+		Vector2f{ 94 , 38 },
+		Vector2f{ 188 , 38 },
+		Vector2f{ 188 , 65 },
+		Vector2f{ 282 , 65 },
+		Vector2f{ 282 , 97 },
+		Vector2f{ 376 , 97 },
+		Vector2f{ 376 , 43 },
+		Vector2f{ 470 , 43 },
+		Vector2f{ 470 , 114 },
+		Vector2f{ 564 , 114 },
+		Vector2f{ 564 , 7 },
+		Vector2f{ 658 , 7 },
+		Vector2f{ 658 , 92 },
+		Vector2f{ 752 , 92 },
+		Vector2f{ 752 , 118 },
+		Vector2f{ 846 , 118 },
+		Vector2f{ 846 , 25 },
+		Vector2f{ 940 , 25 },
+		Vector2f{ 846 , 0 },
+		Vector2f{ 0 , 0 },
+		Vector2f{ 0 , 94 }
+	};
+
+	std::vector<Vector2f> m_Platform
+	{
+		Vector2f{150, 200},
+		Vector2f{150, 250},
+		Vector2f{250, 250},
+		Vector2f{250, 200},
+		Vector2f{150, 200}
+	};
+
+	m_Vertices.push_back(m_Ground);
+	m_Vertices.push_back(m_Platform);
 }
 
 void Game::Cleanup( )
@@ -30,9 +67,12 @@ void Game::Draw( ) const
 {
 	ClearBackground( );
 	m_P1.Draw();
-	for (size_t i{ 0 }; i < m_Vertices.size() - 1; ++i)
+	for (const std::vector<Vector2f>& platform : m_Vertices)
 	{
-		utils::DrawLine(m_Vertices[i], m_Vertices[i + 1]);
+		for (size_t i = 0; i < platform.size() - 1; ++i)
+		{
+			utils::DrawLine(platform[i], platform[i + 1]);
+		}
 	}
 }
 
