@@ -2,7 +2,7 @@
 #include "Game.h"
 
 Game::Game( const Window& window ) 
-	:BaseGame{ window }
+	:BaseGame{ window }, m_P1(Rectf{50, 150, 20, 20})
 {
 	Initialize();
 }
@@ -23,21 +23,17 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
-	// Check keyboard state
-	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	//if ( pStates[SDL_SCANCODE_RIGHT] )
-	//{
-	//	std::cout << "Right arrow key is down\n";
-	//}
-	//if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
-	//{
-	//	std::cout << "Left and up arrow keys are down\n";
-	//}
+	m_P1.Update(elapsedSec, m_Vertices);
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+	m_P1.Draw();
+	for (size_t i{ 0 }; i < m_Vertices.size() - 1; ++i)
+	{
+		utils::DrawLine(m_Vertices[i], m_Vertices[i + 1]);
+	}
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

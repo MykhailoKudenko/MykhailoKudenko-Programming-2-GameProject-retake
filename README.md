@@ -62,15 +62,17 @@ This section gives a clear and detailed overview of which parts of the original 
 ### The minimum I will most certainly develop:
 * Player Movement
 * Player Lance
-* One enemy type
-* Miniboss
+* Two enemy type (Zombie/Plant)
+* Miniboss (Flying Demon)
+* Sounds
+* MovingPlatforms
 
 ### What I will probably make as well:
-* Final boss
-* All enemy types
+* Final boss (Cyclops)
+* All enemy types (Crows, Flying Knights, Flying Monsters)
 * Different weapons
 * Respawn System
-* Sounds
+
 
 ### What I plan to create if I have enough time left:
 * Easter eggs
