@@ -52,6 +52,14 @@ void Game::Initialize( )
 
 	m_Vertices.push_back(m_Ground);
 	m_Vertices.push_back(m_Platform);
+
+	m_Zombies.emplace_back(Rectf{ 50, 250, 20, 30 }, false);
+	m_Zombies.emplace_back(Rectf{ 50, 450, 20, 30 }, true);
+
+	for (Zombie& zomb : m_Zombies)
+	{
+		zomb.SetWorld(&m_Vertices);
+	}
 }
 
 void Game::Cleanup( )
@@ -61,12 +69,22 @@ void Game::Cleanup( )
 void Game::Update( float elapsedSec )
 {
 	m_P1.Update(elapsedSec, m_Vertices);
+	for (Zombie& zomb : m_Zombies)
+	{
+		zomb.Update(elapsedSec);
+	}
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
-	m_P1.Draw();
+
+	glPushMatrix();
+
+	//glTranslatef(-m_P1.GetCenterPosition().x, -m_P1.GetCenterPosition().y, 0);
+	glTranslatef(-m_P1.GetCenterPosition().x + 423.f, 0, 0);
+
+	
 	for (const std::vector<Vector2f>& platform : m_Vertices)
 	{
 		for (size_t i = 0; i < platform.size() - 1; ++i)
@@ -74,6 +92,18 @@ void Game::Draw( ) const
 			utils::DrawLine(platform[i], platform[i + 1]);
 		}
 	}
+
+	for (const Zombie& zomb : m_Zombies)
+	{
+		zomb.Draw();
+	}
+
+
+	//glTranslatef(m_P1.GetCenterPosition().x, m_P1.GetCenterPosition().y, 0);
+	m_P1.Draw();
+
+	glPopMatrix();
+
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

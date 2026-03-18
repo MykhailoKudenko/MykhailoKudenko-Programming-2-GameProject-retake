@@ -11,10 +11,11 @@ public:
 	void Draw() const;
 	void Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& vertices);
 
+	Vector2f GetCenterPosition() const;
+
 private:
 
-	bool LoopOverVertecies(const std::vector<std::vector<Vector2f>>& vertices, const Vector2f& rayP1, const Vector2f& rayP2, utils::HitInfo& myInfo);
-
+	
 	Rectf m_Collider;
 
 	//movement

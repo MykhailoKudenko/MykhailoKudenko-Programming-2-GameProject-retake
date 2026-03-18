@@ -1,56 +1,21 @@
 #include "pch.h"
-#include "Player.h"
+#include "Zombie.h"
+#include "utils.h"
 
-
-//temp
-#include <iostream>
-
-Player::Player(Rectf Start) : m_Collider{ Start }
+Zombie::Zombie(Rectf Start, bool FacingRight) : Enemy(Start)
 {
+    m_Speed = 30;
+    if (!FacingRight)
+    {
+        m_Speed = m_Speed * -1;
 
-}
-Player::~Player()
-{
-
+    }
 }
 
-void Player::Draw() const
-{
-	utils::SetColor(Color4f{ 0, 1, 0, 1 });
-	utils::DrawRect(m_Collider);
+void Zombie::Update(float elapsedSec){
 
-	
-
-}
-void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& vertices)
-{
-	m_Velocity.x = 0;
-	// left / right
-	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
-	if (pStates[SDL_SCANCODE_RIGHT] || pStates[SDL_SCANCODE_D])
-	{
-		m_Velocity.x = m_WalkingSpeed * elapsedSec;
-	}
-	if (pStates[SDL_SCANCODE_LEFT] || pStates[SDL_SCANCODE_A])
-	{
-		m_Velocity.x = -m_WalkingSpeed * elapsedSec;
-	}
-	if ((pStates[SDL_SCANCODE_UP] || pStates[SDL_SCANCODE_W] || pStates[SDL_SCANCODE_SPACE]) && m_IsOnTheGround)
-	{
-		m_JumpingTimeCurrent = m_JumpingTimeMax;
-		m_IsOnTheGround = false;
-	}
-
-	//Jump/Gravity logic
-	if (m_JumpingTimeCurrent >= 0)
-	{
-		m_JumpingTimeCurrent -= elapsedSec;
-		m_Velocity.y = m_JumpingSpeed * elapsedSec;
-	}
-	else
-	{
-		m_Velocity.y = m_Gravity * elapsedSec;
-	}
+	m_Velocity.x = m_Speed * elapsedSec;
+	m_Velocity.y = m_Gravity * elapsedSec;
 
 	//collisions right/left
 	utils::HitInfo myInfoTopSide{};
@@ -61,15 +26,15 @@ void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& 
 	if (m_Velocity.x > 0)
 	{
 		bool hitTopSide = utils::LoopOverVertecies(
-			vertices,
+			*m_pVertices,
 			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
 			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom + m_Collider.height },
 			myInfoTopSide);
 
 		bool hitBottomSide = utils::LoopOverVertecies(
-			vertices,
-			Vector2f{ m_Collider.left, m_Collider.bottom+1 },
-			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom+1 },
+			*m_pVertices,
+			Vector2f{ m_Collider.left, m_Collider.bottom + 1 },
+			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom + 1 },
 			myInfoBottomSide);
 		hitWallOnX = hitTopSide || hitBottomSide;
 
@@ -80,6 +45,7 @@ void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& 
 		else
 		{
 			// optional snap against wall
+			m_Speed = m_Speed * -1;
 			if (hitTopSide && hitBottomSide)
 			{
 				m_Collider.left = std::min(myInfoTopSide.intersectPoint.x, myInfoBottomSide.intersectPoint.x) - m_Collider.width;
@@ -101,15 +67,15 @@ void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& 
 		// moving left: cast rays from left side outward
 
 		bool hitTopSide = utils::LoopOverVertecies(
-			vertices,
+			*m_pVertices,
 			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
 			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom + m_Collider.height },
 			myInfoTopSide);
 
 		bool hitBottomSide = utils::LoopOverVertecies(
-			vertices,
-			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom+1 },
-			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom+1 },
+			*m_pVertices,
+			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1 },
+			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom + 1 },
 			myInfoBottomSide);
 
 		hitWallOnX = hitTopSide || hitBottomSide;
@@ -121,6 +87,7 @@ void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& 
 		else
 		{
 			// optional snap against wall
+			m_Speed = m_Speed * -1;
 			if (hitTopSide && hitBottomSide)
 			{
 				m_Collider.left = std::max(myInfoTopSide.intersectPoint.x, myInfoBottomSide.intersectPoint.x);
@@ -137,32 +104,36 @@ void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& 
 		}
 	}
 	//collisions gravity
-	
+
 	utils::HitInfo myInfoLeft{};
 	utils::HitInfo myInfoRight{};
 
-	bool hitLeft = utils::LoopOverVertecies(vertices, Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height }, Vector2f{ m_Collider.left, m_Collider.bottom - 1.f }, myInfoLeft );
-	bool hitRight = utils::LoopOverVertecies(vertices, Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height }, Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom - 1.f }, myInfoRight);
+	bool hitLeft = utils::LoopOverVertecies(*m_pVertices, 
+		Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height }, 
+		Vector2f{ m_Collider.left, m_Collider.bottom - 1.f }, 
+		myInfoLeft);
+	bool hitRight = utils::LoopOverVertecies(*m_pVertices, 
+		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height }, 
+		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom - 1.f }, 
+		myInfoRight);
 
-	if (!(hitLeft || hitRight) || m_JumpingTimeCurrent >= 0) //if in the air
+	if (!(hitLeft || hitRight)) 
 	{
 		m_Collider.bottom += m_Velocity.y;
-		m_IsOnTheGround = false;
 	}
 	else //if not in the air
 	{
-		bool validLeftHit = hitLeft && myInfoLeft.intersectPoint.y <= m_Collider.bottom-1.f + 2.f;
-		bool validRightHit = hitRight && myInfoRight.intersectPoint.y <= m_Collider.bottom-1.f + 2.f;
+		bool validLeftHit = hitLeft && myInfoLeft.intersectPoint.y <= m_Collider.bottom - 1.f + 2.f;
+		bool validRightHit = hitRight && myInfoRight.intersectPoint.y <= m_Collider.bottom - 1.f + 2.f;
 
 		if (!(validLeftHit || validRightHit)) //if hit is valid
 		{
 			m_Collider.bottom += m_Velocity.y;
-			
-			
+
+
 		}
 		else //slap to the ground
 		{
-			m_IsOnTheGround = true;
 			m_Velocity.y = 0;
 
 			if (validLeftHit && validRightHit)
@@ -182,7 +153,16 @@ void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& 
 }
 
 
-Vector2f Player::GetCenterPosition() const
+
+void Zombie::Draw() const
 {
-	return(Vector2f{ m_Collider.left + m_Collider.width / 2, m_Collider.bottom + m_Collider.height });
+    utils::SetColor(Color4f{ 0, 1, 0, 1 });
+    utils::DrawRect(m_Collider);
+}
+
+
+
+void Zombie::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
+{
+    m_pVertices = vertices;
 }

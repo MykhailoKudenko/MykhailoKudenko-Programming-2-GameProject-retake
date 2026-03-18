@@ -5,6 +5,8 @@
 #include <vector>
 #include "utils.h"
 
+#include "Zombie.h"
+
 class Game : public BaseGame
 {
 public:
@@ -36,4 +38,6 @@ private:
 	Player m_P1;
 
 	std::vector<std::vector<Vector2f>> m_Vertices;
+
+	std::vector<Zombie> m_Zombies;
 };

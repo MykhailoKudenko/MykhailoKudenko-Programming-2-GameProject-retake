@@ -682,5 +682,29 @@ bool utils::IntersectRectLine(const Rectf& r, const Vector2f& p1, const Vector2f
 	intersectMax = tMax;
 	return true;
 }
+//MY OWN STUFF
+// same as raycast but for a few vectors 
+bool utils::LoopOverVertecies(const std::vector<std::vector<Vector2f>>& vertices, const Vector2f& rayP1, const Vector2f& rayP2, utils::HitInfo& myInfo)
+{
+	bool didHit = false;
+	float closestLambda = 1.f;
+
+	for (const std::vector<Vector2f>& platform : vertices)
+	{
+		utils::HitInfo tempHit{};
+
+		if (utils::Raycast(platform, rayP1, rayP2, tempHit))
+		{
+			if (!didHit || tempHit.lambda < closestLambda)
+			{
+				didHit = true;
+				closestLambda = tempHit.lambda;
+				myInfo = tempHit;
+			}
+		}
+
+	}
+	return(didHit);
+}
 
 #pragma endregion CollisionFunctionality
