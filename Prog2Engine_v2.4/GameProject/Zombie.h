@@ -1,7 +1,7 @@
 #pragma once
 #include "Enemy.h"
 
-class Zombie : protected Enemy 
+class Zombie : public Enemy
 {
 public:
 	Zombie(Rectf Start, bool FacingRight);
@@ -14,6 +14,6 @@ public:
 
 private:
 	const std::vector<std::vector<Vector2f>>* m_pVertices{}; //mase static later
-	const float m_Gravity = -60;
+	static constexpr float m_Gravity{ -60.f }; // new stull it is made at compile time
 };
 

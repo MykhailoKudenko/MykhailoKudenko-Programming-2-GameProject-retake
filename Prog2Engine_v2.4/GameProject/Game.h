@@ -6,6 +6,8 @@
 #include "utils.h"
 
 #include "Zombie.h"
+#include "Lance.h"
+#include "Level.h"
 
 class Game : public BaseGame
 {
@@ -37,7 +39,10 @@ private:
 
 	Player m_P1;
 
-	std::vector<std::vector<Vector2f>> m_Vertices;
+	Level* m_level1;
+
+
 
 	std::vector<Zombie> m_Zombies;
+	std::vector<Projectile> m_Projectiles;
 };

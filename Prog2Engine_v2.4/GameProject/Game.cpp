@@ -14,65 +14,131 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	std::vector<Vector2f> m_Ground
-	{
-		Vector2f{ 0 , 94 },
-		Vector2f{ 94 , 94 },
-		Vector2f{ 94 , 38 },
-		Vector2f{ 188 , 38 },
-		Vector2f{ 188 , 65 },
-		Vector2f{ 282 , 65 },
-		Vector2f{ 282 , 97 },
-		Vector2f{ 376 , 97 },
-		Vector2f{ 376 , 43 },
-		Vector2f{ 470 , 43 },
-		Vector2f{ 470 , 114 },
-		Vector2f{ 564 , 114 },
-		Vector2f{ 564 , 7 },
-		Vector2f{ 658 , 7 },
-		Vector2f{ 658 , 92 },
-		Vector2f{ 752 , 92 },
-		Vector2f{ 752 , 118 },
-		Vector2f{ 846 , 118 },
-		Vector2f{ 846 , 25 },
-		Vector2f{ 940 , 25 },
-		Vector2f{ 846 , 0 },
-		Vector2f{ 0 , 0 },
-		Vector2f{ 0 , 94 }
-	};
 
-	std::vector<Vector2f> m_Platform
-	{
-		Vector2f{150, 200},
-		Vector2f{150, 250},
-		Vector2f{250, 250},
-		Vector2f{250, 200},
-		Vector2f{150, 200}
-	};
 
-	m_Vertices.push_back(m_Ground);
-	m_Vertices.push_back(m_Platform);
+	m_level1 = new Level(
+		std::vector<std::vector<Vector2f>>
+	{
+		{
+			Vector2f{ 0, 37 },
+			Vector2f{ 1246, 37 },
+			Vector2f{ 1246, 0 }
+		},
+		{
+			Vector2f{ 450, 95 },
+			Vector2f{ 847, 95 }
+		},
+		{
+			Vector2f{ 1343, 0 },
+			Vector2f{ 1343, 37 },
+			Vector2f{ 1463, 37 },
+			Vector2f{ 1463, 0 }
+		},
+		{
+			Vector2f{ 1487, 0 },
+			Vector2f{ 1487, 37 },
+			Vector2f{ 1511, 37 },
+			Vector2f{ 1511, 0 }
+		},
+		{
+			Vector2f{ 1535, 0 },
+			Vector2f{ 1535, 37 },
+			Vector2f{ 1835, 37 },
+			Vector2f{ 1835, 0 }
+		},
+		{
+			Vector2f{ 1859, 0 },
+			Vector2f{ 1859, 37 },
+			Vector2f{ 2026, 37 },
+			Vector2f{ 2026, 0 }
+		},
+		{
+			Vector2f{ 2051, 0 },
+			Vector2f{ 2051, 37 },
+			Vector2f{ 2686, 37 },
+			Vector2f{ 2686, 0 }
+		},
+		{
+			Vector2f{ 0, 0 },
+			Vector2f{ 0, 179 }
+		},
+		{
+			Vector2f{ 2686, 0 },
+			Vector2f{ 2686, 179 }
+		}
+	},
+		std::vector<Rectf>
+	{
+		Rectf{ 539.f, 42.f, 11.f, 53.f },
+		Rectf{ 683.f, 42.f, 11.f, 53.f },
+		Rectf{ 803.f, 42.f, 11.f, 53.f }
+	},
+		"Level1.png"
+	);
+	//2026 2051
 
 	m_Zombies.emplace_back(Rectf{ 50, 250, 20, 30 }, false);
 	m_Zombies.emplace_back(Rectf{ 50, 450, 20, 30 }, true);
 
 	for (Zombie& zomb : m_Zombies)
 	{
-		zomb.SetWorld(&m_Vertices);
+		zomb.SetWorld(&m_level1->GetVertecies());
 	}
 }
 
 void Game::Cleanup( )
 {
+	delete m_level1;
 }
 
 void Game::Update( float elapsedSec )
 {
-	m_P1.Update(elapsedSec, m_Vertices);
+	m_P1.Update(elapsedSec, m_level1->GetVertecies(), m_level1->GetLadders());
+
+
+	for (Projectile& Proj : m_Projectiles)
+	{
+		Proj.Update(elapsedSec);
+	}
+
 	for (Zombie& zomb : m_Zombies)
 	{
 		zomb.Update(elapsedSec);
+		if (utils::IsOverlapping(zomb.GetHitbox(), m_P1.GetHitbox()))
+			m_P1.TakeDamage();
+
+		for (Projectile& Proj : m_Projectiles)
+		{
+			if (utils::IsOverlapping(zomb.GetHitbox(), Proj.GetHitbox()))
+			{
+				zomb.Kill();
+				Proj.Kill();
+			}
+		}
 	}
+	if (m_P1.DoesWantToThrow())
+	{
+		m_Projectiles.emplace_back(Lance(m_P1.GetCenterPosition(), m_P1.IsFacingRight()));
+	}
+	//clean up
+	for (int i = 0; i < m_Zombies.size(); ++i)
+	{
+		if (m_Zombies[i].isDead())
+		{
+			m_Zombies.erase(m_Zombies.begin() + i);
+			--i;
+		}
+	}
+
+	for (int i = 0; i < m_Projectiles.size(); ++i)
+	{
+		if (m_Projectiles[i].isDead())
+		{
+			m_Projectiles.erase(m_Projectiles.begin() + i);
+			--i;
+		}
+	}
+
 }
 
 void Game::Draw( ) const
@@ -83,23 +149,20 @@ void Game::Draw( ) const
 
 	//glTranslatef(-m_P1.GetCenterPosition().x, -m_P1.GetCenterPosition().y, 0);
 	glTranslatef(-m_P1.GetCenterPosition().x + 423.f, 0, 0);
-
-	
-	for (const std::vector<Vector2f>& platform : m_Vertices)
-	{
-		for (size_t i = 0; i < platform.size() - 1; ++i)
-		{
-			utils::DrawLine(platform[i], platform[i + 1]);
-		}
-	}
+	//glScalef(4, 4, 1);
+	m_level1->Draw();
 
 	for (const Zombie& zomb : m_Zombies)
 	{
 		zomb.Draw();
 	}
+	for (const Projectile& Proj : m_Projectiles)
+	{
+		Proj.Draw();
+	}
 
 
-	//glTranslatef(m_P1.GetCenterPosition().x, m_P1.GetCenterPosition().y, 0);
+
 	m_P1.Draw();
 
 	glPopMatrix();
@@ -174,3 +237,4 @@ void Game::ClearBackground( ) const
 	glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
 }
+
