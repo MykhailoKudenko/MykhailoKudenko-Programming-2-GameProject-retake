@@ -2,6 +2,7 @@
 #include <vector>
 #include "Vector2f.h"
 
+
 namespace utils
 {
 	const float g_Pi{ 3.1415926535f };
@@ -85,4 +86,5 @@ namespace utils
 	bool LoopOverVertecies(const std::vector<std::vector<Vector2f>>& vertices, const Vector2f& rayP1, const Vector2f& rayP2, utils::HitInfo& myInfo);// same as raycast but for a few vectors 
 #pragma endregion CollisionFunctionality
 
+	bool AlmostEqual(float a, float b, float epsilon = 0.0001f);
 }

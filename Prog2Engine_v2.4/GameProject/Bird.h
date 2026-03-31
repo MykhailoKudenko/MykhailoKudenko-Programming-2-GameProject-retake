@@ -1,0 +1,36 @@
+#pragma once
+#include "Enemy.h"
+#include "Animation.h"
+
+enum class BirdState
+{
+	Spawning,
+	Flying
+};
+
+class Bird : public Enemy
+{
+public:
+	Bird(Vector2f startPos, bool facingRight);
+
+	static void InitializeAssets();
+	static void FreeAssets();
+
+	void Update(float elapsedSec) override;
+	void Draw() const override;
+
+private:
+	bool m_IsFacingRight{ true };
+
+	BirdState m_State{ BirdState::Spawning };
+
+	float m_AnimTime{ 0.f };
+	float m_FlyTime{ 0.f };
+	float m_StartY{};
+
+	float m_Amplitude{ 8.f };
+	float m_Frequency{ 2.f };
+
+	static Animation* m_pFlyAnimation;
+	static Animation* m_pSpawnAnimation;
+};

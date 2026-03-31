@@ -160,8 +160,13 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="FlyingKnight.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Lance.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
@@ -171,8 +176,13 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Bird.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="FlyingKnight.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Ghost.h" />
     <ClInclude Include="Lance.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="pch.h" />

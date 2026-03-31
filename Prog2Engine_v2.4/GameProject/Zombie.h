@@ -1,19 +1,36 @@
 #pragma once
 #include "Enemy.h"
+#include "Animation.h"
+
+enum class ZombieState
+{
+	Spawning,
+	Walking
+};
 
 class Zombie : public Enemy
 {
+
 public:
-	Zombie(Rectf Start, bool FacingRight);
+	Zombie(Vector2f StartPos, bool facingRight);
+
+	static void InitializeAssets();
+	static void FreeAssets();
 
 	void Update(float elapsedSec) override;
-
 	void Draw() const override;
 
 	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
 
 private:
-	const std::vector<std::vector<Vector2f>>* m_pVertices{}; //mase static later
-	static constexpr float m_Gravity{ -60.f }; // new stull it is made at compile time
-};
+	const std::vector<std::vector<Vector2f>>* m_pVertices{};
+	static constexpr float m_Gravity{ -60.f };
 
+	bool m_IsFacingRight{ true };
+
+	ZombieState m_State{ ZombieState::Spawning };
+	float m_AnimTime{ 0.f };
+
+	static Animation* m_pWalkAnimation;
+	static Animation* m_pSpawnAnimation;
+};

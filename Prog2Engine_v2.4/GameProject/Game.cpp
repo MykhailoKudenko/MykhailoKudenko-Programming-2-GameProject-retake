@@ -2,19 +2,29 @@
 #include "Game.h"
 
 Game::Game( const Window& window ) 
-	:BaseGame{ window }, m_P1(Rectf{50, 150, 20, 20})
+	:BaseGame{ window }, m_P1(Vector2f{50, 150})
 {
 	Initialize();
 }
 
 Game::~Game( )
 {
+	Zombie::FreeAssets();
+	Bird::FreeAssets();
+	FlyingKnight::FreeAssets();
+	Ghost::FreeAssets();
+
 	Cleanup( );
 }
 
-void Game::Initialize( )
+void Game::Initialize()
 {
+	Zombie::InitializeAssets();
+	Bird::InitializeAssets();
+	FlyingKnight::InitializeAssets();
+	Ghost::InitializeAssets();
 
+	m_pEntityManager = new EntityManager();
 
 	m_level1 = new Level(
 		std::vector<std::vector<Vector2f>>
@@ -70,103 +80,73 @@ void Game::Initialize( )
 		std::vector<Rectf>
 	{
 		Rectf{ 539.f, 42.f, 11.f, 53.f },
-		Rectf{ 683.f, 42.f, 11.f, 53.f },
-		Rectf{ 803.f, 42.f, 11.f, 53.f }
+			Rectf{ 683.f, 42.f, 11.f, 53.f },
+			Rectf{ 803.f, 42.f, 11.f, 53.f }
 	},
+		std::vector<Level::MovingPlatform>
+	{
+		Level::MovingPlatform
+		{
+			Rectf{ 1246.f, 24.f, 32.f, 13.f },
+			20.f,
+			1246.f,
+			1343.f
+		}
+	},
+
+		"Platform.png",
 		"Level1.png"
 	);
-	//2026 2051
+	
+	
+	m_pEntityManager->SetLevel(m_level1);
 
-	m_Zombies.emplace_back(Rectf{ 50, 250, 20, 30 }, false);
-	m_Zombies.emplace_back(Rectf{ 50, 450, 20, 30 }, true);
+	m_pEntityManager->AddZombie(Vector2f{50, 250}, false);
+	m_pEntityManager->AddZombie(Vector2f{ 50, 450 }, true);
 
-	for (Zombie& zomb : m_Zombies)
-	{
-		zomb.SetWorld(&m_level1->GetVertecies());
-	}
+	m_pEntityManager->AddBird(Vector2f{ 250, 50 }, false);
+
+	m_pEntityManager->AddFlyingKnight(Vector2f{ 350, 50 }, false);
+
+	m_pEntityManager->AddGhost(Vector2f{ 400, 200 }, false);
 }
 
-void Game::Cleanup( )
+void Game::Cleanup()
 {
+	delete m_pEntityManager;
+	m_pEntityManager = nullptr;
+
 	delete m_level1;
+	m_level1 = nullptr;
 }
 
-void Game::Update( float elapsedSec )
+void Game::Update(float elapsedSec)
 {
-	m_P1.Update(elapsedSec, m_level1->GetVertecies(), m_level1->GetLadders());
+	m_level1->Update(elapsedSec);
 
+	m_P1.Update(
+		elapsedSec,
+		m_level1->GetVertecies(),
+		m_level1->GetLadders(),
+		m_level1->GetPlatformTopEdges()
+	);
 
-	for (Projectile& Proj : m_Projectiles)
-	{
-		Proj.Update(elapsedSec);
-	}
-
-	for (Zombie& zomb : m_Zombies)
-	{
-		zomb.Update(elapsedSec);
-		if (utils::IsOverlapping(zomb.GetHitbox(), m_P1.GetHitbox()))
-			m_P1.TakeDamage();
-
-		for (Projectile& Proj : m_Projectiles)
-		{
-			if (utils::IsOverlapping(zomb.GetHitbox(), Proj.GetHitbox()))
-			{
-				zomb.Kill();
-				Proj.Kill();
-			}
-		}
-	}
-	if (m_P1.DoesWantToThrow())
-	{
-		m_Projectiles.emplace_back(Lance(m_P1.GetCenterPosition(), m_P1.IsFacingRight()));
-	}
-	//clean up
-	for (int i = 0; i < m_Zombies.size(); ++i)
-	{
-		if (m_Zombies[i].isDead())
-		{
-			m_Zombies.erase(m_Zombies.begin() + i);
-			--i;
-		}
-	}
-
-	for (int i = 0; i < m_Projectiles.size(); ++i)
-	{
-		if (m_Projectiles[i].isDead())
-		{
-			m_Projectiles.erase(m_Projectiles.begin() + i);
-			--i;
-		}
-	}
-
+	m_pEntityManager->Update(elapsedSec, m_P1);
 }
 
-void Game::Draw( ) const
+void Game::Draw() const
 {
-	ClearBackground( );
+	ClearBackground();
 
 	glPushMatrix();
 
-	//glTranslatef(-m_P1.GetCenterPosition().x, -m_P1.GetCenterPosition().y, 0);
 	glTranslatef(-m_P1.GetCenterPosition().x + 423.f, 0, 0);
-	//glScalef(4, 4, 1);
+
 	m_level1->Draw();
-
-	for (const Zombie& zomb : m_Zombies)
-	{
-		zomb.Draw();
-	}
-	for (const Projectile& Proj : m_Projectiles)
-	{
-		Proj.Draw();
-	}
-
-
-
+	m_pEntityManager->Draw();
 	m_P1.Draw();
 
 	glPopMatrix();
-
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

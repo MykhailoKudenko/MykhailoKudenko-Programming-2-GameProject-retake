@@ -351,3 +351,38 @@ void Texture::DrawFilledRect(const Rectf& rect) const
 	glEnd();
 
 }
+//my stuff
+void Texture::Draw(const Vector2f& dstBottomLeft, bool isMirrored) const
+{
+	const Rectf dstRect
+	{
+		dstBottomLeft.x,
+		dstBottomLeft.y,
+		m_Width,
+		m_Height
+	};
+
+	if (!isMirrored)
+	{
+		Draw(dstRect);
+		return;
+	}
+
+	glPushMatrix();
+
+	glTranslatef(dstRect.left, dstRect.bottom, 0.f);
+	glTranslatef(dstRect.width, 0.f, 0.f);
+	glScalef(-1.f, 1.f, 1.f);
+
+	Rectf localRect
+	{
+		0.f,
+		0.f,
+		dstRect.width,
+		dstRect.height
+	};
+
+	Draw(localRect);
+
+	glPopMatrix();
+}

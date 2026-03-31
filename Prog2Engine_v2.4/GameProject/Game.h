@@ -5,9 +5,10 @@
 #include <vector>
 #include "utils.h"
 
-#include "Zombie.h"
 #include "Lance.h"
 #include "Level.h"
+
+#include "EntityManager.h"
 
 class Game : public BaseGame
 {
@@ -38,11 +39,6 @@ private:
 	void ClearBackground( ) const;
 
 	Player m_P1;
-
 	Level* m_level1;
-
-
-
-	std::vector<Zombie> m_Zombies;
-	std::vector<Projectile> m_Projectiles;
+	EntityManager* m_pEntityManager;
 };

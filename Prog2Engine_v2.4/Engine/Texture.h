@@ -20,6 +20,9 @@ public:
 	float GetHeight() const;
 	bool IsCreationOk( ) const;
 
+	//my stuff
+	void Draw(const Vector2f& dstBottomLeft, bool isMirrored) const;
+	//my stuff end
 private:
 	//DATA MEMBERS
 	GLuint m_Id;
