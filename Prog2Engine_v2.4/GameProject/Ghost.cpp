@@ -20,7 +20,6 @@ Ghost::Ghost(Vector2f startPos, bool facingRight)
 
 void Ghost::Update(float elapsedSec)
 {
-	// fallback if somebody accidentally calls base-style update
 	m_AnimTime += elapsedSec;
 }
 

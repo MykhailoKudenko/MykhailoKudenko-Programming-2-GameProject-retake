@@ -2,11 +2,11 @@
 #include "Projectile.h"
 #include "Texture.h"
 
-class Lance : public Projectile
+class Knife : public Projectile
 {
 public:
-	Lance(Vector2f pos, bool isRight);
-	virtual ~Lance() = default;
+	Knife(Vector2f pos, bool isRight);
+	virtual ~Knife() = default;
 
 	void Draw() const override;
 
@@ -16,3 +16,4 @@ public:
 private:
 	static Texture* m_pTexture;
 };
+

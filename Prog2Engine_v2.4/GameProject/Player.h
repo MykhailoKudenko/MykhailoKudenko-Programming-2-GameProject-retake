@@ -18,6 +18,13 @@ enum class PlayerState
 	Dead
 };
 
+enum class PlayerWeapon
+{
+	Lance,
+	Knife,
+	Tourch
+};
+
 
 class Player
 {
@@ -37,6 +44,8 @@ public:
 	bool DoesWantToThrow() const;
 	bool IsFacingRight() const;
 
+	PlayerWeapon GetPlayerWeapon() const;
+	void SetPlayerWeapon(PlayerWeapon weapon);
 private:
 	void UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec);
 	void UpdateInput();
@@ -64,15 +73,15 @@ private:
 	Rectf m_Collider;
 
 	//jumping
-	float m_JumpDirectionX{0};
-	const float m_JumpTimeUpMax{ 0.3 };
-	float m_JumpTimeUpCurrent{ 0 };
+	float m_JumpDirectionX{0.f};
+	const float m_JumpTimeUpMax{ 0.3f };
+	float m_JumpTimeUpCurrent{ 0.f };
 	//KonkBack
-	const float m_InvulnerableTimeMax{ 0.6 };
-	float m_InvulnerableTimeCurrent{ 0 };
-	const float	m_KnockbackTimeMax{ 0.2 };
-	float m_KnockbackTimeCurrent{ 0 };
-	float m_KnockBackDirectionX{ -1 };
+	const float m_InvulnerableTimeMax{ 0.6f };
+	float m_InvulnerableTimeCurrent{ 0.f };
+	const float	m_KnockbackTimeMax{ 0.2f };
+	float m_KnockbackTimeCurrent{ 0.f };
+	float m_KnockBackDirectionX{ -1.f };
 	//climbing 
 	const Rectf* m_pCurrentLadder = nullptr;
 	bool m_BlockVerticalActionsUntilReleased{ false };
@@ -101,6 +110,8 @@ private:
 	//Throwing
 	bool m_PreviousShootPressed{ false };
 	bool m_DoesWantToThrow{ false };
-	//entity manager
+	//wepon
+	PlayerWeapon m_MyWeapon{ PlayerWeapon::Knife };
+
 };
 

@@ -1,23 +1,24 @@
+
 #include "pch.h"
-#include "Lance.h"
+#include "Knife.h"
 #include "utils.h"
 
-Texture* Lance::m_pTexture{ nullptr };
+Texture* Knife::m_pTexture{ nullptr };
 
-Lance::Lance(Vector2f pos, bool isRight)
+Knife::Knife(Vector2f pos, bool isRight)
 	: Projectile(Rectf{ pos.x, pos.y, 20.f, 10.f })
 {
 	if (isRight)
 	{
-		m_Speed.x = 60.f;
+		m_Speed.x = 80.f;
 	}
 	else
 	{
-		m_Speed.x = -60.f;
+		m_Speed.x = -80.f;
 	}
 }
 
-void Lance::Draw() const
+void Knife::Draw() const
 {
 	if (m_pTexture == nullptr)
 	{
@@ -30,15 +31,15 @@ void Lance::Draw() const
 	);
 }
 
-void Lance::InitializeAssets()
+void Knife::InitializeAssets()
 {
 	if (m_pTexture == nullptr)
 	{
-		m_pTexture = new Texture{ "Lance.png" };
+		m_pTexture = new Texture{ "Knife.png" };
 	}
 }
 
-void Lance::FreeAssets()
+void Knife::FreeAssets()
 {
 	delete m_pTexture;
 	m_pTexture = nullptr;

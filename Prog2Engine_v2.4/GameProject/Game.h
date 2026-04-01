@@ -5,7 +5,6 @@
 #include <vector>
 #include "utils.h"
 
-#include "Lance.h"
 #include "Level.h"
 
 #include "EntityManager.h"

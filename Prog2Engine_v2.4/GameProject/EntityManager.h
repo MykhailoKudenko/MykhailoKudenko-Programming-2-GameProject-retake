@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-#include "Lance.h"
+
 #include "Player.h"
 #include "Level.h"
 
@@ -9,6 +9,15 @@
 #include "Zombie.h"
 #include "FlyingKnight.h"
 #include "Ghost.h"
+#include "Plant.h"
+
+#include "Lance.h"
+#include "Knife.h"
+#include "Torch.h"
+
+#include "PlantProjectile.h"
+#include "Drop.h"
+
 
 class EntityManager
 {
@@ -25,9 +34,15 @@ public:
     void AddBird(const Vector2f& SpawnPos, bool startsFacingRight);
     void AddFlyingKnight(const Vector2f& SpawnPos, bool startsFacingRight);
     void AddGhost(const Vector2f& spawnPos, bool startsFacingRight);
+    void AddPlant(const Vector2f& spawnPos);
 
-    void SpawnProjectile(const Projectile& projectile);
+    void SpawnLance(const Vector2f& pos, bool isRight);
+    void SpawnKnife(const Vector2f& pos, bool isRight);
+    void SpawnTourch(const Vector2f& pos, bool isRight);
 
+    void SpawnPlantProjectile(const Vector2f& pos, const Vector2f& direction);
+
+    void AddDrop(const Vector2f& pos, PickupType type);
 
 private:
     void RemoveDeadEntities();
@@ -35,5 +50,7 @@ private:
     const Level* m_pLevel{ nullptr };
 
     std::vector<Enemy*> m_Enemies;
-    std::vector<Projectile> m_Projectiles;
+    std::vector<Projectile*> m_PlayerProjectiles;
+    std::vector<Projectile*> m_EnemyProjectiles;
+    std::vector<Drop*> m_Drops;
 };

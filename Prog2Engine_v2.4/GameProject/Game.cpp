@@ -13,7 +13,15 @@ Game::~Game( )
 	Bird::FreeAssets();
 	FlyingKnight::FreeAssets();
 	Ghost::FreeAssets();
+	Plant::FreeAssets();
 
+	Lance::FreeAssets();
+	Knife::FreeAssets();
+	Torch::FreeAssets();
+	
+	PlantProjectile::FreeAssets();
+
+	Drop::FreeAssets();
 	Cleanup( );
 }
 
@@ -23,6 +31,15 @@ void Game::Initialize()
 	Bird::InitializeAssets();
 	FlyingKnight::InitializeAssets();
 	Ghost::InitializeAssets();
+	Plant::InitializeAssets();
+
+	Lance::InitializeAssets();
+	Knife::InitializeAssets();
+	Torch::InitializeAssets();
+
+	PlantProjectile::InitializeAssets();
+
+	Drop::InitializeAssets();
 
 	m_pEntityManager = new EntityManager();
 
@@ -109,6 +126,13 @@ void Game::Initialize()
 	m_pEntityManager->AddFlyingKnight(Vector2f{ 350, 50 }, false);
 
 	m_pEntityManager->AddGhost(Vector2f{ 400, 200 }, false);
+	m_pEntityManager->AddPlant(Vector2f{ 600, 50 });
+
+	m_pEntityManager->AddDrop(Vector2f{ 500, 50 }, PickupType::Lance);
+	m_pEntityManager->AddDrop(Vector2f{ 550, 50 }, PickupType::Knife);
+	m_pEntityManager->AddDrop(Vector2f{ 600, 50 }, PickupType::Torch);
+	m_pEntityManager->AddDrop(Vector2f{ 650, 50 }, PickupType::Doll);
+	m_pEntityManager->AddDrop(Vector2f{ 700, 50 }, PickupType::MoneyBag);
 }
 
 void Game::Cleanup()

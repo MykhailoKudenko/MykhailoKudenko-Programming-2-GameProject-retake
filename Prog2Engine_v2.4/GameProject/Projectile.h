@@ -4,13 +4,13 @@ class Projectile
 public:
 	Projectile(Rectf Start);
 
-	void Update(float elapsedSec);
+	void virtual Update(float elapsedSec);
 
-	void Draw() const;
-
+	void virtual Draw() const = 0;
+	void DrawCollider() const;
 	Rectf GetHitbox() const;
 
-	void Kill();
+	void virtual Kill();
 	bool isDead();
 
 protected:

@@ -580,3 +580,12 @@ void Player::SnapToCurrentLadderCenter()
 	m_Collider.left = m_pCurrentLadder->left
 		+ (m_pCurrentLadder->width - m_Collider.width) / 2.0f;
 }
+
+PlayerWeapon Player::GetPlayerWeapon() const
+{
+	return(m_MyWeapon);
+}
+void Player::SetPlayerWeapon(PlayerWeapon weapon)
+{
+	m_MyWeapon = weapon;
+}
