@@ -38,6 +38,14 @@ void EntityManager::Update(float elapsedSec, Player& player)
         {
             plant->Update(elapsedSec, player.GetCenterPosition());
         }
+        else if (Demon* demon = dynamic_cast<Demon*>(enemy))
+        {
+            demon->Update(elapsedSec, player.GetCenterPosition());
+        }
+        else if (Troll* troll = dynamic_cast<Troll*>(enemy))
+        {
+            troll->Update(elapsedSec, player.GetCenterPosition());
+        }
         else
         {
             enemy->Update(elapsedSec);
@@ -48,6 +56,7 @@ void EntityManager::Update(float elapsedSec, Player& player)
             player.TakeDamage();
         }
     }
+
 
     for (Projectile* proj : m_PlayerProjectiles)
     {
@@ -112,7 +121,7 @@ void EntityManager::Update(float elapsedSec, Player& player)
         {
             if (utils::IsOverlapping(zomb->GetHitbox(), proj->GetHitbox()))
             {
-                zomb->Kill();
+                zomb->TakeDamage();
                 proj->Kill();
             }
         }
@@ -185,8 +194,23 @@ void EntityManager::AddPlant(const Vector2f& spawnPos)
     palnt->SetEntityManager(this);
     m_Enemies.push_back(palnt);
 }
+void EntityManager::AddDemon(const Vector2f& spawnPos)
+{
+    Demon* demon = new Demon(spawnPos);
+    demon->SetEntityManager(this);
+    m_Enemies.push_back(demon);
+}
 
-
+void EntityManager::AddTroll(const Vector2f& spawnPos)
+{
+    Troll* troll = new Troll(spawnPos);
+    troll->SetEntityManager(this);
+    if (m_pLevel != nullptr)
+    {
+        troll->SetWorld(&m_pLevel->GetVertecies());
+    }
+    m_Enemies.push_back(troll);
+}
 void EntityManager::SpawnLance(const Vector2f& pos, bool isRight)
 {
     Lance* lance = new Lance(pos, isRight);
@@ -215,6 +239,12 @@ void EntityManager::SpawnPlantProjectile(const Vector2f& pos, const Vector2f& di
     m_EnemyProjectiles.push_back(proj);
 }
 
+void EntityManager::SpawnDemonProjectile(const Vector2f& pos, const Vector2f& direction)
+{
+    DemonProjectile* proj = new DemonProjectile(pos, direction);
+
+    m_EnemyProjectiles.push_back(proj);
+}
 void EntityManager::AddDrop(const Vector2f& pos, PickupType type)
 {
     Drop* drop = new Drop(pos, type);

@@ -162,6 +162,8 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Bird.cpp" />
+    <ClCompile Include="Demon.cpp" />
+    <ClCompile Include="DemonProjectile.cpp" />
     <ClCompile Include="Drop.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -178,11 +180,14 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Torch.cpp" />
+    <ClCompile Include="Troll.cpp" />
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bird.h" />
+    <ClInclude Include="Demon.h" />
+    <ClInclude Include="DemonProjectile.h" />
     <ClInclude Include="Drop.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EntityManager.h" />
@@ -198,6 +203,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Torch.h" />
+    <ClInclude Include="Troll.h" />
     <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <!-- Import the custom .targets file -->

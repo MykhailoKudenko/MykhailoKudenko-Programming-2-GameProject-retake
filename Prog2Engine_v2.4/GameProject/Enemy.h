@@ -16,12 +16,15 @@ public:
 	Rectf GetHitbox() const;
 
 	void Kill();
-	bool isDead();
-
+	bool isDead() const;
+	void TakeDamage();
+	
 protected:
 	Rectf m_Collider;
 	float m_Speed = 0;
 	Vector2f m_Velocity{0,0};
+
+	int m_health{ 1 };
 
 	bool m_IsDead = false;
 };

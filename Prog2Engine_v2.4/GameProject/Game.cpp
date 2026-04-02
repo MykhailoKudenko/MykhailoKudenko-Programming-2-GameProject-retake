@@ -15,11 +15,15 @@ Game::~Game( )
 	Ghost::FreeAssets();
 	Plant::FreeAssets();
 
+	Demon::FreeAssets();
+	Troll::FreeAssets();
+
 	Lance::FreeAssets();
 	Knife::FreeAssets();
 	Torch::FreeAssets();
 	
 	PlantProjectile::FreeAssets();
+	DemonProjectile::FreeAssets();
 
 	Drop::FreeAssets();
 	Cleanup( );
@@ -33,11 +37,15 @@ void Game::Initialize()
 	Ghost::InitializeAssets();
 	Plant::InitializeAssets();
 
+	Demon::InitializeAssets();
+	Troll::InitializeAssets();
+
 	Lance::InitializeAssets();
 	Knife::InitializeAssets();
 	Torch::InitializeAssets();
 
 	PlantProjectile::InitializeAssets();
+	DemonProjectile::InitializeAssets();
 
 	Drop::InitializeAssets();
 
@@ -118,21 +126,26 @@ void Game::Initialize()
 	
 	m_pEntityManager->SetLevel(m_level1);
 
-	m_pEntityManager->AddZombie(Vector2f{50, 250}, false);
-	m_pEntityManager->AddZombie(Vector2f{ 50, 450 }, true);
+	//m_pEntityManager->AddZombie(Vector2f{50, 250}, false);
+	//m_pEntityManager->AddZombie(Vector2f{ 50, 450 }, true);
 
-	m_pEntityManager->AddBird(Vector2f{ 250, 50 }, false);
+	//m_pEntityManager->AddBird(Vector2f{ 250, 50 }, false);
 
-	m_pEntityManager->AddFlyingKnight(Vector2f{ 350, 50 }, false);
+	//m_pEntityManager->AddFlyingKnight(Vector2f{ 350, 50 }, false);
 
-	m_pEntityManager->AddGhost(Vector2f{ 400, 200 }, false);
-	m_pEntityManager->AddPlant(Vector2f{ 600, 50 });
+	//m_pEntityManager->AddGhost(Vector2f{ 400, 200 }, false);
+	//m_pEntityManager->AddPlant(Vector2f{ 600, 50 });
+
+	//m_pEntityManager->AddDemon(Vector2f{ 400, 20 });
+	m_pEntityManager->AddTroll(Vector2f{ 400, 40 });
 
 	m_pEntityManager->AddDrop(Vector2f{ 500, 50 }, PickupType::Lance);
 	m_pEntityManager->AddDrop(Vector2f{ 550, 50 }, PickupType::Knife);
 	m_pEntityManager->AddDrop(Vector2f{ 600, 50 }, PickupType::Torch);
 	m_pEntityManager->AddDrop(Vector2f{ 650, 50 }, PickupType::Doll);
 	m_pEntityManager->AddDrop(Vector2f{ 700, 50 }, PickupType::MoneyBag);
+
+
 }
 
 void Game::Cleanup()

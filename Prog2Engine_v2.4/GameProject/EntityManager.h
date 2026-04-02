@@ -11,11 +11,17 @@
 #include "Ghost.h"
 #include "Plant.h"
 
+#include "Demon.h"
+#include "Troll.h"
+
 #include "Lance.h"
 #include "Knife.h"
 #include "Torch.h"
 
 #include "PlantProjectile.h"
+#include "DemonProjectile.h"
+
+
 #include "Drop.h"
 
 
@@ -36,11 +42,16 @@ public:
     void AddGhost(const Vector2f& spawnPos, bool startsFacingRight);
     void AddPlant(const Vector2f& spawnPos);
 
+    void AddDemon(const Vector2f& spawnPos);
+    void AddTroll(const Vector2f& spawnPos);
+
     void SpawnLance(const Vector2f& pos, bool isRight);
     void SpawnKnife(const Vector2f& pos, bool isRight);
     void SpawnTourch(const Vector2f& pos, bool isRight);
 
     void SpawnPlantProjectile(const Vector2f& pos, const Vector2f& direction);
+    void SpawnDemonProjectile(const Vector2f& pos, const Vector2f& direction);
+
 
     void AddDrop(const Vector2f& pos, PickupType type);
 
