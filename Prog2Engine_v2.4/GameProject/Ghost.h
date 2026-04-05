@@ -2,6 +2,8 @@
 #include "Enemy.h"
 #include "Animation.h"
 
+class EntityManager;
+
 enum class GhostState
 {
 	Spawning,
@@ -18,10 +20,15 @@ public:
 	static void FreeAssets();
 
 	void Update(float elapsedSec) override;
-	void Update(float elapsedSec, const Vector2f& playerPos);
 	void Draw() const override;
 
+	void SetEntityManager(EntityManager* manager);
+
+	bool isSpawning() override;
 private:
+
+	EntityManager* m_pEntityManager{ nullptr };
+
 	bool m_IsFacingRight{ true };
 	GhostState m_State{ GhostState::Spawning };
 

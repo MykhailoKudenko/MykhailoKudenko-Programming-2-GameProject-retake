@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Ghost.h"
 #include "utils.h"
+#include "EntityManager.h"
 
 Animation* Ghost::m_pFlyAnimation{ nullptr };
 Animation* Ghost::m_pSpawnAnimation{ nullptr };
@@ -19,11 +20,6 @@ Ghost::Ghost(Vector2f startPos, bool facingRight)
 }
 
 void Ghost::Update(float elapsedSec)
-{
-	m_AnimTime += elapsedSec;
-}
-
-void Ghost::Update(float elapsedSec, const Vector2f& playerPos)
 {
 	m_AnimTime += elapsedSec;
 
@@ -45,8 +41,8 @@ void Ghost::Update(float elapsedSec, const Vector2f& playerPos)
 		float ghostCenterX = m_Collider.left + m_Collider.width / 2.f;
 		float ghostCenterY = m_Collider.bottom + m_Collider.height / 2.f;
 
-		float playerCenterX = playerPos.x;
-		float playerCenterY = playerPos.y;
+		float playerCenterX = m_pEntityManager->GetPlayerPosition().x;
+		float playerCenterY = m_pEntityManager->GetPlayerPosition().y;
 
 		const float yTolerance = 4.f;
 
@@ -147,6 +143,11 @@ void Ghost::Draw() const
 	}
 }
 
+void Ghost::SetEntityManager(EntityManager* manager)
+{
+	m_pEntityManager = manager;
+}
+
 void Ghost::InitializeAssets()
 {
 	if (m_pFlyAnimation == nullptr)
@@ -167,4 +168,16 @@ void Ghost::FreeAssets()
 
 	delete m_pSpawnAnimation;
 	m_pSpawnAnimation = nullptr;
+}
+
+bool Ghost::isSpawning()
+{
+	if (m_State == GhostState::Spawning)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

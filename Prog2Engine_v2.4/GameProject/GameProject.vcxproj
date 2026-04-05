@@ -162,6 +162,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Bird.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Demon.cpp" />
     <ClCompile Include="DemonProjectile.cpp" />
     <ClCompile Include="Drop.cpp" />
@@ -170,6 +171,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="FlyingKnight.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Knife.cpp" />
     <ClCompile Include="Lance.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -186,6 +188,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bird.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Demon.h" />
     <ClInclude Include="DemonProjectile.h" />
     <ClInclude Include="Drop.h" />
@@ -194,6 +197,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="FlyingKnight.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Ghost.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="Knife.h" />
     <ClInclude Include="Lance.h" />
     <ClInclude Include="Level.h" />

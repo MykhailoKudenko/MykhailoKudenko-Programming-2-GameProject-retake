@@ -17,14 +17,10 @@ Troll::Troll(Vector2f StartPos)
 {
 	m_Speed = 30.f;
 	m_health = 20;
+	m_IsBoss = true;
 }
 
 void Troll::Update(float elapsedSec)
-{
-	m_AnimTime += elapsedSec;
-}
-
-void Troll::Update(float elapsedSec, const Vector2f& playerPos)
 {
 	m_AnimTime += elapsedSec;
 
@@ -42,7 +38,7 @@ void Troll::Update(float elapsedSec, const Vector2f& playerPos)
 		break;
 
 	case TrollState::Shooting:
-		if (UpdateShooting(elapsedSec, playerPos))
+		if (UpdateShooting(elapsedSec, m_pEntityManager->GetPlayerPosition()))
 		{
 			if (m_DoJumpNext)
 			{
@@ -60,7 +56,7 @@ void Troll::Update(float elapsedSec, const Vector2f& playerPos)
 		break;
 
 	case TrollState::Walking:
-		if (UpdateWalking(elapsedSec, playerPos))
+		if (UpdateWalking(elapsedSec, m_pEntityManager->GetPlayerPosition()))
 		{
 			m_MyState = TrollState::Shooting;
 			m_AnimTime = 0.f;

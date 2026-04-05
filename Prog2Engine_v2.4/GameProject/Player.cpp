@@ -12,7 +12,9 @@ m_ThrowArmour{"ThrowKnight.png", 2,  0.13f, false }, m_ThrowNaked{"ThrowKnightNa
 m_DuckThrowArmour{ "DuckThrowKnight.png", 2,  0.13f, false }, m_DuckThrowNaked{ "DuckThrowKnightNaked.png", 2,  0.13f, false },
 m_DuckArmour{ "DuckKnight.png" }, m_DuckNaked{ "DuckKnightNaked.png" }, 
 m_JumpingArmour{ "JumpKnight.png"}, m_JumpingNaked{ "JumpKnightNaked.png" },
-m_Hit{"HitKnight.png"}
+m_Hit{"HitKnight.png"}, 
+m_DeathKnockBack{"DeadKnockBack.png"},
+m_Death{"DeadGround.png"}
 {
 }
 Player::~Player()
@@ -77,50 +79,23 @@ void Player::Draw() const
 		else
 			m_DuckThrowNaked.Draw(m_Collider, !m_isFacingRight);
 		break;
+	case PlayerState::Dead:
+		m_Death.Draw(Vector2f{ m_isFacingRight ? m_Collider.left : m_Collider.left - m_Death.GetWidth() + m_Collider.width , m_Collider.bottom }, !m_isFacingRight);
+		break;
+	case PlayerState::KnockbackDead:
+		m_DeathKnockBack.Draw(Vector2f{ m_isFacingRight ? m_Collider.left : m_Collider.left - m_Hit.GetWidth() + m_Collider.width , m_Collider.bottom }, !m_isFacingRight);
+		break;
 	}
-	utils::SetColor(Color4f{ 0, 1, 0, 1 });
-	utils::DrawRect(m_Collider);
 }
 void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& vertices, const std::vector<Rectf>& ladders, std::vector<std::vector<Vector2f>> platfroms)
 {
-	/*switch (m_Mystate)
-	{
-	case PlayerState::Standing:
-		std::cout << "Standing" << std::endl;
-		break;
-	case PlayerState::Walking:
-		std::cout << "Walking" << std::endl;
-		break;
-	case PlayerState::Jumping:
-		std::cout << "Jumping" << std::endl;
-		break;
-	case PlayerState::Climbing:
-		std::cout << "Climbing" << std::endl;
-		break;
-	case PlayerState::Knockback:
-		std::cout << "Knockback" << std::endl;
-		break;
-	case PlayerState::Ducking:
-		std::cout << "Ducking" << std::endl;
-		break;
-	case PlayerState::Throwing:
-		std::cout << "Throwing" << std::endl;
-		break;
-	case PlayerState::Dead:
-		std::cout << "Dead" << std::endl;
-		break;
-	default:
-		std::cout << "Unknown" << std::endl;
-		break;
-	}*/
-	
-
-	
 	//input
+	
 	UpdateInput();
 
 	//states
-	UpdateStates(ladders ,elapsedSec);
+	UpdateStates(ladders, elapsedSec);
+	
 
 	//timers
 	UpdateTimers(elapsedSec);
@@ -142,6 +117,8 @@ Vector2f Player::GetCenterPosition() const
 
 void Player::UpdateInput()
 {
+	if (m_Mystate == PlayerState::Dead)
+		return;
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
 
 	m_inputDirectionX = 0;
@@ -326,7 +303,6 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 		else
 			m_ClimbingNaked.Update(elapsedSec);
 		break;
-
 	default:
 		break;
 	}
@@ -346,6 +322,11 @@ void Player::UpdateTimers(float elapsedSec)
 	{
 		m_KnockbackTimeCurrent -= elapsedSec;
 	}
+	if (m_Mystate == PlayerState::Dead)
+	{
+		if (m_DeathTimeCurrent >= 0)
+			m_DeathTimeCurrent -= elapsedSec;
+	}
 }
 
 void Player::UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& vertices, float elapsedSec)
@@ -356,7 +337,7 @@ void Player::UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& v
 	{
 		XSpeed = m_inputDirectionX * m_MovementSpeed * elapsedSec;
 	}
-	if (m_Mystate == PlayerState::Knockback)
+	if (m_Mystate == PlayerState::Knockback || m_Mystate == PlayerState::KnockbackDead)
 	{
 		XSpeed = m_KnockBackDirectionX * m_KnockBackSpeed * elapsedSec;
 	}
@@ -371,7 +352,9 @@ void Player::UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& v
 		&& m_Mystate != PlayerState::Throwing
 		&& m_Mystate != PlayerState::DuckingThrow
 		&& m_Mystate != PlayerState::Jumping
-		&& m_Mystate != PlayerState::Knockback)
+		&& m_Mystate != PlayerState::Knockback
+		&& m_Mystate != PlayerState::KnockbackDead
+		&& m_Mystate != PlayerState::Dead)
 	{
 		m_Mystate = PlayerState::Standing;
 		return;
@@ -457,6 +440,10 @@ void Player::UpdateMovmentVertical(const std::vector<std::vector<Vector2f>>& ver
 		{
 			m_Mystate = PlayerState::Standing;
 		}
+		if (m_Mystate == PlayerState::KnockbackDead)
+		{
+			m_Mystate = PlayerState::Dead;
+		}
 		m_Collider.bottom = std::max(myInfoLeft.intersectPoint.y, myInfoRight.intersectPoint.y);
 
 		m_isOnTheGround = true;
@@ -471,11 +458,20 @@ void Player::UpdateMovmentVertical(const std::vector<std::vector<Vector2f>>& ver
 //getters/ setters
 Rectf Player::GetHitbox() const
 {
-	return(m_Collider);
+	if (m_Mystate == PlayerState::Ducking || m_Mystate == PlayerState::DuckingThrow)
+	{
+		return(Rectf{ m_Collider.left, m_Collider.bottom, m_Collider.width, m_Collider.height/2});
+	}
+	else
+	{
+		return(m_Collider);
+	}
 }
 
 void Player::TakeDamage()
 {
+	if (m_Mystate == PlayerState::Dead)
+		return;
 	if (m_InvulnerableTimeCurrent > 0)
 		return;
 
@@ -486,7 +482,11 @@ void Player::TakeDamage()
 	}
 	else
 	{
-		//idk like die or smth
+		if (m_IsImmortal == false)
+		{
+			m_Mystate = PlayerState::KnockbackDead;
+			m_DeathTimeCurrent = m_DeathTimerMax;
+		}
 	}
 
 	m_InvulnerableTimeCurrent = m_InvulnerableTimeMax;
@@ -539,6 +539,13 @@ bool Player::TryClimb(const std::vector<Rectf>& ladders, bool isGoingUp)
 	return false;
 }
 
+
+bool Player::IsDeathAnimationFinished()
+{
+	return (m_Mystate == PlayerState::Dead || m_Mystate == PlayerState::KnockbackDead)
+		&& m_DeathTimeCurrent <= 0.f;
+}
+
 bool Player::IsStillOnLadder() const
 {
 	if (!m_pCurrentLadder) return false;
@@ -588,4 +595,40 @@ PlayerWeapon Player::GetPlayerWeapon() const
 void Player::SetPlayerWeapon(PlayerWeapon weapon)
 {
 	m_MyWeapon = weapon;
+}
+int Player::GetPlayerScore() const
+{
+	return m_Score;
+}
+void Player::AddToPLayerScore(int Score)
+{
+	m_Score += Score;
+}
+void Player::SetPlayerScore(int NewScore)
+{
+	m_Score = NewScore;
+}
+
+void Player::Respawn(const Vector2f& pos)
+{
+	m_Collider = Rectf{ pos.x, pos.y, 16.f, 24.f };
+	m_Mystate = PlayerState::Standing;
+	m_IsWearingArmour = true;
+
+	m_DeathTimeCurrent = m_DeathTimerMax;
+	m_InvulnerableTimeCurrent = 0.f;
+	m_KnockbackTimeCurrent = 0.f;
+	m_JumpTimeUpCurrent = 0.f;
+
+	m_inputDirectionX = 0;
+	m_inputDirectionY = 0;
+	m_DoesWantToThrow = false;
+	m_PreviousShootPressed = false;
+	m_pCurrentLadder = nullptr;
+}
+
+
+void Player::SetPos(const Vector2f& pos)
+{
+	m_Collider = Rectf{ pos.x, pos.y, 16.f, 24.f };
 }

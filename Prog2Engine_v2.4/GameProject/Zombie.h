@@ -22,6 +22,8 @@ public:
 
 	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
 
+	bool isSpawning() override;
+
 private:
 	const std::vector<std::vector<Vector2f>>* m_pVertices{};
 	static constexpr float m_Gravity{ -60.f };

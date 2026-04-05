@@ -7,8 +7,9 @@
 
 #include "Level.h"
 
+#include "Camera.h"
 #include "EntityManager.h"
-
+#include "HUD.h"
 class Game : public BaseGame
 {
 public:
@@ -37,7 +38,29 @@ private:
 	void Cleanup( );
 	void ClearBackground( ) const;
 
-	Player m_P1;
+	void LoadLevel1();
+	void ResetLevel();
+	void StartNewRun();
+	void StartNextLife();
+
+	enum class GameState
+	{
+		MainMenu,
+		Playing,
+		DeathMenu
+	};
+
+	Camera* m_pCamera;
+	Player* m_P1;
 	Level* m_level1;
 	EntityManager* m_pEntityManager;
+
+	HUD* m_hud;
+
+	GameState m_MyState{ GameState::DeathMenu };
+	const int PlayerLivesMax = 3;
+	int PLayerLivesCurrent = 3;
+
+	Texture* m_MainMenu;
+	Texture* m_DeathMenu;
 };

@@ -14,15 +14,55 @@ public:
 		float maxX;
 	};
 
-	Level(std::vector<std::vector<Vector2f>> vertices, std::vector<Rectf> ladders, std::vector<MovingPlatform> platforms, const std::string& PlatformTexturePath, const std::string& LevelTexturePath );
+	enum class EnemyType
+	{
+		Zombie,
+		Bird,
+		FlyingKnight,
+		Ghost,
+		Plant,
+		Demon,
+		Troll
+	};
+
+	struct EnemySpawnPoint
+	{
+		EnemyType type;
+		Vector2f position;
+		bool spawned{ false };
+	};
+
+	struct EnemySpawnArea
+	{
+		EnemyType type;
+		Rectf area;
+		bool SpawnAtTheGround{true};
+		float timer{ 0.f };
+	};
+
+	Level(
+		std::vector<std::vector<Vector2f>> vertices,
+		std::vector<Rectf> ladders,
+		std::vector<MovingPlatform> platforms,
+		std::vector<EnemySpawnPoint> enemySpawnPoints,
+		std::vector<EnemySpawnArea> enemySpawnAreas,
+		const std::string& PlatformTexturePath,
+		const std::string& LevelTexturePath
+	);
 
 	const std::vector<std::vector<Vector2f>>& GetVertecies() const;
 	const std::vector<std::vector<Vector2f>>& GetPlatformTopEdges() const;
+	const std::vector<Rectf>& GetLadders() const;
+
+	std::vector<EnemySpawnPoint>& GetEnemySpawnPoints();
+	std::vector<EnemySpawnArea>& GetEnemySpawnAreas();
+
+	float GetWidth() const;
+	float GetHeight() const;
 
 	void Draw() const;
-	void Update( float elapsedSec );
-
-	const std::vector<Rectf>& GetLadders() const;
+	void DrawDebugSpawns() const;
+	void Update(float elapsedSec);
 
 private:
 
@@ -31,9 +71,10 @@ private:
 	std::vector<MovingPlatform> m_Platforms;
 	std::vector<std::vector<Vector2f>> m_PlatformTopEdges;
 
+	std::vector<EnemySpawnPoint> m_EnemySpawnPoints;
+	std::vector<EnemySpawnArea> m_EnemySpawnAreas;
+
 	Texture m_Texture;
 	Texture m_PlatformTexture;
 	const float m_PlatfromSpeedX{ 20 };
-	
 };
-

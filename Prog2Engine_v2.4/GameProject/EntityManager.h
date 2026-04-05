@@ -31,9 +31,12 @@ public:
     EntityManager();
     ~EntityManager();
 
-    void SetLevel(const Level* pLevel);
+    void SetLevel(Level* pLevel);
+    void SetPlayer(Player* pPlayer);
 
-    void Update(float elapsedSec, Player& player);
+    Vector2f GetPlayerPosition() const;
+
+    void Update(float elapsedSec);
     void Draw() const;
 
     void AddZombie(const Vector2f& SpawnPos, bool startsFacingRight);
@@ -55,13 +58,31 @@ public:
 
     void AddDrop(const Vector2f& pos, PickupType type);
 
-private:
-    void RemoveDeadEntities();
+    void SpawnPointEnemies();
 
-    const Level* m_pLevel{ nullptr };
+private:
+
+    void SpawnEnemyByType(Level::EnemyType type, const Vector2f& pos, bool startsFacingRight);
+    bool FindGroundBelow(const Vector2f& pos, float& outGroundY) const;
+    void SpawnAreaEnemies(float elapsedSec);
+
+    void RemoveDeadEntities();
+    void DebugSpawnDraw() const;
+
+    Player* m_pPlayer{ nullptr };
+    Level* m_pLevel{ nullptr };
 
     std::vector<Enemy*> m_Enemies;
     std::vector<Projectile*> m_PlayerProjectiles;
     std::vector<Projectile*> m_EnemyProjectiles;
     std::vector<Drop*> m_Drops;
+
+    float UpdateLenth{ 256 / 2.f + 50 };
+    float DeathLenth{ 256 / 2.f + 150 };
+
+    float xSpawnLenth{256/2.f + 50};
+    float yMinSpawnForAir{ 37.f };
+    float yMaxHeight{ 200.f};
+    float m_AreaSpawnInterval{ 1.f };
+
 };

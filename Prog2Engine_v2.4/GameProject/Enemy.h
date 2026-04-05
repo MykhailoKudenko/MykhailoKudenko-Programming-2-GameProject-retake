@@ -18,14 +18,23 @@ public:
 	void Kill();
 	bool isDead() const;
 	void TakeDamage();
-	
+	Vector2f GetCenterPosition() const;
+
+	virtual bool isSpawning();
+
+	bool GetIsActive() const; 
+	void SetIsActive(bool isActive);
+
+	int GetScore();
 protected:
 	Rectf m_Collider;
-	float m_Speed = 0;
-	Vector2f m_Velocity{0,0};
+	float m_Speed{ 0.f };
+	Vector2f m_Velocity{ 0.f, 0.f };
 
 	int m_health{ 1 };
-
-	bool m_IsDead = false;
+	int m_score{ 100 };
+	bool m_IsDead{ false };
+	bool m_IsBoss{ false };
+	bool m_IsActive{ false };
 };
 

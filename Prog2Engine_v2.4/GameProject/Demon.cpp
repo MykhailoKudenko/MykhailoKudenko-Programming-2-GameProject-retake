@@ -17,14 +17,11 @@ Demon::Demon(Vector2f StartPos)
 {
 	m_Speed = 80.f;
 	m_health = 10;
+	m_IsBoss = true;
 }
+
 
 void Demon::Update(float elapsedSec)
-{
-	m_AnimTime += elapsedSec;
-}
-
-void Demon::Update(float elapsedSec, const Vector2f& playerPos)
 {
 	m_AnimTime += elapsedSec;
 
@@ -38,7 +35,7 @@ void Demon::Update(float elapsedSec, const Vector2f& playerPos)
 		break;
 	case DemonState::MoveToTopRight:
 		
-		if (MoveToThePoint(elapsedSec, playerPos + m_TopRightModificatior))
+		if (MoveToThePoint(elapsedSec, m_pEntityManager->GetPlayerPosition() + m_TopRightModificatior))
 		{
 			m_MyState = DemonState::Shooting;
 			m_AnimTime = 0.f;
@@ -46,7 +43,7 @@ void Demon::Update(float elapsedSec, const Vector2f& playerPos)
 		}
 		break;
 	case DemonState::Shooting:
-		if (UpdateShooting(elapsedSec, playerPos))
+		if (UpdateShooting(elapsedSec, m_pEntityManager->GetPlayerPosition()))
 		{
 			int choice = std::rand() % 2;
 			
@@ -64,7 +61,7 @@ void Demon::Update(float elapsedSec, const Vector2f& playerPos)
 		}
 		break;
 	case DemonState::MovingToTheRight:
-		if (UpdateParabolaAttack(elapsedSec, playerPos, true))
+		if (UpdateParabolaAttack(elapsedSec, m_pEntityManager->GetPlayerPosition(), true))
 		{
 			m_IsAtRightSide = true;
 			m_MyState = DemonState::Shooting;
@@ -73,7 +70,7 @@ void Demon::Update(float elapsedSec, const Vector2f& playerPos)
 		}
 		break;
 	case DemonState::MovingToTheLeft:
-		if (UpdateParabolaAttack(elapsedSec, playerPos, false))
+		if (UpdateParabolaAttack(elapsedSec, m_pEntityManager->GetPlayerPosition(), false))
 		{
 			m_IsAtRightSide = false;
 			m_MyState = DemonState::Shooting;
@@ -82,7 +79,7 @@ void Demon::Update(float elapsedSec, const Vector2f& playerPos)
 		}
 		break;
 	case DemonState::MovingUp:
-		if (MoveToThePoint(elapsedSec, Vector2f{ m_Collider.left, playerPos.y + m_TopRightModificatior.y }))
+		if (MoveToThePoint(elapsedSec, Vector2f{ m_Collider.left, m_pEntityManager->GetPlayerPosition().y + m_TopRightModificatior.y }))
 		{
 			m_MyState = DemonState::Shooting;
 			m_AnimTime = 0.f;
@@ -90,7 +87,7 @@ void Demon::Update(float elapsedSec, const Vector2f& playerPos)
 		}
 		break;
 	case DemonState::MovingDown:
-		if (MoveToThePoint(elapsedSec, Vector2f{ m_Collider.left, playerPos.y }))
+		if (MoveToThePoint(elapsedSec, Vector2f{ m_Collider.left, m_pEntityManager->GetPlayerPosition().y }))
 		{
 			m_MyState = DemonState::MovingUp;
 		}

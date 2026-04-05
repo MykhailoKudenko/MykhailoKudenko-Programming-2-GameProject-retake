@@ -27,7 +27,6 @@ public:
 
 
 	void Update(float elapsedSec) override;
-	void Update(float elapsedSec, const Vector2f& playerPos);
 	void Draw() const override;
 
 	

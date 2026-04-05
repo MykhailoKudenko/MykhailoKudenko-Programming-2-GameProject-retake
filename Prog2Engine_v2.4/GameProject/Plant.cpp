@@ -13,18 +13,14 @@ Plant::Plant(Vector2f StartPos)
 	
 }
 
-void Plant::Update(float elapsedSec)
-{
-	m_AnimTime += elapsedSec;
-}
 
-void Plant::Update(float elapsedSec, const Vector2f & playerPos)
+void Plant::Update(float elapsedSec)
 {
 	m_AnimTime += elapsedSec;
 
 	if (m_pPlantAnimation != nullptr && m_pPlantAnimation->IsTimeFinished(m_AnimTime))
 	{
-		Fire(playerPos);
+		Fire(m_pEntityManager->GetPlayerPosition());
 
 		m_AnimTime = 0.f;
 	}

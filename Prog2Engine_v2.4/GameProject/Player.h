@@ -15,6 +15,7 @@ enum class PlayerState
 	Ducking,
 	Throwing,
 	DuckingThrow,
+	KnockbackDead,
 	Dead
 };
 
@@ -46,6 +47,16 @@ public:
 
 	PlayerWeapon GetPlayerWeapon() const;
 	void SetPlayerWeapon(PlayerWeapon weapon);
+
+	int GetPlayerScore() const;
+	void AddToPLayerScore(int Score);
+	void SetPlayerScore(int NewScore);
+
+	bool IsDeathAnimationFinished();
+
+	void Respawn(const Vector2f& pos);
+
+	void SetPos(const Vector2f& pos);
 private:
 	void UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec);
 	void UpdateInput();
@@ -103,6 +114,10 @@ private:
 	Texture m_DuckNaked;
 
 	Texture m_Hit;
+
+	Texture m_DeathKnockBack;
+	Texture m_Death;
+
 	//State machine
 	bool m_IsWearingArmour = true;
 	PlayerState m_Mystate{ PlayerState::Standing };
@@ -112,6 +127,11 @@ private:
 	bool m_DoesWantToThrow{ false };
 	//wepon
 	PlayerWeapon m_MyWeapon{ PlayerWeapon::Knife };
-
+	//int Score
+	float m_Score{ 0 };
+	//Death
+	bool m_IsImmortal{ false };
+	const float m_DeathTimerMax{1.f};
+	float m_DeathTimeCurrent{1.f};
 };
 

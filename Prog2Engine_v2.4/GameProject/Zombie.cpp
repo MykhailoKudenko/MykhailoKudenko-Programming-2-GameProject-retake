@@ -218,3 +218,16 @@ void Zombie::FreeAssets()
 	delete m_pSpawnAnimation;
 	m_pSpawnAnimation = nullptr;
 }
+
+
+bool Zombie::isSpawning()
+{
+	if (m_State == ZombieState::Spawning)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
