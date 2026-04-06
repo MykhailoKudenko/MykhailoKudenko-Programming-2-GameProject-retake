@@ -7,8 +7,8 @@ Animation* Zombie::m_pSpawnAnimation{ nullptr };
 
 Zombie::Zombie(Vector2f StartPos, bool facingRight)
 	: Enemy(Rectf{ StartPos.x, StartPos.y, 19, 27 })
-	, m_IsFacingRight{ facingRight }
 {
+	m_IsFacingRight = facingRight;
 	m_Speed = 30.f;
 	if (!facingRight)
 	{

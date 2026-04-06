@@ -20,7 +20,6 @@ public:
 	void Draw() const override;
 
 private:
-	bool m_IsFacingRight{ true };
 
 	FlyingKnightState m_State{ FlyingKnightState::Spawning };
 

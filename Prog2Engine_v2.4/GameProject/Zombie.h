@@ -28,7 +28,6 @@ private:
 	const std::vector<std::vector<Vector2f>>* m_pVertices{};
 	static constexpr float m_Gravity{ -60.f };
 
-	bool m_IsFacingRight{ true };
 
 	ZombieState m_State{ ZombieState::Spawning };
 	float m_AnimTime{ 0.f };

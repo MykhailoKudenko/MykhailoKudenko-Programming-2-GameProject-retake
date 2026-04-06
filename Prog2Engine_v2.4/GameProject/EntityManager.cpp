@@ -26,6 +26,10 @@ EntityManager::~EntityManager()
     {
         delete drop;
     }
+    for (Effect* effect : m_Effects)
+    {
+        delete effect;
+    }
 }
 
 void EntityManager::Update(float elapsedSec)
@@ -36,7 +40,13 @@ void EntityManager::Update(float elapsedSec)
     }
 
     SpawnPointEnemies();
+    SpawnPointDrops();
     SpawnAreaEnemies(elapsedSec);
+
+    for (Effect* effect : m_Effects)
+    {
+        effect->Update(elapsedSec);
+    }
 
     Vector2f playerPos = m_pPlayer->GetCenterPosition();
 
@@ -133,10 +143,19 @@ void EntityManager::Update(float elapsedSec)
             if (utils::IsOverlapping(enemy->GetHitbox(), proj->GetHitbox()))
             {
                 enemy->TakeDamage();
+
                 if (enemy->isDead())
                 {
                     m_pPlayer->AddToPLayerScore(enemy->GetScore());
+
+                    if (enemy->GetBag())
+                    {
+                        AddDrop(enemy->GetCenterPosition(), GetRandomBagDrop());
+                    }
+
+                    SpawnEffect(enemy->GetCenterPosition(),enemy->GetEffectType(),enemy->IsFacingRight());
                 }
+
                 proj->Kill();
             }
         }
@@ -147,37 +166,65 @@ void EntityManager::Update(float elapsedSec)
 
 
 
-void EntityManager::Draw() const
+void EntityManager::Draw(bool isDebug) const
 {
+    for (const Effect* effect : m_Effects)
+    {
+        effect->Draw();
+    }
+
     for (const Enemy* enemy : m_Enemies)
     {
-        enemy->Draw();
-        enemy->DrawCollider();
+        enemy->Draw(); 
+        if (enemy->GetBag())
+        {
+            enemy->DrawBag();
+        }
+
+        if (isDebug)
+        {
+            utils::SetColor(Color4f{ 0, 1, 0, 1 });
+            utils::DrawRect(enemy->GetHitbox());
+        }
     }
 
     for (const Projectile* proj : m_PlayerProjectiles)
     {
 
-        proj->Draw();
-        proj->DrawCollider();
+        proj->Draw(); 
+        if (isDebug)
+        {
+            utils::SetColor(Color4f{ 0, 1, 0, 1 });
+            utils::DrawRect(proj->GetHitbox());
+        }
     }
 
     for (const Projectile* proj : m_EnemyProjectiles)
     {
         proj->Draw();
-        proj->DrawCollider();
+        if (isDebug)
+        {
+            utils::SetColor(Color4f{ 0, 1, 0, 1 });
+            utils::DrawRect(proj->GetHitbox());
+        }
     }
     for (const Drop* drop : m_Drops)
     {
         drop->Draw();
-        utils::SetColor(Color4f{ 0, 1, 0, 1 });
-        utils::DrawRect(drop->GetHitbox());
+        if (isDebug)
+        {
+            utils::SetColor(Color4f{ 0, 1, 0, 1 });
+            utils::DrawRect(drop->GetHitbox());
+        }
     }
 
-    utils::SetColor(Color4f{ 0, 1, 0, 1 });
-    utils::DrawRect(m_pPlayer->GetHitbox());
+    if (isDebug)
+    {
+        utils::SetColor(Color4f{ 0, 1, 0, 1 });
+        utils::DrawRect(m_pPlayer->GetHitbox());
 
-    DebugSpawnDraw();
+        DebugSpawnDraw();
+    }
 }
 
 void EntityManager::DebugSpawnDraw() const
@@ -200,6 +247,12 @@ void EntityManager::DebugSpawnDraw() const
 
     utils::DrawEllipse(playerPos, xSpawnLenth, xSpawnLenth);
 
+    std::vector<Level::DropSpawnPoint>& DropspawnPoints = m_pLevel->GetDropSpawnPoints();
+
+    for (Level::DropSpawnPoint& SpawnPoint : DropspawnPoints)
+    {
+        utils::DrawEllipse(SpawnPoint.position, 10, 10);
+    }
 }
 void EntityManager::SpawnEnemyByType(Level::EnemyType type, const Vector2f& pos, bool startsFacingRight)
 {
@@ -248,6 +301,33 @@ void EntityManager::SpawnPointEnemies()
         spawnPoint.spawned = true;
     }
 }
+void EntityManager::SpawnPointDrops()
+{
+    if (m_pLevel == nullptr || m_pPlayer == nullptr)
+    {
+        return;
+    }
+
+    std::vector<Level::DropSpawnPoint>& dropSpawnPoints = m_pLevel->GetDropSpawnPoints();
+    Vector2f playerPos = m_pPlayer->GetCenterPosition();
+
+    for (Level::DropSpawnPoint& dropSpawn : dropSpawnPoints)
+    {
+        if (dropSpawn.spawned)
+        {
+            continue;
+        }
+
+        float dx = std::abs(dropSpawn.position.x - playerPos.x);
+
+        if (dx <= UpdateLenth)
+        {
+            AddDrop(dropSpawn.position, dropSpawn.type);
+            dropSpawn.spawned = true;
+        }
+    }
+}
+
 void EntityManager::SpawnAreaEnemies(float elapsedSec)
 {
     if (m_pLevel == nullptr || m_pPlayer == nullptr)
@@ -356,6 +436,8 @@ void EntityManager::AddZombie(const Vector2f& SpawnPos, bool startsFacingRight)
         zombie->SetWorld(&m_pLevel->GetVertecies());
     }
 
+    zombie->SetBag(RollBagDrop());
+
     m_Enemies.push_back(zombie);
 }
 void EntityManager::AddBird(const Vector2f& SpawnPos, bool startsFacingRight)
@@ -374,6 +456,7 @@ void EntityManager::AddGhost(const Vector2f& SpawnPos, bool startsFacingRight)
 {
     Ghost* ghost = new Ghost(SpawnPos, startsFacingRight);
     ghost->SetEntityManager(this);
+    ghost->SetBag(RollBagDrop());
     m_Enemies.push_back(ghost);
 }
 void EntityManager::AddPlant(const Vector2f& spawnPos)
@@ -442,7 +525,11 @@ void EntityManager::AddDrop(const Vector2f& pos, PickupType type)
     }
     m_Drops.push_back(drop);
 }
-
+void EntityManager::SpawnEffect(const Vector2f& pos, Effect::EffectType type, bool isMirrored)
+{
+    Effect* effect = new Effect(pos, type, isMirrored);
+    m_Effects.push_back(effect);
+}
 void EntityManager::RemoveDeadEntities()
 {
     for (int i = 0; i < m_Enemies.size(); ++i)
@@ -483,6 +570,16 @@ void EntityManager::RemoveDeadEntities()
             --i;
         }
     }
+
+    for (int i = 0; i < m_Effects.size(); ++i)
+    {
+        if (m_Effects[i]->IsFinished())
+        {
+            delete m_Effects[i];
+            m_Effects.erase(m_Effects.begin() + i);
+            --i;
+        }
+    }
 }
 void EntityManager::SetLevel(Level* pLevel)
 {
@@ -502,4 +599,24 @@ Vector2f EntityManager::GetPlayerPosition() const
     }
 
     return Vector2f{ 0.f, 0.f };
+}
+
+bool EntityManager::RollBagDrop() const
+{
+    return (std::rand() % 10) == 0;
+}
+
+PickupType EntityManager::GetRandomBagDrop() const
+{
+    int randomIndex = std::rand() % 5;
+
+    switch (randomIndex)
+    {
+    case 0: return PickupType::Lance;
+    case 1: return PickupType::Knife;
+    case 2: return PickupType::Torch;
+    case 3: return PickupType::Doll;
+    case 4: return PickupType::MoneyBag;
+    default: return PickupType::Doll;
+    }
 }

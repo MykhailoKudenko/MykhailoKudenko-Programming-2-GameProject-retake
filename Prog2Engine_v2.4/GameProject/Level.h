@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "Texture.h"
-
+#include "Drop.h"
 class Level
 {
 public:
@@ -40,15 +40,22 @@ public:
 		float timer{ 0.f };
 	};
 
+	struct DropSpawnPoint
+	{
+		PickupType type;
+		Vector2f position;
+		bool spawned{ false };
+	};
+
 	Level(
 		std::vector<std::vector<Vector2f>> vertices,
 		std::vector<Rectf> ladders,
 		std::vector<MovingPlatform> platforms,
 		std::vector<EnemySpawnPoint> enemySpawnPoints,
 		std::vector<EnemySpawnArea> enemySpawnAreas,
+		std::vector<DropSpawnPoint> dropSpawnPoints,
 		const std::string& PlatformTexturePath,
-		const std::string& LevelTexturePath
-	);
+		const std::string& LevelTexturePath);
 
 	const std::vector<std::vector<Vector2f>>& GetVertecies() const;
 	const std::vector<std::vector<Vector2f>>& GetPlatformTopEdges() const;
@@ -57,10 +64,12 @@ public:
 	std::vector<EnemySpawnPoint>& GetEnemySpawnPoints();
 	std::vector<EnemySpawnArea>& GetEnemySpawnAreas();
 
+	std::vector<DropSpawnPoint>& GetDropSpawnPoints();
+
 	float GetWidth() const;
 	float GetHeight() const;
 
-	void Draw() const;
+	void Draw(bool isDebug) const;
 	void DrawDebugSpawns() const;
 	void Update(float elapsedSec);
 
@@ -73,6 +82,8 @@ private:
 
 	std::vector<EnemySpawnPoint> m_EnemySpawnPoints;
 	std::vector<EnemySpawnArea> m_EnemySpawnAreas;
+
+	std::vector<DropSpawnPoint> m_DropSpawnPoints;
 
 	Texture m_Texture;
 	Texture m_PlatformTexture;

@@ -9,6 +9,7 @@ Level::Level(
 	std::vector<MovingPlatform> platforms,
 	std::vector<EnemySpawnPoint> enemySpawnPoints,
 	std::vector<EnemySpawnArea> enemySpawnAreas,
+	std::vector<DropSpawnPoint> dropSpawnPoints,
 	const std::string& PlatformTexturePath,
 	const std::string& LevelTexturePath)
 	: m_Vertices{ vertices }
@@ -16,6 +17,7 @@ Level::Level(
 	, m_Platforms{ platforms }
 	, m_EnemySpawnPoints{ enemySpawnPoints }
 	, m_EnemySpawnAreas{ enemySpawnAreas }
+	, m_DropSpawnPoints{ dropSpawnPoints }
 	, m_Texture{ LevelTexturePath }
 	, m_PlatformTexture{ PlatformTexturePath }
 {
@@ -44,6 +46,10 @@ std::vector<Level::EnemySpawnPoint>& Level::GetEnemySpawnPoints()
 std::vector<Level::EnemySpawnArea>& Level::GetEnemySpawnAreas()
 {
 	return m_EnemySpawnAreas;
+}
+std::vector<Level::DropSpawnPoint>& Level::GetDropSpawnPoints()
+{
+	return m_DropSpawnPoints;
 }
 
 float Level::GetWidth() const
@@ -130,7 +136,7 @@ float Level::GetHeight() const
 	return maxY;
 }
 
-void Level::Draw() const
+void Level::Draw(bool isDebug) const
 {
 	m_Texture.Draw();
 
@@ -139,19 +145,22 @@ void Level::Draw() const
 		m_PlatformTexture.Draw(platform.rect);
 	}
 
-	for (const std::vector<Vector2f>& platform : m_Vertices)
+	if (isDebug)
 	{
-		for (size_t i = 0; i + 1 < platform.size(); ++i)
+		for (const std::vector<Vector2f>& platform : m_Vertices)
+		{
+			for (size_t i = 0; i + 1 < platform.size(); ++i)
+			{
+				utils::SetColor(Color4f{ 1.f, 0.f, 1.f, 1.f });
+				utils::DrawLine(platform[i], platform[i + 1]);
+			}
+		}
+
+		for (const Rectf& ladder : m_Ladders)
 		{
 			utils::SetColor(Color4f{ 1.f, 0.f, 1.f, 1.f });
-			utils::DrawLine(platform[i], platform[i + 1]);
+			utils::DrawRect(ladder);
 		}
-	}
-
-	for (const Rectf& ladder : m_Ladders)
-	{
-		utils::SetColor(Color4f{ 1.f, 0.f, 1.f, 1.f });
-		utils::DrawRect(ladder);
 	}
 }
 

@@ -63,4 +63,7 @@ private:
 
 	Texture* m_MainMenu;
 	Texture* m_DeathMenu;
+
+	bool m_DebugShowColliders = false;
+	int m_CameraScale = 4;
 };

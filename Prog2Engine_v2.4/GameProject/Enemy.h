@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include "Texture.h"
+#include "Effect.h"
 class Enemy
 {
 public:
@@ -10,8 +12,6 @@ public:
 
 	virtual void Update(float elapsedSec) = 0;
 	virtual void Draw() const = 0;
-
-	void DrawCollider() const;
 
 	Rectf GetHitbox() const;
 
@@ -26,6 +26,18 @@ public:
 	void SetIsActive(bool isActive);
 
 	int GetScore();
+
+	static void InitializeSharedAssets();
+	static void FreeSharedAssets();
+
+	void SetBag(bool DoesHaveBag);
+	bool GetBag() const;
+	void DrawBag() const;
+
+	Effect::EffectType GetEffectType();
+
+	bool IsFacingRight() const;
+
 protected:
 	Rectf m_Collider;
 	float m_Speed{ 0.f };
@@ -36,5 +48,12 @@ protected:
 	bool m_IsDead{ false };
 	bool m_IsBoss{ false };
 	bool m_IsActive{ false };
+	bool m_DoesHaveBag{ false };
+
+	bool m_IsFacingRight{ true };
+
+	Effect::EffectType m_EffectType{ Effect::EffectType::Blood };
+
+	static Texture* m_pBagTexture;
 };
 

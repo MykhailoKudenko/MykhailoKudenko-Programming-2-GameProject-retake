@@ -57,6 +57,15 @@ public:
 	void Respawn(const Vector2f& pos);
 
 	void SetPos(const Vector2f& pos);
+
+	void SetImmortal(bool isImmortal);
+
+	bool IsImmortal() const;
+
+	void SetFlying(bool isFlying);
+
+	bool IsFlying() const;
+
 private:
 	void UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec);
 	void UpdateInput();
@@ -125,6 +134,10 @@ private:
 	//Throwing
 	bool m_PreviousShootPressed{ false };
 	bool m_DoesWantToThrow{ false };
+
+	float m_ThrowCooldownMax{ 0.3f };
+	float m_ThrowCooldownCurrent{ 0.0f };
+
 	//wepon
 	PlayerWeapon m_MyWeapon{ PlayerWeapon::Knife };
 	//int Score
@@ -133,5 +146,8 @@ private:
 	bool m_IsImmortal{ false };
 	const float m_DeathTimerMax{1.f};
 	float m_DeathTimeCurrent{1.f};
+	//DEBUG fly
+	bool m_IsFlying{ false };
+	float m_FlySpeed{ 120.f };
 };
 

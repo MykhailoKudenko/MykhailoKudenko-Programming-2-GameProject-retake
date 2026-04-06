@@ -166,6 +166,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Demon.cpp" />
     <ClCompile Include="DemonProjectile.cpp" />
     <ClCompile Include="Drop.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="FlyingKnight.cpp" />
@@ -192,6 +193,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="Demon.h" />
     <ClInclude Include="DemonProjectile.h" />
     <ClInclude Include="Drop.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="FlyingKnight.h" />

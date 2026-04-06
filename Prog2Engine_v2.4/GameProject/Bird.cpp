@@ -8,10 +8,11 @@ Animation* Bird::m_pSpawnAnimation{ nullptr };
 
 Bird::Bird(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 16.f, 16.f })
-	, m_IsFacingRight{ facingRight }
 	, m_State{ BirdState::Spawning }
 	, m_StartY{ startPos.y }
 {
+
+	m_IsFacingRight = facingRight;
 	m_Speed = 25.f;
 
 	if (!facingRight)

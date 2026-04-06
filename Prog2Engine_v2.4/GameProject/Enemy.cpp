@@ -2,6 +2,8 @@
 #include "Enemy.h"
 #include "utils.h"
 
+Texture* Enemy::m_pBagTexture{ nullptr };
+
 Enemy::Enemy(Rectf Start) :m_Collider{Start}
 {
 
@@ -12,11 +14,6 @@ Rectf Enemy::GetHitbox() const
 	return (m_Collider);
 }
 
-void Enemy::DrawCollider() const
-{
-	utils::SetColor(Color4f{ 0, 1, 0, 1 });
-	utils::DrawRect(m_Collider);
-}
 
 void Enemy::TakeDamage()
 {
@@ -59,4 +56,48 @@ void Enemy::SetIsActive(bool isActive)
 int Enemy::GetScore()
 {
 	return m_score;
+}
+
+void Enemy::InitializeSharedAssets()
+{
+	if (m_pBagTexture == nullptr)
+	{
+		m_pBagTexture = new Texture("Bag.png");
+	}
+}
+
+void Enemy::FreeSharedAssets()
+{
+	delete m_pBagTexture;
+	m_pBagTexture = nullptr;
+}
+
+void Enemy::SetBag(bool DoesHaveBag)
+{
+	m_DoesHaveBag = DoesHaveBag;
+}
+bool Enemy::GetBag() const
+{
+	return m_DoesHaveBag;
+}
+void Enemy::DrawBag() const
+{
+	if (!m_DoesHaveBag)
+		return;
+
+	m_pBagTexture->Draw(
+		Vector2f{ m_Collider.left, m_Collider.bottom },
+		m_IsFacingRight
+	);
+}
+
+Effect::EffectType Enemy::GetEffectType()
+{
+	return m_EffectType;
+}
+
+
+bool Enemy::IsFacingRight() const
+{
+	return m_IsFacingRight;
 }

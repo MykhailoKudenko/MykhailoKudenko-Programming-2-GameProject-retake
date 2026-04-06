@@ -37,7 +37,7 @@ public:
     Vector2f GetPlayerPosition() const;
 
     void Update(float elapsedSec);
-    void Draw() const;
+    void Draw(bool isDebug) const;
 
     void AddZombie(const Vector2f& SpawnPos, bool startsFacingRight);
     void AddBird(const Vector2f& SpawnPos, bool startsFacingRight);
@@ -59,6 +59,9 @@ public:
     void AddDrop(const Vector2f& pos, PickupType type);
 
     void SpawnPointEnemies();
+    void SpawnPointDrops();
+
+    void SpawnEffect(const Vector2f& pos, Effect::EffectType type, bool isMirrored = false);
 
 private:
 
@@ -69,6 +72,9 @@ private:
     void RemoveDeadEntities();
     void DebugSpawnDraw() const;
 
+    bool RollBagDrop() const;
+    PickupType GetRandomBagDrop() const;
+
     Player* m_pPlayer{ nullptr };
     Level* m_pLevel{ nullptr };
 
@@ -76,6 +82,7 @@ private:
     std::vector<Projectile*> m_PlayerProjectiles;
     std::vector<Projectile*> m_EnemyProjectiles;
     std::vector<Drop*> m_Drops;
+    std::vector<Effect*> m_Effects;
 
     float UpdateLenth{ 256 / 2.f + 50 };
     float DeathLenth{ 256 / 2.f + 150 };

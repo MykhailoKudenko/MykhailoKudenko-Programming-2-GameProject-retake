@@ -7,7 +7,6 @@ public:
 	void virtual Update(float elapsedSec);
 
 	void virtual Draw() const = 0;
-	void DrawCollider() const;
 	Rectf GetHitbox() const;
 
 	void virtual Kill();

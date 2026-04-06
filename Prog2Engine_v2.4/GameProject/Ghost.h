@@ -29,7 +29,6 @@ private:
 
 	EntityManager* m_pEntityManager{ nullptr };
 
-	bool m_IsFacingRight{ true };
 	GhostState m_State{ GhostState::Spawning };
 
 	float m_AnimTime{ 0.f };

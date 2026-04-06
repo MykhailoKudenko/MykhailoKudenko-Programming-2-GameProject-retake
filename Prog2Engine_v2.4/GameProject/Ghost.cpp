@@ -8,9 +8,9 @@ Animation* Ghost::m_pSpawnAnimation{ nullptr };
 
 Ghost::Ghost(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 16.f, 16.f })
-	, m_IsFacingRight{ facingRight }
 	, m_State{ GhostState::Spawning }
 {
+	m_IsFacingRight = facingRight;
 	m_Speed = 60.f;
 
 	if (!facingRight)

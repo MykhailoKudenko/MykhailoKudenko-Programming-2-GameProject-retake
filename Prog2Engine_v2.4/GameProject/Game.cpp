@@ -16,6 +16,7 @@ Game::~Game( )
 
 void Game::Initialize()
 {
+	Enemy::InitializeSharedAssets();
 	Zombie::InitializeAssets();
 	Bird::InitializeAssets();
 	FlyingKnight::InitializeAssets();
@@ -35,6 +36,8 @@ void Game::Initialize()
 	Drop::InitializeAssets();
 	HUD::InitializeAssets();
 
+	Effect::InitializeAssets();
+
 	m_P1 = new Player(Vector2f{ 50, 38 });
 	m_pEntityManager = new EntityManager();
 	m_hud = new HUD();
@@ -51,6 +54,7 @@ void Game::Initialize()
 
 void Game::Cleanup()
 {
+	Enemy::FreeSharedAssets();
 	Zombie::FreeAssets();
 	Bird::FreeAssets();
 	FlyingKnight::FreeAssets();
@@ -69,6 +73,8 @@ void Game::Cleanup()
 
 	Drop::FreeAssets();
 	HUD::FreeAssets();
+
+	Effect::FreeAssets();
 
 	delete m_MainMenu;
 	m_MainMenu = nullptr;
@@ -149,11 +155,11 @@ void Game::Draw() const
 	case GameState::Playing:
 		m_pCamera->Aim(
 			m_level1->GetWidth(), m_level1->GetHeight(), 0, 20,
-			Vector2f{ m_P1->GetCenterPosition().x, 0 }, 4
+			Vector2f{ m_P1->GetCenterPosition().x, 0 }, m_CameraScale
 		);
 
-		m_level1->Draw();
-		m_pEntityManager->Draw();
+		m_level1->Draw(m_DebugShowColliders);
+		m_pEntityManager->Draw(m_DebugShowColliders);
 		m_P1->Draw();
 
 		m_pCamera->Reset();
@@ -186,8 +192,58 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		case GameState::DeathMenu:
 			StartNextLife();
 			break;
+
 		}
 	}
+	//debug
+	switch (e.keysym.sym)
+	{
+	case SDLK_F1:
+		m_DebugShowColliders = !m_DebugShowColliders;
+		if (m_DebugShowColliders)
+			std::cout << "DEBUG: COLLIDERS SHOW ON" << std::endl;
+		else
+			std::cout << "DEBUG: COLLIDERS SHOW OFF" << std::endl;
+		break;
+	case SDLK_F2:
+		
+		m_P1->SetImmortal(!m_P1->IsImmortal());
+		if (m_P1->IsImmortal())
+			std::cout << "DEBUG: IMMORTALITY ON" << std::endl;
+		else
+			std::cout << "DEBUG: IMMORTALITY OFF" << std::endl;
+		break;
+	case SDLK_F3:
+
+		m_P1->SetFlying(!m_P1->IsFlying());
+		if (m_P1->IsFlying())
+			std::cout << "DEBUG: FLYING ON" << std::endl;
+		else
+			std::cout << "DEBUG: FLYING OFF" << std::endl;
+		break;
+	case SDLK_F5:
+		if (m_CameraScale < 10.f)
+		{
+			m_CameraScale += 1.f;
+			if (m_CameraScale > 10.f)
+				m_CameraScale = 10.f;
+		}
+		std::cout << "DEBUG: CAMERA SCALE = " << m_CameraScale << " (NORMAL SCALE IS 4)" << std::endl;
+		break;
+
+	case SDLK_F6:
+		if (m_CameraScale > 1.f)
+		{
+			m_CameraScale -= 1.f;
+			if (m_CameraScale < 1.f)
+				m_CameraScale = 1.f;
+		}
+		std::cout << "DEBUG: CAMERA SCALE = " << m_CameraScale << " (NORMAL SCALE IS 4)" << std::endl;
+		break;
+	}
+	
+	
+	
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
@@ -337,6 +393,10 @@ void Game::LoadLevel1()
 		std::vector<Level::EnemySpawnArea>
 	{
 		{ Level::EnemyType::Zombie, Rectf{ 0, 37, 900.f, 150.f } }
+	},
+		std::vector<Level::DropSpawnPoint>
+	{
+		{ PickupType::MoneyBag, Vector2f{ 300.f, 80.f } }
 	},
 		"Platform.png",
 		"Level1.png"

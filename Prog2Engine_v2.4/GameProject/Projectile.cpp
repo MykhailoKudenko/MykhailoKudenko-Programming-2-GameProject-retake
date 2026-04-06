@@ -15,12 +15,6 @@ void Projectile::Update(float elapsedSec)
 
 
 
-void Projectile::DrawCollider() const
-{
-	utils::SetColor(Color4f{ 0, 1, 0, 1 });
-	utils::DrawRect(m_Collider);
-}
-
 Rectf Projectile::GetHitbox() const
 {
 	return( m_Collider );

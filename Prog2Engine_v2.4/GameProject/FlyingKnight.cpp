@@ -7,10 +7,11 @@ Texture* FlyingKnight::m_pTexture{ nullptr };
 
 FlyingKnight::FlyingKnight(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 24.f, 24.f })
-	, m_IsFacingRight{ facingRight }
 	, m_State{ FlyingKnightState::Spawning }
 	, m_StartY{ startPos.y }
 {
+
+	m_IsFacingRight = facingRight;
 	m_Speed = 35.f;
 
 	if (!facingRight)

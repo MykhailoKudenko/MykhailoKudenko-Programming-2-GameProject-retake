@@ -145,8 +145,14 @@ void Player::UpdateInput()
 
 	bool isPressedNow = pStates[SDL_SCANCODE_E];
 
-	m_DoesWantToThrow = (isPressedNow && !m_PreviousShootPressed);
-
+	if (isPressedNow && !m_PreviousShootPressed && m_ThrowCooldownCurrent <= 0)
+	{
+		m_DoesWantToThrow = true;
+		m_ThrowCooldownCurrent = m_ThrowCooldownMax;
+	}else
+	{
+		m_DoesWantToThrow = false;
+	}
 	m_PreviousShootPressed = isPressedNow;
 
 }
@@ -160,6 +166,32 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 	else if (m_inputDirectionX == -1)
 	{
 		m_isFacingRight = false;
+	}
+	//flying debug update
+	if (m_IsFlying)
+	{
+		if (m_DoesWantToThrow)
+		{
+			m_Mystate = PlayerState::Throwing;
+
+			if (m_IsWearingArmour)
+				m_ThrowArmour.Reset();
+			else
+				m_ThrowNaked.Reset();
+
+			return;
+		}
+
+		if (m_inputDirectionX != 0 || m_inputDirectionY != 0)
+		{
+			m_Mystate = PlayerState::Walking;
+		}
+		else
+		{
+			m_Mystate = PlayerState::Standing;
+		}
+
+		return;
 	}
 
 	// While the up/down key is still being held after climbing started,
@@ -327,10 +359,20 @@ void Player::UpdateTimers(float elapsedSec)
 		if (m_DeathTimeCurrent >= 0)
 			m_DeathTimeCurrent -= elapsedSec;
 	}
+	if (m_ThrowCooldownCurrent >= 0)
+	{
+		m_ThrowCooldownCurrent -= elapsedSec;
+	}
 }
 
 void Player::UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& vertices, float elapsedSec)
 {
+	if (m_IsFlying)
+	{
+		m_Collider.left += m_inputDirectionX * m_FlySpeed * elapsedSec;
+		return;
+	}
+
 	float XSpeed{0};
 	
 	if (m_Mystate == PlayerState::Standing || m_Mystate == PlayerState::Walking)
@@ -394,6 +436,13 @@ void Player::UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& v
 
 void Player::UpdateMovmentVertical(const std::vector<std::vector<Vector2f>>& vertices, std::vector<std::vector<Vector2f>> platfroms, float elapsedSec)
 {
+	if (m_IsFlying)
+	{
+		m_Collider.bottom += m_inputDirectionY * m_FlySpeed * elapsedSec;
+		m_isOnTheGround = false;
+		return;
+	}
+
 	float YSpeed{ 0 };
 
 	if (m_Mystate == PlayerState::Climbing || m_Mystate == PlayerState::ClimbingStill)
@@ -631,4 +680,22 @@ void Player::Respawn(const Vector2f& pos)
 void Player::SetPos(const Vector2f& pos)
 {
 	m_Collider = Rectf{ pos.x, pos.y, 16.f, 24.f };
+}
+void Player::SetImmortal(bool isImmortal)
+{
+	m_IsImmortal = isImmortal;
+}
+bool Player::IsImmortal() const
+{
+	return m_IsImmortal;
+}
+
+void Player::SetFlying(bool isFlying)
+{
+	m_IsFlying = isFlying;
+}
+
+bool Player::IsFlying() const
+{
+	return m_IsFlying;
 }

@@ -56,7 +56,6 @@ private:
 	TrollState m_MyState{ TrollState::Spawning };
 
 	bool m_HasFiredThisShot{ false };
-	bool m_IsFacingRight{ true };
 
 	float m_AnimTime{ 0.f };
 	float m_WalkTimer{ 0.f };
