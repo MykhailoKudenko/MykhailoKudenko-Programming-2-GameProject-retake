@@ -6,7 +6,7 @@ Texture* Torch::m_pTexture{ nullptr };
 Animation* Torch::m_BurningGround{ nullptr };
 
 Torch::Torch(Vector2f pos, bool isRight)
-	: Projectile(Rectf{ pos.x, pos.y, 20.f, 10.f })
+	: Projectile(Rectf{ pos.x, pos.y, 12.f, 8.f })
 {
 	if (isRight)
 	{

@@ -5,7 +5,7 @@
 Texture* Lance::m_pTexture{ nullptr };
 
 Lance::Lance(Vector2f pos, bool isRight)
-	: Projectile(Rectf{ pos.x, pos.y, 20.f, 10.f })
+	: Projectile(Rectf{ pos.x, pos.y, 24.f, 5.f })
 {
 	if (isRight)
 	{

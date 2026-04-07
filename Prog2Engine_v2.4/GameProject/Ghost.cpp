@@ -7,7 +7,7 @@ Animation* Ghost::m_pFlyAnimation{ nullptr };
 Animation* Ghost::m_pSpawnAnimation{ nullptr };
 
 Ghost::Ghost(Vector2f startPos, bool facingRight)
-	: Enemy(Rectf{ startPos.x, startPos.y, 16.f, 16.f })
+	: Enemy(Rectf{ startPos.x, startPos.y, 24, 13.f })
 	, m_State{ GhostState::Spawning }
 {
 	m_IsFacingRight = facingRight;

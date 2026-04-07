@@ -5,7 +5,7 @@
 Texture* PlantProjectile::m_pTexture{ nullptr };
 
 PlantProjectile::PlantProjectile(Vector2f pos, Vector2f Direction)
-	: Projectile(Rectf{ pos.x, pos.y, 10.f, 10.f })
+	: Projectile(Rectf{ pos.x, pos.y, 9.f, 9.f })
 {
 	m_Speed.x = Direction.x * 60;
 	m_Speed.y = Direction.y * 60;

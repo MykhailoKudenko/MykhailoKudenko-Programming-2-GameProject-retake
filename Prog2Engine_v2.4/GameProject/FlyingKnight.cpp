@@ -6,7 +6,7 @@
 Texture* FlyingKnight::m_pTexture{ nullptr };
 
 FlyingKnight::FlyingKnight(Vector2f startPos, bool facingRight)
-	: Enemy(Rectf{ startPos.x, startPos.y, 24.f, 24.f })
+	: Enemy(Rectf{ startPos.x, startPos.y, 15.f, 24.f })
 	, m_State{ FlyingKnightState::Spawning }
 	, m_StartY{ startPos.y }
 {

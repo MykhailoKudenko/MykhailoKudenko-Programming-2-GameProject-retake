@@ -13,7 +13,7 @@ Animation* Troll::m_pSpawnAnimation{ nullptr };
 
 
 Troll::Troll(Vector2f StartPos)
-	: Enemy(Rectf{ StartPos.x, StartPos.y, 40, 40 })
+	: Enemy(Rectf{ StartPos.x, StartPos.y, 43, 40 })
 {
 	m_Speed = 30.f;
 	m_health = 20;

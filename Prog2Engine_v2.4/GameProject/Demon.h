@@ -41,7 +41,7 @@ private:
 
 	EntityManager* m_pEntityManager{ nullptr };
 
-	Vector2f m_TopRightModificatior{ 200, 100 };
+	Vector2f m_TopRightModificatior{ 100, 80 };
 
 
 	static Animation* m_pFlyAnimation;

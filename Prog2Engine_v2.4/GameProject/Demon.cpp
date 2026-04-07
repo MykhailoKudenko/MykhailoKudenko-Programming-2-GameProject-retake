@@ -13,7 +13,7 @@ Animation* Demon::m_pSpawnAnimation{ nullptr };
 
 
 Demon::Demon(Vector2f StartPos)
-	: Enemy(Rectf{ StartPos.x, StartPos.y, 20, 30 })
+	: Enemy(Rectf{ StartPos.x, StartPos.y, 24, 26 })
 {
 	m_Speed = 80.f;
 	m_health = 10;

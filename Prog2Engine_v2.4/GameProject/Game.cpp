@@ -38,8 +38,10 @@ void Game::Initialize()
 
 	Effect::InitializeAssets();
 
-	m_P1 = new Player(Vector2f{ 50, 38 });
+	m_P1 = new Player(Vector2f{ 100, 50.f });
 	m_pEntityManager = new EntityManager();
+	m_SoundManager = new SoundManager();
+	m_pEntityManager->SetSoundManager(m_SoundManager);
 	m_hud = new HUD();
 	m_pCamera = new Camera(1024.f, 960.f);
 
@@ -50,6 +52,9 @@ void Game::Initialize()
 
 	PLayerLivesCurrent = PlayerLivesMax;
 	m_MyState = GameState::MainMenu;
+
+	m_SoundManager->SetMusicVolume(20);
+	m_SoundManager->SetEffectVolume(20);
 }
 
 void Game::Cleanup()
@@ -96,6 +101,13 @@ void Game::Cleanup()
 
 	delete m_P1;
 	m_P1 = nullptr;
+
+	m_SoundManager->StopMusic();
+
+	delete m_SoundManager;
+	m_SoundManager = nullptr;
+
+
 }
 
 void Game::Update(float elapsedSec)
@@ -120,13 +132,17 @@ void Game::Update(float elapsedSec)
 		m_hud->Update(elapsedSec);
 		
 
-		if (m_P1->IsDeathAnimationFinished())
+		if (m_P1->IsDeathAnimationFinished() || m_P1->GetCenterPosition().y < 0)
 		{
 			PLayerLivesCurrent -= 1;
+
+			m_SoundManager->StopMusic();
 
 			if (PLayerLivesCurrent > 0)
 			{
 				m_MyState = GameState::DeathMenu;
+				m_SoundManager->PlayEffect(SFX::Death);
+
 			}
 			else
 			{
@@ -148,7 +164,11 @@ void Game::Draw() const
 	case GameState::MainMenu:
 		if (m_MainMenu != nullptr)
 		{
+			glPushMatrix();
+			glScalef(4, 4, 1.0f);
 			m_MainMenu->Draw(Vector2f{ 0.f, 0.f });
+			glPopMatrix();
+
 		}
 		break;
 
@@ -170,7 +190,10 @@ void Game::Draw() const
 	case GameState::DeathMenu:
 		if (m_DeathMenu != nullptr)
 		{
+			glPushMatrix();
+			glScalef(4, 4, 1.0f);
 			m_DeathMenu->Draw(Vector2f{ 0.f, 0.f });
+			glPopMatrix();
 		}
 		break;
 	}
@@ -184,12 +207,14 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		{
 		case GameState::MainMenu:
 			StartNewRun();
+			m_SoundManager->PlayMusic();
 			break;
 
 		case GameState::Playing:
 			break;
 
 		case GameState::DeathMenu:
+			m_SoundManager->PlayMusic();
 			StartNextLife();
 			break;
 
@@ -322,81 +347,108 @@ void Game::LoadLevel1()
 		std::vector<std::vector<Vector2f>>
 	{
 		{
-			Vector2f{ 0, 37 },
-				Vector2f{ 1246, 37 },
-				Vector2f{ 1246, 0 }
+			Vector2f{ 0, 49 },
+				Vector2f{ 1661, 49 },
+				Vector2f{ 1661, 0 }
 		},
 			{
-				Vector2f{ 450, 95 },
-				Vector2f{ 847, 95 }
+				Vector2f{ 600, 127 },
+				Vector2f{ 1120, 127 }
 			},
 			{
-				Vector2f{ 1343, 0 },
-				Vector2f{ 1343, 37 },
-				Vector2f{ 1463, 37 },
-				Vector2f{ 1463, 0 }
+				Vector2f{ 1790, 0 },
+				Vector2f{ 1790, 49},
+				Vector2f{ 1949, 49},
+				Vector2f{ 1949, 0 }
 			},
 			{
-				Vector2f{ 1487, 0 },
-				Vector2f{ 1487, 37 },
-				Vector2f{ 1511, 37 },
-				Vector2f{ 1511, 0 }
+				Vector2f{ 1982, 0 },
+				Vector2f{ 1982, 49},
+				Vector2f{ 2013, 49},
+				Vector2f{ 2013, 0 }
 			},
 			{
-				Vector2f{ 1535, 0 },
-				Vector2f{ 1535, 37 },
-				Vector2f{ 1835, 37 },
-				Vector2f{ 1835, 0 }
+				Vector2f{ 2046, 0 },
+				Vector2f{ 2046, 49},
+				Vector2f{ 2445, 49},
+				Vector2f{ 2445, 0 }
 			},
 			{
-				Vector2f{ 1859, 0 },
-				Vector2f{ 1859, 37 },
-				Vector2f{ 2026, 37 },
-				Vector2f{ 2026, 0 }
+				Vector2f{ 2478, 0 },
+				Vector2f{ 2478, 49},
+				Vector2f{ 2701, 49},
+				Vector2f{ 2701, 0 }
 			},
 			{
-				Vector2f{ 2051, 0 },
-				Vector2f{ 2051, 37 },
-				Vector2f{ 2686, 37 },
-				Vector2f{ 2686, 0 }
+				Vector2f{ 2734, 0 },
+				Vector2f{ 2734, 49},
+				Vector2f{ 3582, 49},
+				Vector2f{ 3582, 0 }
 			},
 			{
 				Vector2f{ 0, 0 },
-				Vector2f{ 0, 179 }
+				Vector2f{ 0, 240 }
 			},
 			{
-				Vector2f{ 2686, 0 },
-				Vector2f{ 2686, 179 }
+				Vector2f{ 3582, 0 },
+				Vector2f{ 3582, 240 }
 			}
 	},
 		std::vector<Rectf>
 	{
-		Rectf{ 539.f, 42.f, 11.f, 53.f },
-			Rectf{ 683.f, 42.f, 11.f, 53.f },
-			Rectf{ 803.f, 42.f, 11.f, 53.f }
+		Rectf{ 719.f, 50.f, 16.f, 80.f },
+		Rectf{ 911.f, 50.f, 16.f, 80.f },
+		Rectf{ 1071.f, 50.f, 16.f, 80.f }
 	},
 		std::vector<Level::MovingPlatform>
 	{
 		Level::MovingPlatform
 		{
-			Rectf{ 1246.f, 24.f, 32.f, 13.f },
+			Rectf{ 1664, 24.f, 32.f, 13.f },
 			20.f,
-			1246.f,
-			1343.f
+			1664.f,
+			1789.f
 		}
 	},
 		std::vector<Level::EnemySpawnPoint>
 	{
-		{ Level::EnemyType::Plant, Vector2f{ 620.f, 95.f } },
-		{ Level::EnemyType::Plant, Vector2f{ 800.f, 37.f } }
+		{ Level::EnemyType::Plant, Vector2f{ 798.f, 128.f } },
+		{ Level::EnemyType::Plant, Vector2f{ 1102.f, 128.f } },
+		{ Level::EnemyType::Plant, Vector2f{ 2351.f, 49.f } },
+		{ Level::EnemyType::Plant, Vector2f{ 2777.f, 49.f } },
+
+		{ Level::EnemyType::Bird, Vector2f{ 752.f, 64.f } },
+		{ Level::EnemyType::Bird, Vector2f{ 1103.f, 64.f } },
+		{ Level::EnemyType::Bird, Vector2f{ 1268.f, 62.f } },
+		{ Level::EnemyType::Bird, Vector2f{ 1520.f, 64.f } },
+
+		{ Level::EnemyType::Demon, Vector2f{ 1500, 49.f } },
+
+		{ Level::EnemyType::FlyingKnight, Vector2f{ 2050.f, 81.f } },
+		{ Level::EnemyType::FlyingKnight, Vector2f{ 2080.f, 111.f } },
+		{ Level::EnemyType::FlyingKnight, Vector2f{ 2110.f, 81.f } },
+
+		{ Level::EnemyType::FlyingKnight, Vector2f{ 2200.f, 81.f } },
+		{ Level::EnemyType::FlyingKnight, Vector2f{ 2230.f, 111.f } },
+		{ Level::EnemyType::FlyingKnight, Vector2f{ 2260.f, 81.f } },
+
+		{ Level::EnemyType::Troll, Vector2f{ 3424.f, 49.f } }
 	},
 		std::vector<Level::EnemySpawnArea>
 	{
-		{ Level::EnemyType::Zombie, Rectf{ 0, 37, 900.f, 150.f } }
+		{ Level::EnemyType::Zombie, Rectf{ 0, 49.f, 1200.f, 150.f } },
+		{ Level::EnemyType::Ghost, Rectf{ 2670, 49.f, 480.f, 150.f }, false }
 	},
 		std::vector<Level::DropSpawnPoint>
 	{
-		{ PickupType::MoneyBag, Vector2f{ 300.f, 80.f } }
+		{ PickupType::MoneyBag, Vector2f{ 304.f, 49.f } },
+		{ PickupType::MoneyBag, Vector2f{ 609.f, 49.f } },
+		{ PickupType::MoneyBag, Vector2f{ 921.f, 128.f } },
+		{ PickupType::MoneyBag, Vector2f{ 1466.f, 49.f } },
+		{ PickupType::MoneyBag, Vector2f{ 2382.f, 49.f } },
+		{ PickupType::MoneyBag, Vector2f{ 2436.f, 49.f } },
+		{ PickupType::MoneyBag, Vector2f{ 2940.f, 49.f } },
+
 	},
 		"Platform.png",
 		"Level1.png"
@@ -418,6 +470,7 @@ void Game::ResetLevel()
 	m_pEntityManager->SetLevel(m_level1);
 	m_pEntityManager->SetPlayer(m_P1);
 	m_pEntityManager->SpawnPointEnemies();
+	m_pEntityManager->SetSoundManager(m_SoundManager);
 
 	m_hud->ResetTimer();
 }

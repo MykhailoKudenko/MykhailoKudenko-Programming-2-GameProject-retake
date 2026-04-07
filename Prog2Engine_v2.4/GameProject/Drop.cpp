@@ -10,9 +10,16 @@ Texture* Drop::m_pDollTexture{ nullptr };
 Texture* Drop::m_pMoneyBagTexture{ nullptr };
 
 Drop::Drop(const Vector2f& pos, PickupType type)
-	: m_Collider{ pos.x, pos.y, 20.f, 20.f }
+	: m_Collider{ pos.x, pos.y, 10.f, 10.f }
 	, m_Type{ type }
 {
+	Texture* pTexture = GetTexture();
+
+	if (pTexture != nullptr)
+	{
+		m_Collider.width = pTexture->GetWidth();
+		m_Collider.height = pTexture->GetHeight();
+	}
 }
 
 void Drop::Update(float elapsedSec)

@@ -7,7 +7,7 @@
 Animation* Plant::m_pPlantAnimation{ nullptr };
 
 Plant::Plant(Vector2f StartPos)
-	: Enemy(Rectf{ StartPos.x, StartPos.y, 20, 40 })
+	: Enemy(Rectf{ StartPos.x, StartPos.y, 16, 24 })
 {
 	m_Speed = 0.f;
 	

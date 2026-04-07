@@ -54,86 +54,12 @@ std::vector<Level::DropSpawnPoint>& Level::GetDropSpawnPoints()
 
 float Level::GetWidth() const
 {
-	float maxX{ 0.f };
-
-	for (const std::vector<Vector2f>& shape : m_Vertices)
-	{
-		for (const Vector2f& vertex : shape)
-		{
-			if (vertex.x > maxX)
-			{
-				maxX = vertex.x;
-			}
-		}
-	}
-
-	for (const MovingPlatform& platform : m_Platforms)
-	{
-		if (platform.rect.left + platform.rect.width > maxX)
-		{
-			maxX = platform.rect.left + platform.rect.width;
-		}
-	}
-
-	for (const EnemySpawnArea& area : m_EnemySpawnAreas)
-	{
-		if (area.area.left + area.area.width > maxX)
-		{
-			maxX = area.area.left + area.area.width;
-		}
-	}
-
-	for (const EnemySpawnPoint& point : m_EnemySpawnPoints)
-	{
-		if (point.position.x > maxX)
-		{
-			maxX = point.position.x;
-		}
-	}
-
-	return maxX;
+	return m_Texture.GetWidth();
 }
 
 float Level::GetHeight() const
 {
-	float maxY{ 0.f };
-
-	for (const std::vector<Vector2f>& shape : m_Vertices)
-	{
-		for (const Vector2f& vertex : shape)
-		{
-			if (vertex.y > maxY)
-			{
-				maxY = vertex.y;
-			}
-		}
-	}
-
-	for (const MovingPlatform& platform : m_Platforms)
-	{
-		if (platform.rect.bottom + platform.rect.height > maxY)
-		{
-			maxY = platform.rect.bottom + platform.rect.height;
-		}
-	}
-
-	for (const EnemySpawnArea& area : m_EnemySpawnAreas)
-	{
-		if (area.area.bottom + area.area.height > maxY)
-		{
-			maxY = area.area.bottom + area.area.height;
-		}
-	}
-
-	for (const EnemySpawnPoint& point : m_EnemySpawnPoints)
-	{
-		if (point.position.y > maxY)
-		{
-			maxY = point.position.y;
-		}
-	}
-
-	return maxY;
+	return m_Texture.GetHeight();
 }
 
 void Level::Draw(bool isDebug) const

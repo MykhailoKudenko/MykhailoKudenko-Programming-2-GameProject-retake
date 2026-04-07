@@ -4,6 +4,7 @@
 
 #include "Player.h"
 #include "Level.h"
+#include "SoundManager.h"
 
 #include "Bird.h"
 #include "Zombie.h"
@@ -33,6 +34,7 @@ public:
 
     void SetLevel(Level* pLevel);
     void SetPlayer(Player* pPlayer);
+    void SetSoundManager(SoundManager* pSoundManager);
 
     Vector2f GetPlayerPosition() const;
 
@@ -62,7 +64,7 @@ public:
     void SpawnPointDrops();
 
     void SpawnEffect(const Vector2f& pos, Effect::EffectType type, bool isMirrored = false);
-
+  
 private:
 
     void SpawnEnemyByType(Level::EnemyType type, const Vector2f& pos, bool startsFacingRight);
@@ -78,6 +80,8 @@ private:
     Player* m_pPlayer{ nullptr };
     Level* m_pLevel{ nullptr };
 
+    SoundManager* m_pSoundManager{ nullptr };
+
     std::vector<Enemy*> m_Enemies;
     std::vector<Projectile*> m_PlayerProjectiles;
     std::vector<Projectile*> m_EnemyProjectiles;
@@ -91,5 +95,13 @@ private:
     float yMinSpawnForAir{ 37.f };
     float yMaxHeight{ 200.f};
     float m_AreaSpawnInterval{ 1.f };
+    //non unique sounds/ group sounds
+    bool m_IsGhostSoundPlaying{ false };
+    bool m_IsFlyingKnightSoundPlaying{ false };
 
+    float m_GhostSoundTimer{ 0.f };
+    float m_FlyingKnightSoundTimer{ 0.f };
+
+    const float m_GhostSoundCooldown{ 2.0f };
+    const float m_FlyingKnightSoundCooldown{ 2.0f };
 };

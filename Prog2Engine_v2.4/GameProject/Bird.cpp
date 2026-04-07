@@ -7,7 +7,7 @@ Animation* Bird::m_pFlyAnimation{ nullptr };
 Animation* Bird::m_pSpawnAnimation{ nullptr };
 
 Bird::Bird(Vector2f startPos, bool facingRight)
-	: Enemy(Rectf{ startPos.x, startPos.y, 16.f, 16.f })
+	: Enemy(Rectf{ startPos.x, startPos.y, 12.f, 13.f })
 	, m_State{ BirdState::Spawning }
 	, m_StartY{ startPos.y }
 {

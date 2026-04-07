@@ -6,7 +6,7 @@
 Texture* Knife::m_pTexture{ nullptr };
 
 Knife::Knife(Vector2f pos, bool isRight)
-	: Projectile(Rectf{ pos.x, pos.y, 20.f, 10.f })
+	: Projectile(Rectf{ pos.x, pos.y, 12.f, 7.f })
 {
 	if (isRight)
 	{

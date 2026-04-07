@@ -9,6 +9,8 @@
 
 #include "Camera.h"
 #include "EntityManager.h"
+#include "SoundManager.h"
+
 #include "HUD.h"
 class Game : public BaseGame
 {
@@ -54,6 +56,7 @@ private:
 	Player* m_P1;
 	Level* m_level1;
 	EntityManager* m_pEntityManager;
+	SoundManager* m_SoundManager;
 
 	HUD* m_hud;
 

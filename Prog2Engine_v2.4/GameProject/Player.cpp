@@ -117,8 +117,15 @@ Vector2f Player::GetCenterPosition() const
 
 void Player::UpdateInput()
 {
-	if (m_Mystate == PlayerState::Dead)
+	if (m_Mystate == PlayerState::Dead || m_Mystate == PlayerState::KnockbackDead)
+	{
+		m_inputDirectionX = 0;
+		m_inputDirectionY = 0;
+		m_IsShootButtonPressed = false;
+		m_DoesWantToThrow = false;
 		return;
+	}
+
 	const Uint8* pStates = SDL_GetKeyboardState(nullptr);
 
 	m_inputDirectionX = 0;

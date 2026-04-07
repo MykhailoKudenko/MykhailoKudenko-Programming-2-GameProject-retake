@@ -50,6 +50,12 @@ void EntityManager::Update(float elapsedSec)
 
     Vector2f playerPos = m_pPlayer->GetCenterPosition();
 
+    m_GhostSoundTimer -= elapsedSec;
+    m_FlyingKnightSoundTimer -= elapsedSec;
+
+    bool hasGhostInRange{ false };
+    bool hasFlyingKnightInRange{ false };
+
     for (Enemy* enemy : m_Enemies)
     {
         float dx = std::abs(enemy->GetCenterPosition().x - playerPos.x);
@@ -61,6 +67,16 @@ void EntityManager::Update(float elapsedSec)
 
         if (enemy->GetIsActive())
         {
+            if (dynamic_cast<Ghost*>(enemy) != nullptr)
+            {
+                hasGhostInRange = true;
+            }
+
+            if (dynamic_cast<FlyingKnight*>(enemy) != nullptr)
+            {
+                hasFlyingKnightInRange = true;
+            }
+
             enemy->Update(elapsedSec);
 
             if (utils::IsOverlapping(enemy->GetHitbox(), m_pPlayer->GetHitbox()))
@@ -76,6 +92,24 @@ void EntityManager::Update(float elapsedSec)
         {
             enemy->Kill();
         }
+    }
+
+    if (hasGhostInRange && m_GhostSoundTimer <= 0.f)
+    {
+        if (m_pSoundManager != nullptr)
+        {
+            m_pSoundManager->PlayEffect(SFX::Ghost);
+        }
+        m_GhostSoundTimer = m_GhostSoundCooldown;
+    }
+
+    if (hasFlyingKnightInRange && m_FlyingKnightSoundTimer <= 0.f)
+    {
+        if (m_pSoundManager != nullptr)
+        {
+            m_pSoundManager->PlayEffect(SFX::FlyingKnight);
+        }
+        m_FlyingKnightSoundTimer = m_FlyingKnightSoundCooldown;
     }
 
     for (Projectile* proj : m_PlayerProjectiles)
@@ -98,6 +132,7 @@ void EntityManager::Update(float elapsedSec)
         drop->Update(elapsedSec);
         if (utils::IsOverlapping(m_pPlayer->GetHitbox(), drop->GetHitbox()))
         {
+            m_pSoundManager->PlayEffect(SFX::PickUp);
             switch (drop->GetType())
             {
             case PickupType::Lance:
@@ -154,6 +189,10 @@ void EntityManager::Update(float elapsedSec)
                     }
 
                     SpawnEffect(enemy->GetCenterPosition(),enemy->GetEffectType(),enemy->IsFacingRight());
+                    if (enemy->GetEffectType() == Effect::EffectType::Fire)
+                    {
+                        m_pSoundManager->PlayEffect(SFX::FireDead);
+                    }
                 }
 
                 proj->Kill();
@@ -484,17 +523,20 @@ void EntityManager::AddTroll(const Vector2f& spawnPos)
 }
 void EntityManager::SpawnLance(const Vector2f& pos, bool isRight)
 {
+    m_pSoundManager->PlayEffect(SFX::Throw);
     Lance* lance = new Lance(pos, isRight);
     m_PlayerProjectiles.push_back(lance);
 }
 void EntityManager::SpawnKnife(const Vector2f& pos, bool isRight)
 {
+    m_pSoundManager->PlayEffect(SFX::Throw);
     Knife* knife = new Knife(pos, isRight);
     m_PlayerProjectiles.push_back(knife);
 
 }
 void EntityManager::SpawnTourch(const Vector2f& pos, bool isRight)
 {
+    m_pSoundManager->PlayEffect(SFX::Throw);
     Torch* torch = new Torch(pos, isRight);
     if (m_pLevel != nullptr)
     {
@@ -591,6 +633,12 @@ void EntityManager::SetPlayer(Player* pPlayer)
 {
     m_pPlayer = pPlayer;
 }
+
+void EntityManager::SetSoundManager(SoundManager* pSoundManager)
+{
+    m_pSoundManager = pSoundManager;
+}
+
 Vector2f EntityManager::GetPlayerPosition() const
 {
     if (m_pPlayer != nullptr)
