@@ -87,7 +87,7 @@ void Player::Draw() const
 		break;
 	}
 }
-void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& vertices, const std::vector<Rectf>& ladders, std::vector<std::vector<Vector2f>> platfroms)
+void Player::Update(float elapsedSec,const std::vector<std::vector<Vector2f>>& vertices,const std::vector<std::vector<Vector2f>>& playerOnlyVertices,const std::vector<Rectf>& ladders,std::vector<std::vector<Vector2f>> platfroms)
 {
 	//input
 	
@@ -101,8 +101,8 @@ void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& 
 	UpdateTimers(elapsedSec);
 
 	//movemnt control + states reset
-	UpdateMovmentVertical(vertices, platfroms, elapsedSec);
-	UpdateMovmentHorisontal(vertices, elapsedSec);
+	UpdateMovmentVertical(vertices, playerOnlyVertices, platfroms, elapsedSec);
+	UpdateMovmentHorisontal(vertices, playerOnlyVertices, elapsedSec);
 	
 }
 
@@ -372,7 +372,10 @@ void Player::UpdateTimers(float elapsedSec)
 	}
 }
 
-void Player::UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& vertices, float elapsedSec)
+void Player::UpdateMovmentHorisontal(
+	const std::vector<std::vector<Vector2f>>& vertices,
+	const std::vector<std::vector<Vector2f>>& playerOnlyVertices,
+	float elapsedSec)
 {
 	if (m_IsFlying)
 	{
@@ -380,21 +383,22 @@ void Player::UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& v
 		return;
 	}
 
-	float XSpeed{0};
-	
+	float xSpeed{ 0.f };
+
 	if (m_Mystate == PlayerState::Standing || m_Mystate == PlayerState::Walking)
 	{
-		XSpeed = m_inputDirectionX * m_MovementSpeed * elapsedSec;
+		xSpeed = m_inputDirectionX * m_MovementSpeed * elapsedSec;
 	}
-	if (m_Mystate == PlayerState::Knockback || m_Mystate == PlayerState::KnockbackDead)
+	else if (m_Mystate == PlayerState::Knockback || m_Mystate == PlayerState::KnockbackDead)
 	{
-		XSpeed = m_KnockBackDirectionX * m_KnockBackSpeed * elapsedSec;
+		xSpeed = m_KnockBackDirectionX * m_KnockBackSpeed * elapsedSec;
 	}
-	if (m_Mystate == PlayerState::Jumping)
+	else if (m_Mystate == PlayerState::Jumping)
 	{
-		XSpeed = m_JumpDirectionX * m_JumpSpeed * elapsedSec;
+		xSpeed = m_JumpDirectionX * m_JumpSpeed * elapsedSec;
 	}
-	if (XSpeed == 0
+
+	if (xSpeed == 0.f
 		&& m_Mystate != PlayerState::Ducking
 		&& m_Mystate != PlayerState::Climbing
 		&& m_Mystate != PlayerState::ClimbingStill
@@ -408,40 +412,93 @@ void Player::UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& v
 		m_Mystate = PlayerState::Standing;
 		return;
 	}
-	//collisions right/left
-	utils::HitInfo myInfoTopSide{};
-	utils::HitInfo myInfoBottomSide{};
 
-	bool hitWallOnX = false;
+	bool hitWallOnX{ false };
 
-	if (XSpeed > 0)
+	if (xSpeed > 0.f)
 	{
-		bool hitTopSide = utils::LoopOverVertecies(vertices,Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },Vector2f{ m_Collider.left + m_Collider.width + XSpeed, m_Collider.bottom + m_Collider.height },myInfoTopSide);
-		bool hitBottomSide = utils::LoopOverVertecies(vertices,Vector2f{ m_Collider.left, m_Collider.bottom + 1 },Vector2f{ m_Collider.left + m_Collider.width + XSpeed, m_Collider.bottom + 1 },myInfoBottomSide);
-		hitWallOnX = hitTopSide || hitBottomSide;
+		utils::HitInfo worldTopHit{};
+		utils::HitInfo worldBottomHit{};
+		utils::HitInfo playerTopHit{};
+		utils::HitInfo playerBottomHit{};
+
+		bool hitWorldTop = utils::LoopOverVertecies(
+			vertices,
+			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height - 1.f },
+			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
+			worldTopHit);
+
+		bool hitWorldBottom = utils::LoopOverVertecies(
+			vertices,
+			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1.f },
+			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + 1.f },
+			worldBottomHit);
+
+		bool hitPlayerTop = utils::LoopOverVertecies(
+			playerOnlyVertices,
+			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height - 1.f },
+			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
+			playerTopHit);
+
+		bool hitPlayerBottom = utils::LoopOverVertecies(
+			playerOnlyVertices,
+			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1.f },
+			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + 1.f },
+			playerBottomHit);
+
+		hitWallOnX = hitWorldTop || hitWorldBottom || hitPlayerTop || hitPlayerBottom;
 	}
-	else if (XSpeed < 0)
+	else if (xSpeed < 0.f)
 	{
-		// moving left: cast rays from left side outward
+		utils::HitInfo worldTopHit{};
+		utils::HitInfo worldBottomHit{};
+		utils::HitInfo playerTopHit{};
+		utils::HitInfo playerBottomHit{};
 
-		bool hitTopSide = utils::LoopOverVertecies(vertices,Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },Vector2f{ m_Collider.left + XSpeed, m_Collider.bottom + m_Collider.height },myInfoTopSide);
+		bool hitWorldTop = utils::LoopOverVertecies(
+			vertices,
+			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height - 1.f },
+			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
+			worldTopHit);
 
-		bool hitBottomSide = utils::LoopOverVertecies(vertices,Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1 },Vector2f{ m_Collider.left + XSpeed, m_Collider.bottom + 1 },myInfoBottomSide);
-		hitWallOnX = hitTopSide || hitBottomSide;
-		
+		bool hitWorldBottom = utils::LoopOverVertecies(
+			vertices,
+			Vector2f{ m_Collider.left, m_Collider.bottom + 1.f },
+			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + 1.f },
+			worldBottomHit);
+
+		bool hitPlayerTop = utils::LoopOverVertecies(
+			playerOnlyVertices,
+			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height - 1.f },
+			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
+			playerTopHit);
+
+		bool hitPlayerBottom = utils::LoopOverVertecies(
+			playerOnlyVertices,
+			Vector2f{ m_Collider.left, m_Collider.bottom + 1.f },
+			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + 1.f },
+			playerBottomHit);
+
+		hitWallOnX = hitWorldTop || hitWorldBottom || hitPlayerTop || hitPlayerBottom;
 	}
+
 	if (!hitWallOnX)
 	{
-		m_Collider.left += XSpeed;
+		m_Collider.left += xSpeed;
 
-		if (XSpeed != 0 && (m_Mystate == PlayerState::Standing || m_Mystate == PlayerState::Walking))
+		if (xSpeed != 0.f
+			&& (m_Mystate == PlayerState::Standing || m_Mystate == PlayerState::Walking))
 		{
 			m_Mystate = PlayerState::Walking;
 		}
 	}
 }
 
-void Player::UpdateMovmentVertical(const std::vector<std::vector<Vector2f>>& vertices, std::vector<std::vector<Vector2f>> platfroms, float elapsedSec)
+void Player::UpdateMovmentVertical(
+	const std::vector<std::vector<Vector2f>>& vertices,
+	const std::vector<std::vector<Vector2f>>& playerOnlyVertices,
+	const std::vector<std::vector<Vector2f>>& platforms,
+	float elapsedSec)
 {
 	if (m_IsFlying)
 	{
@@ -450,44 +507,81 @@ void Player::UpdateMovmentVertical(const std::vector<std::vector<Vector2f>>& ver
 		return;
 	}
 
-	float YSpeed{ 0 };
+	float ySpeed{ 0.f };
 
 	if (m_Mystate == PlayerState::Climbing || m_Mystate == PlayerState::ClimbingStill)
 	{
 		m_Collider.bottom += m_ClimbSpeed * elapsedSec * m_inputDirectionY;
 	}
-	else if (m_KnockbackTimeCurrent > 0)
+	else if (m_KnockbackTimeCurrent > 0.f)
 	{
-		YSpeed = m_KnockBackSpeed * elapsedSec;
+		ySpeed = m_KnockBackSpeed * elapsedSec;
 	}
-	else if (m_JumpTimeUpCurrent > 0)
+	else if (m_JumpTimeUpCurrent > 0.f)
 	{
-		YSpeed = m_JumpSpeed * elapsedSec;
+		ySpeed = m_JumpSpeed * elapsedSec;
 	}
 	else
 	{
-		YSpeed = m_Gravity * elapsedSec;
+		ySpeed = m_Gravity * elapsedSec;
 	}
 
-	utils::HitInfo myInfoLeft{};
-	utils::HitInfo myInfoRight{};
+	utils::HitInfo worldLeftHit{};
+	utils::HitInfo worldRightHit{};
+	utils::HitInfo playerLeftHit{};
+	utils::HitInfo playerRightHit{};
+	utils::HitInfo platformLeftHit{};
+	utils::HitInfo platformRightHit{};
 
-	bool hitLeft = utils::LoopOverVertecies(vertices, Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height }, Vector2f{ m_Collider.left, m_Collider.bottom - YSpeed }, myInfoLeft);
-	bool hitRight = utils::LoopOverVertecies(vertices, Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height }, Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom - 1.f }, myInfoRight);
+	bool hitWorldLeft{ false };
+	bool hitWorldRight{ false };
+	bool hitPlayerLeft{ false };
+	bool hitPlayerRight{ false };
+	bool hitPlatformLeft{ false };
+	bool hitPlatformRight{ false };
 
-	if (!(hitLeft || hitRight)) //if didnt hit check for platforms
+	if (ySpeed <= 0.f)
 	{
-		hitLeft = utils::LoopOverVertecies(platfroms, Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height }, Vector2f{ m_Collider.left, m_Collider.bottom - YSpeed }, myInfoLeft);
-		hitRight = utils::LoopOverVertecies(platfroms, Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height }, Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom - 1.f }, myInfoRight);
+		Vector2f leftRayStart{ m_Collider.left + 1.f, m_Collider.bottom + m_Collider.height };
+		Vector2f leftRayEnd{ m_Collider.left + 1.f, m_Collider.bottom + ySpeed };
 
+		Vector2f rightRayStart{ m_Collider.left + m_Collider.width - 1.f, m_Collider.bottom + m_Collider.height };
+		Vector2f rightRayEnd{ m_Collider.left + m_Collider.width - 1.f, m_Collider.bottom + ySpeed };
+
+		hitWorldLeft = utils::LoopOverVertecies(vertices, leftRayStart, leftRayEnd, worldLeftHit);
+		hitWorldRight = utils::LoopOverVertecies(vertices, rightRayStart, rightRayEnd, worldRightHit);
+
+		hitPlayerLeft = utils::LoopOverVertecies(playerOnlyVertices, leftRayStart, leftRayEnd, playerLeftHit);
+		hitPlayerRight = utils::LoopOverVertecies(playerOnlyVertices, rightRayStart, rightRayEnd, playerRightHit);
+
+		if (!(hitWorldLeft || hitWorldRight || hitPlayerLeft || hitPlayerRight))
+		{
+			hitPlatformLeft = utils::LoopOverVertecies(platforms, leftRayStart, leftRayEnd, platformLeftHit);
+			hitPlatformRight = utils::LoopOverVertecies(platforms, rightRayStart, rightRayEnd, platformRightHit);
+		}
 	}
-	if (!(hitLeft || hitRight) || YSpeed > 0  || m_Mystate == PlayerState::Climbing || m_Mystate == PlayerState::ClimbingStill) // if not on the ground
+
+	bool hitGround =
+		hitWorldLeft || hitWorldRight ||
+		hitPlayerLeft || hitPlayerRight ||
+		hitPlatformLeft || hitPlatformRight;
+
+	if (!hitGround || ySpeed > 0.f || m_Mystate == PlayerState::Climbing || m_Mystate == PlayerState::ClimbingStill)
 	{
-		m_Collider.bottom += YSpeed;
+		m_Collider.bottom += ySpeed;
 		m_isOnTheGround = false;
 	}
-	else //if on the ground
+	else
 	{
+		float groundY = -100000.f;
+
+		if (hitWorldLeft)    groundY = std::max(groundY, worldLeftHit.intersectPoint.y);
+		if (hitWorldRight)   groundY = std::max(groundY, worldRightHit.intersectPoint.y);
+		if (hitPlayerLeft)   groundY = std::max(groundY, playerLeftHit.intersectPoint.y);
+		if (hitPlayerRight)  groundY = std::max(groundY, playerRightHit.intersectPoint.y);
+		if (hitPlatformLeft) groundY = std::max(groundY, platformLeftHit.intersectPoint.y);
+		if (hitPlatformRight)groundY = std::max(groundY, platformRightHit.intersectPoint.y);
+
 		if (m_Mystate == PlayerState::Jumping)
 		{
 			m_Mystate = PlayerState::Standing;
@@ -500,8 +594,8 @@ void Player::UpdateMovmentVertical(const std::vector<std::vector<Vector2f>>& ver
 		{
 			m_Mystate = PlayerState::Dead;
 		}
-		m_Collider.bottom = std::max(myInfoLeft.intersectPoint.y, myInfoRight.intersectPoint.y);
 
+		m_Collider.bottom = groundY;
 		m_isOnTheGround = true;
 	}
 

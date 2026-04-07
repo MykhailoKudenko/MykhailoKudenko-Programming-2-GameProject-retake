@@ -35,6 +35,7 @@ public:
 
 	void Draw() const;
 	void Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& vertices, 
+		const std::vector<std::vector<Vector2f>>& playerOnlyVertices,
 		const std::vector<Rectf>& ladders, 
 		std::vector<std::vector<Vector2f>> platfroms); //maybe make by reference later
 
@@ -70,8 +71,12 @@ private:
 	void UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec);
 	void UpdateInput();
 	void UpdateTimers(float elapsedSec);
-	void UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& vertices, float elapsedSec);
-	void UpdateMovmentVertical(const std::vector<std::vector<Vector2f>>& vertices, std::vector<std::vector<Vector2f>> platfroms, float elapsedSec);
+
+	void UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& vertices,const std::vector<std::vector<Vector2f>>& playerOnlyVertices,float elapsedSec); 
+	void UpdateMovmentVertical(const std::vector<std::vector<Vector2f>>& vertices,
+		const std::vector<std::vector<Vector2f>>& playerOnlyVertices,
+		const std::vector<std::vector<Vector2f>>& platforms,
+		float elapsedSec);
 
 	bool TryClimb(const std::vector<Rectf>& ladders, bool isGoingUp);
 	bool IsStillOnLadder() const;

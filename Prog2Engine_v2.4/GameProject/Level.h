@@ -49,6 +49,7 @@ public:
 
 	Level(
 		std::vector<std::vector<Vector2f>> vertices,
+		std::vector<std::vector<Vector2f>> playerOnlyVertices,
 		std::vector<Rectf> ladders,
 		std::vector<MovingPlatform> platforms,
 		std::vector<EnemySpawnPoint> enemySpawnPoints,
@@ -66,6 +67,8 @@ public:
 
 	std::vector<DropSpawnPoint>& GetDropSpawnPoints();
 
+	std::vector<std::vector<Vector2f>>& GetPlayerOnlyVertices();
+
 	float GetWidth() const;
 	float GetHeight() const;
 
@@ -76,6 +79,8 @@ public:
 private:
 
 	std::vector<std::vector<Vector2f>> m_Vertices;
+	std::vector<std::vector<Vector2f>> m_PlayerOnlyVertices;
+
 	std::vector<Rectf> m_Ladders;
 	std::vector<MovingPlatform> m_Platforms;
 	std::vector<std::vector<Vector2f>> m_PlatformTopEdges;

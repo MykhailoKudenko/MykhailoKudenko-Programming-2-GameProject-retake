@@ -5,6 +5,7 @@
 
 Level::Level(
 	std::vector<std::vector<Vector2f>> vertices,
+	std::vector<std::vector<Vector2f>> playerOnlyVertices,
 	std::vector<Rectf> ladders,
 	std::vector<MovingPlatform> platforms,
 	std::vector<EnemySpawnPoint> enemySpawnPoints,
@@ -13,6 +14,7 @@ Level::Level(
 	const std::string& PlatformTexturePath,
 	const std::string& LevelTexturePath)
 	: m_Vertices{ vertices }
+	, m_PlayerOnlyVertices{ playerOnlyVertices }
 	, m_Ladders{ ladders }
 	, m_Platforms{ platforms }
 	, m_EnemySpawnPoints{ enemySpawnPoints }
@@ -51,6 +53,10 @@ std::vector<Level::DropSpawnPoint>& Level::GetDropSpawnPoints()
 {
 	return m_DropSpawnPoints;
 }
+std::vector<std::vector<Vector2f>>& Level::GetPlayerOnlyVertices() 
+{
+	return m_PlayerOnlyVertices;
+}
 
 float Level::GetWidth() const
 {
@@ -74,6 +80,15 @@ void Level::Draw(bool isDebug) const
 	if (isDebug)
 	{
 		for (const std::vector<Vector2f>& platform : m_Vertices)
+		{
+			for (size_t i = 0; i + 1 < platform.size(); ++i)
+			{
+				utils::SetColor(Color4f{ 1.f, 0.f, 1.f, 1.f });
+				utils::DrawLine(platform[i], platform[i + 1]);
+			}
+		}
+
+		for (const std::vector<Vector2f>& platform : m_PlayerOnlyVertices)
 		{
 			for (size_t i = 0; i + 1 < platform.size(); ++i)
 			{
@@ -144,3 +159,4 @@ void Level::Update(float elapsedSec)
 			});
 	}
 }
+

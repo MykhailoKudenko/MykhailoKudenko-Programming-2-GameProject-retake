@@ -122,6 +122,7 @@ void Game::Update(float elapsedSec)
 		m_P1->Update(
 			elapsedSec,
 			m_level1->GetVertecies(),
+			m_level1->GetPlayerOnlyVertices(),
 			m_level1->GetLadders(),
 			m_level1->GetPlatformTopEdges()
 		);
@@ -393,6 +394,81 @@ void Game::LoadLevel1()
 				Vector2f{ 3582, 0 },
 				Vector2f{ 3582, 240 }
 			}
+	}, std::vector<std::vector<Vector2f>>
+	{
+	{
+		Vector2f{ 0 + 46, 0 + 49 },
+		Vector2f{ 0 + 46, 49 + 15 },
+		Vector2f{ 46 + 15, 49 + 15 },
+		Vector2f{ 46 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 238, 0 + 49 },
+		Vector2f{ 0 + 238, 49 + 15 },
+		Vector2f{ 238 + 15, 49 + 15 },
+		Vector2f{ 238 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 414, 0 + 49 },
+		Vector2f{ 0 + 414, 49 + 15 },
+		Vector2f{ 414 + 15, 49 + 15 },
+		Vector2f{ 414 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 526, 0 + 49 },
+		Vector2f{ 0 + 526, 49 + 15 },
+		Vector2f{ 526 + 15, 49 + 15 },
+		Vector2f{ 526 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 750, 0 + 49 },
+		Vector2f{ 0 + 750, 49 + 15 },
+		Vector2f{ 750 + 15, 49 + 15 },
+		Vector2f{ 750 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 958, 0 + 49 },
+		Vector2f{ 0 + 958, 49 + 15 },
+		Vector2f{ 958 + 15, 49 + 15 },
+		Vector2f{ 958 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 1102, 0 + 49 },
+		Vector2f{ 0 + 1102, 49 + 15 },
+		Vector2f{ 1102 + 15, 49 + 15 },
+		Vector2f{ 1102 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 1262, 0 + 49 },
+		Vector2f{ 0 + 1262, 49 + 15 },
+		Vector2f{ 1262 + 15, 49 + 15 },
+		Vector2f{ 1262 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 1518, 0 + 49 },
+		Vector2f{ 0 + 1518, 49 + 15 },
+		Vector2f{ 1518 + 15, 49 + 15 },
+		Vector2f{ 1518 + 15, 0 + 49 },
+	},
+
+	{
+		Vector2f{ 0 + 766, 0 + 127 },
+		Vector2f{ 0 + 766, 127 + 15 },
+		Vector2f{ 766 + 15, 127 + 15 },
+		Vector2f{ 766 + 15, 0 + 127 },
+	},
+	{
+		Vector2f{ 0 + 862, 0 + 127 },
+		Vector2f{ 0 + 862, 127 + 15 },
+		Vector2f{ 862 + 15, 127 + 15 },
+		Vector2f{ 862 + 15, 0 + 127 },
+	},
+	{
+		Vector2f{ 0 + 958, 0 + 127 },
+		Vector2f{ 0 + 958, 127 + 15 },
+		Vector2f{ 958 + 15, 127 + 15 },
+		Vector2f{ 958 + 15, 0 + 127 },
+	}
 	},
 		std::vector<Rectf>
 	{
