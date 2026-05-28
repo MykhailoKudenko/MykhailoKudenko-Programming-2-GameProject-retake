@@ -5,14 +5,31 @@
 #include <cmath>
 
 Animation* Plant::m_pPlantAnimation{ nullptr };
+int Plant::m_InstanceCount{ 0 };
 
 Plant::Plant(Vector2f StartPos)
 	: Enemy(Rectf{ StartPos.x, StartPos.y, 16, 24 })
 {
 	m_Speed = 0.f;
 	
+	if (m_pPlantAnimation == nullptr)
+	{
+		m_pPlantAnimation = new Animation("Plant.png", 2, 1.06f, false);
+	}
 }
 
+Plant::~Plant()
+{
+	--m_InstanceCount;
+
+	if (m_InstanceCount <= 0)
+	{
+		delete m_pPlantAnimation;
+		m_pPlantAnimation = nullptr;
+
+		m_InstanceCount = 0;
+	}
+}
 
 void Plant::Update(float elapsedSec)
 {
@@ -78,23 +95,7 @@ void Plant::Draw() const
 	}
 }
 
-
-void Plant::InitializeAssets()
+void Plant::SetEntityManager(EntityManager* pEntityManager)
 {
-	if (m_pPlantAnimation == nullptr)
-	{
-		m_pPlantAnimation = new Animation("Plant.png", 2, 1.06f, false);
-	}
-}
-
-void Plant::FreeAssets()
-{
-	delete m_pPlantAnimation;
-	m_pPlantAnimation = nullptr;
-
-}
-
-void Plant::SetEntityManager(EntityManager* manager)
-{
-	m_pEntityManager = manager;
+	m_pEntityManager = pEntityManager;
 }

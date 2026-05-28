@@ -19,12 +19,9 @@ class Demon : public Enemy
 {
 public:
 	Demon(Vector2f startPos);
+	~Demon() override;
 
 	void SetEntityManager(EntityManager* manager);
-
-	static void InitializeAssets();
-	static void FreeAssets();
-
 
 	void Update(float elapsedSec) override;
 	void Draw() const override;
@@ -47,6 +44,8 @@ private:
 	static Animation* m_pFlyAnimation;
 	static Animation* m_pShootAnimation;
 	static Animation* m_pSpawnAnimation;
+	static int m_InstanceCount;
+
 	float m_AnimTime{ 0.f };
 
 	float m_ParabolaProgress{ 0.f };
@@ -56,4 +55,5 @@ private:
 	
 	bool m_IsAtRightSide{ true };
 	bool m_HasFiredThisShot{ false };
+
 };

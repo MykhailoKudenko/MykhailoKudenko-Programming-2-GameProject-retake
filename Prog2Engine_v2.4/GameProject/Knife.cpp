@@ -4,6 +4,7 @@
 #include "utils.h"
 
 Texture* Knife::m_pTexture{ nullptr };
+int Knife::m_InstanceCount{ 0 };
 
 Knife::Knife(Vector2f pos, bool isRight)
 	: Projectile(Rectf{ pos.x, pos.y, 12.f, 7.f })
@@ -16,8 +17,26 @@ Knife::Knife(Vector2f pos, bool isRight)
 	{
 		m_Speed.x = -80.f;
 	}
-}
 
+	++m_InstanceCount;
+
+	if (m_pTexture == nullptr)
+	{
+		m_pTexture = new Texture{ "Knife.png" };
+	}
+}
+Knife::~Knife()
+{
+	--m_InstanceCount;
+
+	if (m_InstanceCount <= 0)
+	{
+		delete m_pTexture;
+		m_pTexture = nullptr;
+
+		m_InstanceCount = 0;
+	}
+}
 void Knife::Draw() const
 {
 	if (m_pTexture == nullptr)
@@ -31,16 +50,3 @@ void Knife::Draw() const
 	);
 }
 
-void Knife::InitializeAssets()
-{
-	if (m_pTexture == nullptr)
-	{
-		m_pTexture = new Texture{ "Knife.png" };
-	}
-}
-
-void Knife::FreeAssets()
-{
-	delete m_pTexture;
-	m_pTexture = nullptr;
-}

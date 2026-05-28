@@ -4,6 +4,7 @@
 #include <cmath>
 
 Texture* FlyingKnight::m_pTexture{ nullptr };
+int FlyingKnight::m_InstanceCount{ 0 };
 
 FlyingKnight::FlyingKnight(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 15.f, 24.f })
@@ -14,9 +15,28 @@ FlyingKnight::FlyingKnight(Vector2f startPos, bool facingRight)
 	m_IsFacingRight = facingRight;
 	m_Speed = 35.f;
 
+
 	if (!facingRight)
 	{
 		m_Speed *= -1.f;
+	}
+
+	++m_InstanceCount;
+	if (m_pTexture == nullptr)
+	{
+		m_pTexture = new Texture("FlyingKnight.png");
+	}
+}
+FlyingKnight::~FlyingKnight()
+{
+	--m_InstanceCount;
+
+	if (m_InstanceCount <= 0)
+	{
+		delete m_pTexture;
+		m_pTexture = nullptr;
+
+		m_InstanceCount = 0;
 	}
 }
 
@@ -59,16 +79,3 @@ void FlyingKnight::Draw() const
 	);
 }
 
-void FlyingKnight::InitializeAssets()
-{
-	if (m_pTexture == nullptr)
-	{
-		m_pTexture = new Texture("FlyingKnight.png");
-	}
-}
-
-void FlyingKnight::FreeAssets()
-{
-	delete m_pTexture;
-	m_pTexture = nullptr;
-}

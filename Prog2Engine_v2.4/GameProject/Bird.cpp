@@ -5,6 +5,7 @@
 
 Animation* Bird::m_pFlyAnimation{ nullptr };
 Animation* Bird::m_pSpawnAnimation{ nullptr };
+int Bird::m_InstanceCount{ 0 };
 
 Bird::Bird(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 12.f, 13.f })
@@ -18,6 +19,34 @@ Bird::Bird(Vector2f startPos, bool facingRight)
 	if (!facingRight)
 	{
 		m_Speed *= -1.f;
+	}
+
+	++m_InstanceCount;
+
+	if (m_pFlyAnimation == nullptr)
+	{
+		m_pFlyAnimation = new Animation("BirdFly.png", 2, 0.15f, true);
+	}
+
+	if (m_pSpawnAnimation == nullptr)
+	{
+		m_pSpawnAnimation = new Animation("BirdSpawn.png", 2, 0.52f, false);
+	}
+}
+
+Bird::~Bird()
+{
+	--m_InstanceCount;
+
+	if (m_InstanceCount <= 0)
+	{
+		delete m_pFlyAnimation;
+		m_pFlyAnimation = nullptr;
+
+		delete m_pSpawnAnimation;
+		m_pSpawnAnimation = nullptr;
+
+		m_InstanceCount = 0;
 	}
 }
 
@@ -83,24 +112,5 @@ void Bird::Draw() const
 	}
 }
 
-void Bird::InitializeAssets()
-{
-	if (m_pFlyAnimation == nullptr)
-	{
-		m_pFlyAnimation = new Animation("BirdFly.png", 2, 0.15f, true);
-	}
 
-	if (m_pSpawnAnimation == nullptr)
-	{
-		m_pSpawnAnimation = new Animation("BirdSpawn.png", 2, 0.52f, false);
-	}
-}
 
-void Bird::FreeAssets()
-{
-	delete m_pFlyAnimation;
-	m_pFlyAnimation = nullptr;
-
-	delete m_pSpawnAnimation;
-	m_pSpawnAnimation = nullptr;
-}

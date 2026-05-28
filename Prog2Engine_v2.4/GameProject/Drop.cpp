@@ -8,6 +8,7 @@ Texture* Drop::m_pKnifeTexture{ nullptr };
 Texture* Drop::m_pTorchTexture{ nullptr };
 Texture* Drop::m_pDollTexture{ nullptr };
 Texture* Drop::m_pMoneyBagTexture{ nullptr };
+int Drop::m_InstanceCount{ 0 };
 
 Drop::Drop(const Vector2f& pos, PickupType type)
 	: m_Collider{ pos.x, pos.y, 10.f, 10.f }
@@ -20,6 +21,114 @@ Drop::Drop(const Vector2f& pos, PickupType type)
 		m_Collider.width = pTexture->GetWidth();
 		m_Collider.height = pTexture->GetHeight();
 	}
+
+	++m_InstanceCount;
+
+	if (m_pLanceTexture == nullptr)
+		m_pLanceTexture = new Texture("Lance.png");
+
+	if (m_pKnifeTexture == nullptr)
+		m_pKnifeTexture = new Texture("Knife.png");
+
+	if (m_pTorchTexture == nullptr)
+		m_pTorchTexture = new Texture("Torch.png");
+
+	if (m_pDollTexture == nullptr)
+		m_pDollTexture = new Texture("Doll.png");
+
+	if (m_pMoneyBagTexture == nullptr)
+		m_pMoneyBagTexture = new Texture("MoneyBag.png");
+
+}
+Drop::~Drop()
+{
+	--m_InstanceCount;
+
+	if (m_InstanceCount <= 0)
+	{
+		delete m_pLanceTexture;
+		delete m_pKnifeTexture;
+		delete m_pTorchTexture;
+		delete m_pDollTexture;
+		delete m_pMoneyBagTexture;
+
+		m_pLanceTexture = nullptr;
+		m_pKnifeTexture = nullptr;
+		m_pTorchTexture = nullptr;
+		m_pDollTexture = nullptr;
+		m_pMoneyBagTexture = nullptr;
+
+		m_InstanceCount = 0;
+	}
+}
+
+Drop::Drop(const Drop& other) //copy constr
+	: m_pVertices{ other.m_pVertices }
+	, m_Collider{ other.m_Collider }
+	, m_Type{ other.m_Type }
+	, m_IsDead{ other.m_IsDead }
+	, m_Mystate{ other.m_Mystate }
+{
+	++m_InstanceCount;
+
+	if (m_pLanceTexture == nullptr)
+		m_pLanceTexture = new Texture("Lance.png");
+
+	if (m_pKnifeTexture == nullptr)
+		m_pKnifeTexture = new Texture("Knife.png");
+
+	if (m_pTorchTexture == nullptr)
+		m_pTorchTexture = new Texture("Torch.png");
+
+	if (m_pDollTexture == nullptr)
+		m_pDollTexture = new Texture("Doll.png");
+
+	if (m_pMoneyBagTexture == nullptr)
+		m_pMoneyBagTexture = new Texture("MoneyBag.png");
+}
+
+Drop& Drop::operator=(const Drop& other) //copy assign
+{
+	if (this == &other)
+		return *this;
+
+	m_pVertices = other.m_pVertices;
+	m_Collider = other.m_Collider;
+	m_Type = other.m_Type;
+	m_IsDead = other.m_IsDead;
+	m_Mystate = other.m_Mystate;
+
+	return *this;
+}
+
+Drop::Drop(Drop&& other) noexcept //move constr
+	: m_pVertices{ other.m_pVertices }
+	, m_Collider{ other.m_Collider }
+	, m_Type{ other.m_Type }
+	, m_IsDead{ other.m_IsDead }
+	, m_Mystate{ other.m_Mystate }
+{
+	++m_InstanceCount;
+
+	other.m_pVertices = nullptr;
+	other.m_IsDead = true;
+}
+
+Drop& Drop::operator=(Drop&& other) noexcept//move assign
+{
+	if (this == &other)
+		return *this;
+
+	m_pVertices = other.m_pVertices;
+	m_Collider = other.m_Collider;
+	m_Type = other.m_Type;
+	m_IsDead = other.m_IsDead;
+	m_Mystate = other.m_Mystate;
+
+	other.m_pVertices = nullptr;
+	other.m_IsDead = true;
+
+	return *this;
 }
 
 void Drop::Update(float elapsedSec)
@@ -119,35 +228,3 @@ Texture* Drop::GetTexture() const
 	}
 }
 
-void Drop::InitializeAssets()
-{
-	if (m_pLanceTexture == nullptr)
-		m_pLanceTexture = new Texture("Lance.png");
-
-	if (m_pKnifeTexture == nullptr)
-		m_pKnifeTexture = new Texture("Knife.png");
-
-	if (m_pTorchTexture == nullptr)
-		m_pTorchTexture = new Texture("Torch.png");
-
-	if (m_pDollTexture == nullptr)
-		m_pDollTexture = new Texture("Doll.png");
-
-	if (m_pMoneyBagTexture == nullptr)
-		m_pMoneyBagTexture = new Texture("MoneyBag.png");
-}
-
-void Drop::FreeAssets()
-{
-	delete m_pLanceTexture;
-	delete m_pKnifeTexture;
-	delete m_pTorchTexture;
-	delete m_pDollTexture;
-	delete m_pMoneyBagTexture;
-
-	m_pLanceTexture = nullptr;
-	m_pKnifeTexture = nullptr;
-	m_pTorchTexture = nullptr;
-	m_pDollTexture = nullptr;
-	m_pMoneyBagTexture = nullptr;
-}

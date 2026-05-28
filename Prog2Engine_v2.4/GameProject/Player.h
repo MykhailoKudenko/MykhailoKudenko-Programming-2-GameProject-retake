@@ -32,12 +32,17 @@ class Player
 public:
 	Player(Vector2f Pos);
 	~Player();
+	//rule of 5
+	Player(const Player&) = delete;
+	Player& operator=(const Player&) = delete;
+	Player(Player&&) = delete;
+	Player& operator=(Player&&) = delete;
 
 	void Draw() const;
 	void Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& vertices, 
 		const std::vector<std::vector<Vector2f>>& playerOnlyVertices,
 		const std::vector<Rectf>& ladders, 
-		std::vector<std::vector<Vector2f>> platfroms); //maybe make by reference later
+		std::vector<std::vector<Vector2f>> platfroms); 
 
 	Vector2f GetCenterPosition() const;
 	Rectf GetHitbox() const;
@@ -144,7 +149,7 @@ private:
 	float m_ThrowCooldownCurrent{ 0.0f };
 
 	//wepon
-	PlayerWeapon m_MyWeapon{ PlayerWeapon::Knife };
+	PlayerWeapon m_MyWeapon{ PlayerWeapon::Lance };
 	//int Score
 	float m_Score{ 0 };
 	//Death

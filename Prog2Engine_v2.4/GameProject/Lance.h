@@ -6,13 +6,13 @@ class Lance : public Projectile
 {
 public:
 	Lance(Vector2f pos, bool isRight);
-	virtual ~Lance() = default;
+	~Lance() override;
+
 
 	void Draw() const override;
 
-	static void InitializeAssets();
-	static void FreeAssets();
-
 private:
 	static Texture* m_pTexture;
+	static int m_InstanceCount;
+
 };

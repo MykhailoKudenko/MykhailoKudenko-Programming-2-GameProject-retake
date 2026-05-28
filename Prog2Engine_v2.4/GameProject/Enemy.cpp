@@ -3,10 +3,31 @@
 #include "utils.h"
 
 Texture* Enemy::m_pBagTexture{ nullptr };
+int Enemy::m_EnemyInstanceCount{ 0 };
 
-Enemy::Enemy(Rectf Start) :m_Collider{Start}
+
+Enemy::Enemy(Rectf Start)
+	: m_Collider{ Start }
 {
+	++m_EnemyInstanceCount;
 
+	if (m_pBagTexture == nullptr)
+	{
+		m_pBagTexture = new Texture("Bag.png");
+	}
+}
+
+Enemy::~Enemy()
+{
+	--m_EnemyInstanceCount;
+
+	if (m_EnemyInstanceCount <= 0)
+	{
+		delete m_pBagTexture;
+		m_pBagTexture = nullptr;
+
+		m_EnemyInstanceCount = 0;
+	}
 }
 
 Rectf Enemy::GetHitbox() const
@@ -58,19 +79,6 @@ int Enemy::GetScore()
 	return m_score;
 }
 
-void Enemy::InitializeSharedAssets()
-{
-	if (m_pBagTexture == nullptr)
-	{
-		m_pBagTexture = new Texture("Bag.png");
-	}
-}
-
-void Enemy::FreeSharedAssets()
-{
-	delete m_pBagTexture;
-	m_pBagTexture = nullptr;
-}
 
 void Enemy::SetBag(bool DoesHaveBag)
 {

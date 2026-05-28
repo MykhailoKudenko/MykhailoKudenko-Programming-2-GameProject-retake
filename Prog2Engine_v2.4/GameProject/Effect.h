@@ -12,13 +12,17 @@ public:
     };
 
     Effect(const Vector2f& pos, EffectType type, bool isMirrored = false);
+    ~Effect();
+    //rule of 5
+    Effect(const Effect&) = delete;
+    Effect& operator=(const Effect&) = delete;
+
+    Effect(Effect&&) = delete;
+    Effect& operator=(Effect&&) = delete;
 
     void Update(float elapsedSec);
     void Draw() const;
     bool IsFinished() const;
-
-    static void InitializeAssets();
-    static void FreeAssets();
 
 private:
     Vector2f m_Position;
@@ -29,4 +33,6 @@ private:
     static Animation* m_pBloodAnimation;
     static Animation* m_pFireAnimation;
     static Animation* m_pBlinkAnimation;
+    static int m_InstanceCount;
+
 };

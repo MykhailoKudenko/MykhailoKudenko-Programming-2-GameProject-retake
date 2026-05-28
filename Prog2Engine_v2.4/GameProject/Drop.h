@@ -22,6 +22,15 @@ class Drop
 {
 public:
 	Drop(const Vector2f& pos, PickupType type);
+	~Drop();
+
+
+	// Rule of 5
+	Drop(const Drop& other);
+	Drop& operator=(const Drop& other);
+
+	Drop(Drop&& other) noexcept;
+	Drop& operator=(Drop&& other) noexcept;
 
 	void Update(float elapsedSec);
 	void Draw() const;
@@ -30,9 +39,6 @@ public:
 	PickupType GetType() const;
 	bool IsDead() const;
 	void Kill();
-
-	static void InitializeAssets();
-	static void FreeAssets();
 
 	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
 
@@ -51,6 +57,7 @@ private:
 	static Texture* m_pTorchTexture;
 	static Texture* m_pDollTexture;
 	static Texture* m_pMoneyBagTexture;
+	static int m_InstanceCount;
 
 	Texture* GetTexture() const;
 

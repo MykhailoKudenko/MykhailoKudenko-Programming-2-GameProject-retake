@@ -6,14 +6,13 @@ class PlantProjectile : public Projectile
 {
 public:
 	PlantProjectile(Vector2f pos, Vector2f Direction);
-	virtual ~PlantProjectile() = default;
+	~PlantProjectile() override;
 
 	void Draw() const override;
 
-	static void InitializeAssets();
-	static void FreeAssets();
-
 private:
 	static Texture* m_pTexture;
+	static int m_InstanceCount;
+
 };
 

@@ -10,6 +10,7 @@ Animation* Troll::m_pJumpAnimation{ nullptr };
 Animation* Troll::m_pShootAnimation{ nullptr };
 Animation* Troll::m_pWalkAnimation{ nullptr };
 Animation* Troll::m_pSpawnAnimation{ nullptr };
+int Troll::m_InstanceCount{ 0 };
 
 
 Troll::Troll(Vector2f StartPos)
@@ -18,6 +19,48 @@ Troll::Troll(Vector2f StartPos)
 	m_Speed = 30.f;
 	m_health = 20;
 	m_IsBoss = true;
+
+	++m_InstanceCount;
+
+	if (m_pJumpAnimation == nullptr)
+	{
+		m_pJumpAnimation = new Animation("TrollJump.png", 1, 0.13f, true);
+	}
+
+	if (m_pShootAnimation == nullptr)
+	{
+		m_pShootAnimation = new Animation("TrollShoot.png", 1, 0.52f, false);
+	}
+	if (m_pWalkAnimation == nullptr)
+	{
+		m_pWalkAnimation = new Animation("TrollWalking.png", 2, 0.13f, true);
+	}
+
+	if (m_pSpawnAnimation == nullptr)
+	{
+		m_pSpawnAnimation = new Animation("TrollStand.png", 1, 0.52f, false);
+	}
+}
+Troll::~Troll()
+{
+	--m_InstanceCount;
+
+	if (m_InstanceCount <= 0)
+	{
+		delete m_pJumpAnimation;
+		m_pJumpAnimation = nullptr;
+
+		delete m_pShootAnimation;
+		m_pShootAnimation = nullptr;
+
+		delete m_pWalkAnimation;
+		m_pWalkAnimation = nullptr;
+
+		delete m_pSpawnAnimation;
+		m_pSpawnAnimation = nullptr;
+
+		m_InstanceCount = 0;
+	}
 }
 
 void Troll::Update(float elapsedSec)
@@ -412,39 +455,3 @@ void Troll::SetEntityManager(EntityManager* manager)
 	m_pEntityManager = manager;
 }
 
-void Troll::InitializeAssets()
-{
-	if (m_pJumpAnimation == nullptr)
-	{
-		m_pJumpAnimation = new Animation("TrollJump.png", 1, 0.13f, true);
-	}
-
-	if (m_pShootAnimation == nullptr)
-	{
-		m_pShootAnimation = new Animation("TrollShoot.png", 1, 0.52f, false);
-	}
-	if (m_pWalkAnimation == nullptr)
-	{
-		m_pWalkAnimation = new Animation("TrollWalking.png", 2, 0.13f, true);
-	}
-
-	if (m_pSpawnAnimation == nullptr)
-	{
-		m_pSpawnAnimation = new Animation("TrollStand.png", 1, 0.52f, false);
-	}
-}
-
-void Troll::FreeAssets()
-{
-	delete m_pJumpAnimation;
-	m_pJumpAnimation = nullptr;
-
-	delete m_pShootAnimation;
-	m_pShootAnimation = nullptr;
-
-	delete m_pWalkAnimation;
-	m_pWalkAnimation = nullptr;
-
-	delete m_pSpawnAnimation;
-	m_pSpawnAnimation = nullptr;
-}

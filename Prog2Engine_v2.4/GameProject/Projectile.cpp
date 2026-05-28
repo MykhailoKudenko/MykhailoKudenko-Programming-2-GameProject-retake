@@ -6,6 +6,10 @@ Projectile::Projectile(Rectf Start) :m_Collider{ Start }
 {
 
 }
+Projectile::~Projectile()
+{
+
+}
 
 void Projectile::Update(float elapsedSec)
 {

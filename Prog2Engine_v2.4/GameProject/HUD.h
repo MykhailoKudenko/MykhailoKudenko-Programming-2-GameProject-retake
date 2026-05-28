@@ -5,15 +5,19 @@ class HUD
 {
 public:
     HUD();
+    ~HUD();
+    
+    //rule of 5
+    HUD(const HUD&) = delete;
+    HUD& operator=(const HUD&) = delete;
+    HUD(HUD&&) = delete;
+    HUD& operator=(HUD&&) = delete;
 
     void Update(float elapsedSec);
     void Draw(int score, PlayerWeapon weapon) const;
 
-    static void InitializeAssets();
-    static void FreeAssets();
-
     void ResetTimer();
-
+    bool DidTimerFinish();
 private:
     std::string GetTimerText() const;
 
@@ -22,4 +26,6 @@ private:
     static Texture* m_pLanceTexture;
     static Texture* m_pKnifeTexture;
     static Texture* m_pTorchTexture;
+    static int m_InstanceCount;
+
 };

@@ -82,17 +82,16 @@ This section gives a clear and detailed overview of which parts of the original 
 
 <!-- GETTING STARTED -->
 ## Getting Started
-Detailed instructions on how to run your game project are in this section.
+You would need to open as a project in Visual Studio (preferably 2022);
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+You would need to install Visual Studio from Official Website.
 * Visual Studio 2022
 
 ### How to run the project
 
-Explain which project (version) must be run.
-* any extra steps if required 
+Open the solution in Visual Studio 2022 and run the project in Debug x64 mode.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -101,12 +100,22 @@ Explain which project (version) must be run.
 <!-- HOW TO PLAY -->
 ## How to play
 
-Use this space to show useful examples of how a game can be played. 
-Additional screenshots and demos work well in this space. 
+Purpouse of the game is to get to the end of the game, and beat the final boss, and get as many points as possible.
 
 ### Controls
-* keys, .. 
-* .. 
+
+* Enter - Start the game
+
+* A/D - move left/right
+* W - jump
+* S - Crouch
+* E - Shoot your current Projectile
+
+
+Debug:
+* F1 - Toggle Collider Visibility 
+* F2 - Toggle Immortality
+* F3 - Toggle Flying
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -116,12 +125,125 @@ Additional screenshots and demos work well in this space.
 ## Class structure 
 
 ### Object composition 
-If you applied object composition (optional); explain where and how.
+Game
+Game is composed of:
+
+Camera
+Player
+Level
+EntityManager
+SoundManager
+HUD
+Menu textures
+
+Purpose:
+Main controller class that manages all game systems.
+
+Player
+
+Player is composed of:
+
+Multiple Animation objects
+Multiple Texture objects
+Collider (Rectf)
+State variables
+Weapon/state enums
+
+Purpose:
+To Store movement, animations, combat state, and rendering data inside one object.
+
+Level
+
+Level is composed of:
+
+Vertices
+Ladders
+Platforms
+Enemy spawn points
+Enemy spawn areas
+Drop spawn points
+Textures
+
+Purpose:
+Store all level geometry and spawn data.
+
+EntityManager
+
+EntityManager is composed of:
+
+std::vector<Enemy*>
+std::vector<Projectile*>
+std::vector<Drop*>
+std::vector<Effect*>
+
+Purpose:
+Responsible for spawning, updating, drawing, and deleting gameplay entities.
+
+SoundManager
+
+SoundManager is composed of:
+
+SoundStream
+Multiple SoundEffect objects
+
+Purpose:
+Handles music and sound effects.
+
+Animation
+
+Animation is composed of:
+
+Texture
+Frame data
+Timing/playback variables
+
+Purpose:
+Handles sprite animation playback.
+
+Other class relationships / design choices
+Shared static resources
+
+Some classes use static shared resources to avoid loading the same asset multiple times.
+
+Examples:
+
+Zombie
+Effect
+Drop
+
+These classes use shared static textures/animations and an instance counter system.
+
+Purpose:
+
+Reduce memory usage
+Prevent loading duplicate textures
 
 ### Inheritance 
-Explain where you applied inheritance (mandatory).
+Enemy hierarchy
+Enemy
+ ->Zombie
+ -> Bird
+ -> FlyingKnight
+ -> Ghost
+ -> Plant
+ -> Demon
+ -> Troll
 
-### ..
+Projectile hierarchy
+Projectile
+ -> Lance
+ -> Knife
+ -> Torch
+ -> PlantProjectile
+ -> DemonProjectile
+
+Purpose:
+All projectiles share movement/collision/death logic while each projectile has its own behavior and rendering.
+
+Purpose:
+All enemies share common enemy behavior while still having unique AI/attacks/animations.
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -134,15 +256,15 @@ Explain where you applied inheritance (mandatory).
     - [x] const keyword applied proactively (variables, functions,..)
     - [x] static keyword applied proactively (class variables, static functions,..)
     - [x] object composition (optional)
-- [ ] week 02 topics applied
-- [ ] week 03 topics applied
-- [ ] week 04 topics applied
-- [ ] week 05 topics applied
-- [ ] week 06 topics applied
-- [ ] week 07 topics applied
-- [ ] week 08 topics applied
-- [ ] week 09 topics applied (optional)
-- [ ] week 10 topics applied (optional)
+- [x] week 02 topics applied
+- [x] week 03 topics applied
+- [x] week 04 topics applied
+- [x] week 05 topics applied
+- [x] week 06 topics applied
+- [x] week 07 topics applied
+- [x] week 08 topics applied
+- [x] week 09 topics applied (optional)
+- [x] week 10 topics applied (optional)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -159,10 +281,9 @@ Project Link: https://github.com/HowestDAE/gd14-MykhailoKudenko
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. 
 
-* [Example 1: cpp reference on std::vector](https://en.cppreference.com/w/cpp/container/vector)
-* ..
+* [Sprites](https://www.spriters-resource.com/nes/ghostsngoblins/)
+* [Sounds](https://www.101soundboards.com/boards/11222-ghosts-n-goblins-sounds)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

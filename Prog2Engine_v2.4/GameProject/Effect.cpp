@@ -4,14 +4,48 @@
 Animation* Effect::m_pBloodAnimation{ nullptr };
 Animation* Effect::m_pFireAnimation{ nullptr };
 Animation* Effect::m_pBlinkAnimation{ nullptr };
+int Effect::m_InstanceCount{ 0 };
 
 Effect::Effect(const Vector2f& pos, EffectType type, bool isMirrored)
     : m_Position{ pos }
     , m_Type{ type }
     , m_IsMirrored{ isMirrored }
 {
-}
+    ++m_InstanceCount;
 
+    if (m_pBloodAnimation == nullptr)
+    {
+        m_pBloodAnimation = new Animation("BloodDeath.png", 3, 0.13f, false);
+    }
+
+    if (m_pFireAnimation == nullptr)
+    {
+        m_pFireAnimation = new Animation("FireDeath.png", 3, 0.13f, false);
+    }
+
+    if (m_pBlinkAnimation == nullptr)
+    {
+        m_pBlinkAnimation = new Animation("Sparklinghit.png", 2, 0.13f, false);
+    }
+}
+Effect::~Effect()
+{
+    --m_InstanceCount;
+
+    if (m_InstanceCount <= 0)
+    {
+        delete m_pBloodAnimation;
+        m_pBloodAnimation = nullptr;
+
+        delete m_pFireAnimation;
+        m_pFireAnimation = nullptr;
+
+        delete m_pBlinkAnimation;
+        m_pBlinkAnimation = nullptr;
+
+        m_InstanceCount = 0;
+    }
+}
 void Effect::Update(float elapsedSec)
 {
     m_AnimTime += elapsedSec;
@@ -72,32 +106,3 @@ bool Effect::IsFinished() const
     return anim->IsTimeFinished(m_AnimTime);
 }
 
-void Effect::InitializeAssets()
-{
-    if (m_pBloodAnimation == nullptr)
-    {
-        m_pBloodAnimation = new Animation("BloodDeath.png", 3, 0.13f, false);
-    }
-
-    if (m_pFireAnimation == nullptr)
-    {
-        m_pFireAnimation = new Animation("FireDeath.png", 3, 0.13f, false);
-    }
-
-    if (m_pBlinkAnimation == nullptr)
-    {
-        m_pBlinkAnimation = new Animation("Sparklinghit.png", 2, 0.13f, false);
-    }
-}
-
-void Effect::FreeAssets()
-{
-    delete m_pBloodAnimation;
-    m_pBloodAnimation = nullptr;
-
-    delete m_pFireAnimation;
-    m_pFireAnimation = nullptr;
-
-    delete m_pBlinkAnimation;
-    m_pBlinkAnimation = nullptr;
-}

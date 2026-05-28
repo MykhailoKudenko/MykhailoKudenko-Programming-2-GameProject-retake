@@ -4,9 +4,17 @@ class Camera
 {
 public:
 	Camera(float screenWidth, float screenHeight);
+	//rule of 5
+	~Camera() = default;
+	Camera(const Camera&) = delete;
+	Camera& operator=(const Camera&) = delete;
+	Camera(Camera&&) = delete;
+	Camera& operator=(Camera&&) = delete;
 
 	void Aim(float levelWidth, float levelHeight, float XNegativeSpace, float YNegativeSpace, const Vector2f& trackCenter, float zoom) const;
 	void Reset() const;
+
+	
 
 private:
 	float m_ScreenWidth;

@@ -32,7 +32,7 @@ EntityManager::~EntityManager()
     }
 }
 
-void EntityManager::Update(float elapsedSec)
+void EntityManager::Update(float elapsedSec) //pass player here
 {
     if (m_pPlayer == nullptr || m_pLevel == nullptr)
     {

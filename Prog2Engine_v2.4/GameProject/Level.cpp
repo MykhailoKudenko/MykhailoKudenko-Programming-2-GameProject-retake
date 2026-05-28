@@ -2,6 +2,8 @@
 #include "Level.h"
 #include "utils.h"
 #include <algorithm>
+#include "SvgParser.h"
+#include <iostream>
 
 Level::Level(
 	std::vector<std::vector<Vector2f>> vertices,
@@ -23,6 +25,38 @@ Level::Level(
 	, m_Texture{ LevelTexturePath }
 	, m_PlatformTexture{ PlatformTexturePath }
 {
+}
+
+
+Level::Level(const std::string& svgPath,
+	std::vector<std::vector<Vector2f>> playerOnlyVertices,
+	std::vector<Rectf> ladders,
+	std::vector<MovingPlatform> platforms,
+	std::vector<EnemySpawnPoint> enemySpawnPoints,
+	std::vector<EnemySpawnArea> enemySpawnAreas,
+	std::vector<DropSpawnPoint> dropSpawnPoints,
+	const std::string& PlatformTexturePath,
+	const std::string& LevelTexturePath)
+	: m_PlayerOnlyVertices{ playerOnlyVertices }
+	, m_Ladders{ ladders }
+	, m_Platforms{ platforms }
+	, m_EnemySpawnPoints{ enemySpawnPoints }
+	, m_EnemySpawnAreas{ enemySpawnAreas }
+	, m_DropSpawnPoints{ dropSpawnPoints }
+	, m_Texture{ LevelTexturePath }
+	, m_PlatformTexture{ PlatformTexturePath }
+{
+	LoadFromSvg(svgPath);
+}
+
+void Level::LoadFromSvg(const std::string& svgPath)
+{
+	m_Vertices.clear();
+
+	if (!SVGParser::GetVerticesFromSvgFile(svgPath, m_Vertices))
+	{
+		std::cout << "Failed SVG " << svgPath << std::endl;
+	}
 }
 
 const std::vector<std::vector<Vector2f>>& Level::GetVertecies() const

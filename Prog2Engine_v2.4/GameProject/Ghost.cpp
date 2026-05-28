@@ -5,6 +5,7 @@
 
 Animation* Ghost::m_pFlyAnimation{ nullptr };
 Animation* Ghost::m_pSpawnAnimation{ nullptr };
+int Ghost::m_InstanceCount{ 0 };
 
 Ghost::Ghost(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 24, 13.f })
@@ -16,6 +17,33 @@ Ghost::Ghost(Vector2f startPos, bool facingRight)
 	if (!facingRight)
 	{
 		m_Speed *= -1.f;
+	}
+
+	++m_InstanceCount;
+
+	if (m_pFlyAnimation == nullptr)
+	{
+		m_pFlyAnimation = new Animation("GhostFly.png", 2, 0.13f, true);
+	}
+
+	if (m_pSpawnAnimation == nullptr)
+	{
+		m_pSpawnAnimation = new Animation("GhostSpawn.png", 2, 0.39f, false);
+	}
+}
+Ghost::~Ghost()
+{
+	--m_InstanceCount;
+
+	if (m_InstanceCount <= 0)
+	{
+		delete m_pFlyAnimation;
+		m_pFlyAnimation = nullptr;
+
+		delete m_pSpawnAnimation;
+		m_pSpawnAnimation = nullptr;
+
+		m_InstanceCount = 0;
 	}
 }
 
@@ -148,27 +176,6 @@ void Ghost::SetEntityManager(EntityManager* manager)
 	m_pEntityManager = manager;
 }
 
-void Ghost::InitializeAssets()
-{
-	if (m_pFlyAnimation == nullptr)
-	{
-		m_pFlyAnimation = new Animation("GhostFly.png", 2, 0.13f, true);
-	}
-
-	if (m_pSpawnAnimation == nullptr)
-	{
-		m_pSpawnAnimation = new Animation("GhostSpawn.png", 2, 0.39f, false);
-	}
-}
-
-void Ghost::FreeAssets()
-{
-	delete m_pFlyAnimation;
-	m_pFlyAnimation = nullptr;
-
-	delete m_pSpawnAnimation;
-	m_pSpawnAnimation = nullptr;
-}
 
 bool Ghost::isSpawning()
 {

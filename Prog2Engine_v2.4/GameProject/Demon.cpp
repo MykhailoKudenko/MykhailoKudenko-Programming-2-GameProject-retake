@@ -9,6 +9,7 @@
 Animation* Demon::m_pFlyAnimation{ nullptr };
 Animation* Demon::m_pShootAnimation{ nullptr };
 Animation* Demon::m_pSpawnAnimation{ nullptr };
+int Demon::m_InstanceCount{ 0 };
 
 
 
@@ -18,8 +19,41 @@ Demon::Demon(Vector2f StartPos)
 	m_Speed = 80.f;
 	m_health = 10;
 	m_IsBoss = true;
+
+	++m_InstanceCount;
+
+	if (m_pFlyAnimation == nullptr)
+	{
+		m_pFlyAnimation = new Animation("DemonFly.png", 2, 0.13f, true);
+	}
+	if (m_pShootAnimation == nullptr)
+	{
+		m_pShootAnimation = new Animation("DemonShoot.png", 1, 0.52f, false);
+	}
+	if (m_pSpawnAnimation == nullptr)
+	{
+		m_pSpawnAnimation = new Animation("DemonSpawn.png", 3, 0.26f, false);
+	}
 }
 
+Demon::~Demon()
+{
+	--m_InstanceCount;
+
+	if (m_InstanceCount <= 0)
+	{
+		delete m_pFlyAnimation;
+		m_pFlyAnimation = nullptr;
+
+		delete m_pShootAnimation;
+		m_pShootAnimation = nullptr;
+
+		delete m_pSpawnAnimation;
+		m_pSpawnAnimation = nullptr;
+
+		m_InstanceCount = 0;
+	}
+}
 
 void Demon::Update(float elapsedSec)
 {
@@ -196,34 +230,7 @@ void Demon::Draw() const
 }
 
 
-void Demon::InitializeAssets()
-{
-	if (m_pFlyAnimation == nullptr)
-	{
-		m_pFlyAnimation = new Animation("DemonFly.png", 2, 0.13f, true);
-	}
-	if (m_pShootAnimation == nullptr)
-	{
-		m_pShootAnimation = new Animation("DemonShoot.png", 1, 0.52f, false);
-	}
-	if (m_pSpawnAnimation == nullptr)
-	{
-		m_pSpawnAnimation = new Animation("DemonSpawn.png", 3, 0.26f, false);
-	}
-}
 
-void Demon::FreeAssets()
-{
-	delete m_pFlyAnimation;
-	m_pFlyAnimation = nullptr;
-
-	delete m_pShootAnimation;
-	m_pShootAnimation = nullptr;
-
-	delete m_pSpawnAnimation;
-	m_pSpawnAnimation = nullptr;
-
-}
 
 void Demon::SetEntityManager(EntityManager* manager)
 {

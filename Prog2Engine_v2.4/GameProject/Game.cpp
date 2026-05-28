@@ -16,29 +16,8 @@ Game::~Game( )
 
 void Game::Initialize()
 {
-	Enemy::InitializeSharedAssets();
-	Zombie::InitializeAssets();
-	Bird::InitializeAssets();
-	FlyingKnight::InitializeAssets();
-	Ghost::InitializeAssets();
-	Plant::InitializeAssets();
 
-	Demon::InitializeAssets();
-	Troll::InitializeAssets();
-
-	Lance::InitializeAssets();
-	Knife::InitializeAssets();
-	Torch::InitializeAssets();
-
-	PlantProjectile::InitializeAssets();
-	DemonProjectile::InitializeAssets();
-
-	Drop::InitializeAssets();
-	HUD::InitializeAssets();
-
-	Effect::InitializeAssets();
-
-	m_P1 = new Player(Vector2f{ 100, 50.f });
+	m_P1 = new Player(Vector2f{ 50.f, 38.f });
 	m_pEntityManager = new EntityManager();
 	m_SoundManager = new SoundManager();
 	m_pEntityManager->SetSoundManager(m_SoundManager);
@@ -59,27 +38,6 @@ void Game::Initialize()
 
 void Game::Cleanup()
 {
-	Enemy::FreeSharedAssets();
-	Zombie::FreeAssets();
-	Bird::FreeAssets();
-	FlyingKnight::FreeAssets();
-	Ghost::FreeAssets();
-	Plant::FreeAssets();
-
-	Demon::FreeAssets();
-	Troll::FreeAssets();
-
-	Lance::FreeAssets();
-	Knife::FreeAssets();
-	Torch::FreeAssets();
-
-	PlantProjectile::FreeAssets();
-	DemonProjectile::FreeAssets();
-
-	Drop::FreeAssets();
-	HUD::FreeAssets();
-
-	Effect::FreeAssets();
 
 	delete m_MainMenu;
 	m_MainMenu = nullptr;
@@ -132,6 +90,12 @@ void Game::Update(float elapsedSec)
 		m_pEntityManager->Update(elapsedSec);
 		m_hud->Update(elapsedSec);
 		
+		if (m_hud->DidTimerFinish())
+		{
+			m_SoundManager->StopMusic();
+			m_MyState = GameState::MainMenu;
+			m_hud->ResetTimer();
+		}
 
 		if (m_P1->IsDeathAnimationFinished() || m_P1->GetCenterPosition().y < 0)
 		{
@@ -176,7 +140,7 @@ void Game::Draw() const
 	case GameState::Playing:
 		m_pCamera->Aim(
 			m_level1->GetWidth(), m_level1->GetHeight(), 0, 20,
-			Vector2f{ m_P1->GetCenterPosition().x, 0 }, m_CameraScale
+			Vector2f{ m_P1->GetCenterPosition().x, 0 }, (float)m_CameraScale
 		);
 
 		m_level1->Draw(m_DebugShowColliders);
@@ -248,21 +212,21 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 			std::cout << "DEBUG: FLYING OFF" << std::endl;
 		break;
 	case SDLK_F5:
-		if (m_CameraScale < 10.f)
+		if (m_CameraScale < 10)
 		{
-			m_CameraScale += 1.f;
-			if (m_CameraScale > 10.f)
-				m_CameraScale = 10.f;
+			m_CameraScale += 1;
+			if (m_CameraScale > 10)
+				m_CameraScale = 10;
 		}
 		std::cout << "DEBUG: CAMERA SCALE = " << m_CameraScale << " (NORMAL SCALE IS 4)" << std::endl;
 		break;
 
 	case SDLK_F6:
-		if (m_CameraScale > 1.f)
+		if (m_CameraScale > 1)
 		{
-			m_CameraScale -= 1.f;
-			if (m_CameraScale < 1.f)
-				m_CameraScale = 1.f;
+			m_CameraScale -= 1;
+			if (m_CameraScale < 1)
+				m_CameraScale = 1;
 		}
 		std::cout << "DEBUG: CAMERA SCALE = " << m_CameraScale << " (NORMAL SCALE IS 4)" << std::endl;
 		break;
@@ -336,156 +300,44 @@ void Game::ClearBackground( ) const
 	glClear( GL_COLOR_BUFFER_BIT );
 }
 
+
 void Game::LoadLevel1()
 {
-	if (m_level1 != nullptr)
-	{
-		delete m_level1;
-		m_level1 = nullptr;
-	}
+	delete m_level1;
+	m_level1 = nullptr;
 
 	m_level1 = new Level(
+		"Level1.svg",
+
 		std::vector<std::vector<Vector2f>>
 	{
 		{
-			Vector2f{ 0, 49 },
-				Vector2f{ 1661, 49 },
-				Vector2f{ 1661, 0 }
+			Vector2f{ 46, 49 },
+				Vector2f{ 46, 64 },
+				Vector2f{ 61, 64 },
+				Vector2f{ 61, 49 },
 		},
 			{
-				Vector2f{ 600, 127 },
-				Vector2f{ 1120, 127 }
+				Vector2f{ 238, 49 },
+				Vector2f{ 238, 64 },
+				Vector2f{ 253, 64 },
+				Vector2f{ 253, 49 },
 			},
-			{
-				Vector2f{ 1790, 0 },
-				Vector2f{ 1790, 49},
-				Vector2f{ 1949, 49},
-				Vector2f{ 1949, 0 }
-			},
-			{
-				Vector2f{ 1982, 0 },
-				Vector2f{ 1982, 49},
-				Vector2f{ 2013, 49},
-				Vector2f{ 2013, 0 }
-			},
-			{
-				Vector2f{ 2046, 0 },
-				Vector2f{ 2046, 49},
-				Vector2f{ 2445, 49},
-				Vector2f{ 2445, 0 }
-			},
-			{
-				Vector2f{ 2478, 0 },
-				Vector2f{ 2478, 49},
-				Vector2f{ 2701, 49},
-				Vector2f{ 2701, 0 }
-			},
-			{
-				Vector2f{ 2734, 0 },
-				Vector2f{ 2734, 49},
-				Vector2f{ 3582, 49},
-				Vector2f{ 3582, 0 }
-			},
-			{
-				Vector2f{ 0, 0 },
-				Vector2f{ 0, 240 }
-			},
-			{
-				Vector2f{ 3582, 0 },
-				Vector2f{ 3582, 240 }
-			}
-	}, std::vector<std::vector<Vector2f>>
-	{
-	{
-		Vector2f{ 0 + 46, 0 + 49 },
-		Vector2f{ 0 + 46, 49 + 15 },
-		Vector2f{ 46 + 15, 49 + 15 },
-		Vector2f{ 46 + 15, 0 + 49 },
-	},
-	{
-		Vector2f{ 0 + 238, 0 + 49 },
-		Vector2f{ 0 + 238, 49 + 15 },
-		Vector2f{ 238 + 15, 49 + 15 },
-		Vector2f{ 238 + 15, 0 + 49 },
-	},
-	{
-		Vector2f{ 0 + 414, 0 + 49 },
-		Vector2f{ 0 + 414, 49 + 15 },
-		Vector2f{ 414 + 15, 49 + 15 },
-		Vector2f{ 414 + 15, 0 + 49 },
-	},
-	{
-		Vector2f{ 0 + 526, 0 + 49 },
-		Vector2f{ 0 + 526, 49 + 15 },
-		Vector2f{ 526 + 15, 49 + 15 },
-		Vector2f{ 526 + 15, 0 + 49 },
-	},
-	{
-		Vector2f{ 0 + 750, 0 + 49 },
-		Vector2f{ 0 + 750, 49 + 15 },
-		Vector2f{ 750 + 15, 49 + 15 },
-		Vector2f{ 750 + 15, 0 + 49 },
-	},
-	{
-		Vector2f{ 0 + 958, 0 + 49 },
-		Vector2f{ 0 + 958, 49 + 15 },
-		Vector2f{ 958 + 15, 49 + 15 },
-		Vector2f{ 958 + 15, 0 + 49 },
-	},
-	{
-		Vector2f{ 0 + 1102, 0 + 49 },
-		Vector2f{ 0 + 1102, 49 + 15 },
-		Vector2f{ 1102 + 15, 49 + 15 },
-		Vector2f{ 1102 + 15, 0 + 49 },
-	},
-	{
-		Vector2f{ 0 + 1262, 0 + 49 },
-		Vector2f{ 0 + 1262, 49 + 15 },
-		Vector2f{ 1262 + 15, 49 + 15 },
-		Vector2f{ 1262 + 15, 0 + 49 },
-	},
-	{
-		Vector2f{ 0 + 1518, 0 + 49 },
-		Vector2f{ 0 + 1518, 49 + 15 },
-		Vector2f{ 1518 + 15, 49 + 15 },
-		Vector2f{ 1518 + 15, 0 + 49 },
+			// paste the rest of your player-only blocks here
 	},
 
-	{
-		Vector2f{ 0 + 766, 0 + 127 },
-		Vector2f{ 0 + 766, 127 + 15 },
-		Vector2f{ 766 + 15, 127 + 15 },
-		Vector2f{ 766 + 15, 0 + 127 },
-	},
-	{
-		Vector2f{ 0 + 862, 0 + 127 },
-		Vector2f{ 0 + 862, 127 + 15 },
-		Vector2f{ 862 + 15, 127 + 15 },
-		Vector2f{ 862 + 15, 0 + 127 },
-	},
-	{
-		Vector2f{ 0 + 958, 0 + 127 },
-		Vector2f{ 0 + 958, 127 + 15 },
-		Vector2f{ 958 + 15, 127 + 15 },
-		Vector2f{ 958 + 15, 0 + 127 },
-	}
-	},
-		std::vector<Rectf>
+	std::vector<Rectf>
 	{
 		Rectf{ 719.f, 50.f, 16.f, 80.f },
-		Rectf{ 911.f, 50.f, 16.f, 80.f },
-		Rectf{ 1071.f, 50.f, 16.f, 80.f }
+			Rectf{ 911.f, 50.f, 16.f, 80.f },
+			Rectf{ 1071.f, 50.f, 16.f, 80.f }
 	},
+
 		std::vector<Level::MovingPlatform>
 	{
-		Level::MovingPlatform
-		{
-			Rectf{ 1664, 24.f, 32.f, 13.f },
-			20.f,
-			1664.f,
-			1789.f
-		}
+		{ Rectf{ 1664, 24.f, 32.f, 13.f }, 20.f, 1664.f, 1789.f }
 	},
+
 		std::vector<Level::EnemySpawnPoint>
 	{
 		{ Level::EnemyType::Plant, Vector2f{ 798.f, 128.f } },
@@ -510,11 +362,13 @@ void Game::LoadLevel1()
 
 		{ Level::EnemyType::Troll, Vector2f{ 3424.f, 49.f } }
 	},
+
 		std::vector<Level::EnemySpawnArea>
 	{
 		{ Level::EnemyType::Zombie, Rectf{ 0, 49.f, 1200.f, 150.f } },
 		{ Level::EnemyType::Ghost, Rectf{ 2670, 49.f, 480.f, 150.f }, false }
 	},
+
 		std::vector<Level::DropSpawnPoint>
 	{
 		{ PickupType::MoneyBag, Vector2f{ 304.f, 49.f } },
@@ -524,12 +378,207 @@ void Game::LoadLevel1()
 		{ PickupType::MoneyBag, Vector2f{ 2382.f, 49.f } },
 		{ PickupType::MoneyBag, Vector2f{ 2436.f, 49.f } },
 		{ PickupType::MoneyBag, Vector2f{ 2940.f, 49.f } },
-
 	},
+
 		"Platform.png",
 		"Level1.png"
 	);
 }
+
+//void Game::LoadLevel1()
+//{
+//	if (m_level1 != nullptr)
+//	{
+//		delete m_level1;
+//		m_level1 = nullptr;
+//	}
+//	// make it readabl for a file svg (game technique)
+//	m_level1 = new Level(
+//		std::vector<std::vector<Vector2f>>
+//	{
+//		{
+//			Vector2f{ 0, 49 },
+//				Vector2f{ 1661, 49 },
+//				Vector2f{ 1661, 0 }
+//		},
+//			{
+//				Vector2f{ 600, 127 },
+//				Vector2f{ 1120, 127 }
+//			},
+//			{
+//				Vector2f{ 1790, 0 },
+//				Vector2f{ 1790, 49},
+//				Vector2f{ 1949, 49},
+//				Vector2f{ 1949, 0 }
+//			},
+//			{
+//				Vector2f{ 1982, 0 },
+//				Vector2f{ 1982, 49},
+//				Vector2f{ 2013, 49},
+//				Vector2f{ 2013, 0 }
+//			},
+//			{
+//				Vector2f{ 2046, 0 },
+//				Vector2f{ 2046, 49},
+//				Vector2f{ 2445, 49},
+//				Vector2f{ 2445, 0 }
+//			},
+//			{
+//				Vector2f{ 2478, 0 },
+//				Vector2f{ 2478, 49},
+//				Vector2f{ 2701, 49},
+//				Vector2f{ 2701, 0 }
+//			},
+//			{
+//				Vector2f{ 2734, 0 },
+//				Vector2f{ 2734, 49},
+//				Vector2f{ 3582, 49},
+//				Vector2f{ 3582, 0 }
+//			},
+//			{
+//				Vector2f{ 0, 0 },
+//				Vector2f{ 0, 240 }
+//			},
+//			{
+//				Vector2f{ 3582, 0 },
+//				Vector2f{ 3582, 240 }
+//			}
+//	}, std::vector<std::vector<Vector2f>>
+//	{
+//	{
+//		Vector2f{ 0 + 46, 0 + 49 },
+//		Vector2f{ 0 + 46, 49 + 15 },
+//		Vector2f{ 46 + 15, 49 + 15 },
+//		Vector2f{ 46 + 15, 0 + 49 },
+//	},
+//	{
+//		Vector2f{ 0 + 238, 0 + 49 },
+//		Vector2f{ 0 + 238, 49 + 15 },
+//		Vector2f{ 238 + 15, 49 + 15 },
+//		Vector2f{ 238 + 15, 0 + 49 },
+//	},
+//	{
+//		Vector2f{ 0 + 414, 0 + 49 },
+//		Vector2f{ 0 + 414, 49 + 15 },
+//		Vector2f{ 414 + 15, 49 + 15 },
+//		Vector2f{ 414 + 15, 0 + 49 },
+//	},
+//	{
+//		Vector2f{ 0 + 526, 0 + 49 },
+//		Vector2f{ 0 + 526, 49 + 15 },
+//		Vector2f{ 526 + 15, 49 + 15 },
+//		Vector2f{ 526 + 15, 0 + 49 },
+//	},
+//	{
+//		Vector2f{ 0 + 750, 0 + 49 },
+//		Vector2f{ 0 + 750, 49 + 15 },
+//		Vector2f{ 750 + 15, 49 + 15 },
+//		Vector2f{ 750 + 15, 0 + 49 },
+//	},
+//	{
+//		Vector2f{ 0 + 958, 0 + 49 },
+//		Vector2f{ 0 + 958, 49 + 15 },
+//		Vector2f{ 958 + 15, 49 + 15 },
+//		Vector2f{ 958 + 15, 0 + 49 },
+//	},
+//	{
+//		Vector2f{ 0 + 1102, 0 + 49 },
+//		Vector2f{ 0 + 1102, 49 + 15 },
+//		Vector2f{ 1102 + 15, 49 + 15 },
+//		Vector2f{ 1102 + 15, 0 + 49 },
+//	},
+//	{
+//		Vector2f{ 0 + 1262, 0 + 49 },
+//		Vector2f{ 0 + 1262, 49 + 15 },
+//		Vector2f{ 1262 + 15, 49 + 15 },
+//		Vector2f{ 1262 + 15, 0 + 49 },
+//	},
+//	{
+//		Vector2f{ 0 + 1518, 0 + 49 },
+//		Vector2f{ 0 + 1518, 49 + 15 },
+//		Vector2f{ 1518 + 15, 49 + 15 },
+//		Vector2f{ 1518 + 15, 0 + 49 },
+//	},
+//
+//	{
+//		Vector2f{ 0 + 766, 0 + 127 },
+//		Vector2f{ 0 + 766, 127 + 15 },
+//		Vector2f{ 766 + 15, 127 + 15 },
+//		Vector2f{ 766 + 15, 0 + 127 },
+//	},
+//	{
+//		Vector2f{ 0 + 862, 0 + 127 },
+//		Vector2f{ 0 + 862, 127 + 15 },
+//		Vector2f{ 862 + 15, 127 + 15 },
+//		Vector2f{ 862 + 15, 0 + 127 },
+//	},
+//	{
+//		Vector2f{ 0 + 958, 0 + 127 },
+//		Vector2f{ 0 + 958, 127 + 15 },
+//		Vector2f{ 958 + 15, 127 + 15 },
+//		Vector2f{ 958 + 15, 0 + 127 },
+//	}
+//	},
+//		std::vector<Rectf>
+//	{
+//		Rectf{ 719.f, 50.f, 16.f, 80.f },
+//		Rectf{ 911.f, 50.f, 16.f, 80.f },
+//		Rectf{ 1071.f, 50.f, 16.f, 80.f }
+//	},
+//		std::vector<Level::MovingPlatform>
+//	{
+//		Level::MovingPlatform
+//		{
+//			Rectf{ 1664, 24.f, 32.f, 13.f },
+//			20.f,
+//			1664.f,
+//			1789.f
+//		}
+//	},
+//		std::vector<Level::EnemySpawnPoint>
+//	{
+//		{ Level::EnemyType::Plant, Vector2f{ 798.f, 128.f } },
+//		{ Level::EnemyType::Plant, Vector2f{ 1102.f, 128.f } },
+//		{ Level::EnemyType::Plant, Vector2f{ 2351.f, 49.f } },
+//		{ Level::EnemyType::Plant, Vector2f{ 2777.f, 49.f } },
+//
+//		{ Level::EnemyType::Bird, Vector2f{ 752.f, 64.f } },
+//		{ Level::EnemyType::Bird, Vector2f{ 1103.f, 64.f } },
+//		{ Level::EnemyType::Bird, Vector2f{ 1268.f, 62.f } },
+//		{ Level::EnemyType::Bird, Vector2f{ 1520.f, 64.f } },
+//
+//		{ Level::EnemyType::Demon, Vector2f{ 1500, 49.f } },
+//
+//		{ Level::EnemyType::FlyingKnight, Vector2f{ 2050.f, 81.f } },
+//		{ Level::EnemyType::FlyingKnight, Vector2f{ 2080.f, 111.f } },
+//		{ Level::EnemyType::FlyingKnight, Vector2f{ 2110.f, 81.f } },
+//
+//		{ Level::EnemyType::FlyingKnight, Vector2f{ 2200.f, 81.f } },
+//		{ Level::EnemyType::FlyingKnight, Vector2f{ 2230.f, 111.f } },
+//		{ Level::EnemyType::FlyingKnight, Vector2f{ 2260.f, 81.f } },
+//
+//		{ Level::EnemyType::Troll, Vector2f{ 3424.f, 49.f } }
+//	},
+//		std::vector<Level::EnemySpawnArea>
+//	{
+//		{ Level::EnemyType::Zombie, Rectf{ 0, 49.f, 1200.f, 150.f } },
+//		{ Level::EnemyType::Ghost, Rectf{ 2670, 49.f, 480.f, 150.f }, false }
+//	},
+//		std::vector<Level::DropSpawnPoint>
+//	{
+//		{ PickupType::MoneyBag, Vector2f{ 304.f, 49.f } },
+//		{ PickupType::MoneyBag, Vector2f{ 609.f, 49.f } },
+//		{ PickupType::MoneyBag, Vector2f{ 921.f, 128.f } },
+//		{ PickupType::MoneyBag, Vector2f{ 1466.f, 49.f } },
+//		{ PickupType::MoneyBag, Vector2f{ 2382.f, 49.f } },
+//		{ PickupType::MoneyBag, Vector2f{ 2436.f, 49.f } },
+//		{ PickupType::MoneyBag, Vector2f{ 2940.f, 49.f } },
+//
+//	},
+//		"Platform.png",
+//		"Level1.png"
+//	);
+//}
 
 void Game::ResetLevel()
 {
@@ -540,7 +589,7 @@ void Game::ResetLevel()
 
 	LoadLevel1();
 
-	m_P1->Respawn(Vector2f{ 50.f, 38.f });
+	m_P1->Respawn(Vector2f{ 150.f, 38.f });
 	m_P1->SetPlayerScore(savedScore);
 
 	m_pEntityManager->SetLevel(m_level1);
@@ -548,7 +597,7 @@ void Game::ResetLevel()
 	m_pEntityManager->SpawnPointEnemies();
 	m_pEntityManager->SetSoundManager(m_SoundManager);
 
-	m_hud->ResetTimer();
+	
 }
 void Game::StartNewRun()
 {
@@ -556,6 +605,7 @@ void Game::StartNewRun()
 	m_P1->SetPlayerScore(0);
 	ResetLevel();
 	m_MyState = GameState::Playing;
+	m_hud->ResetTimer();
 }
 
 void Game::StartNextLife()

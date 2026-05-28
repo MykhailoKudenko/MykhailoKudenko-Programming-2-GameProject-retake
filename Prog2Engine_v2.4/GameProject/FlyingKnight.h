@@ -12,9 +12,7 @@ class FlyingKnight : public Enemy
 {
 public:
 	FlyingKnight(Vector2f startPos, bool facingRight);
-
-	static void InitializeAssets();
-	static void FreeAssets();
+	~FlyingKnight() override;
 
 	void Update(float elapsedSec) override;
 	void Draw() const override;
@@ -32,4 +30,5 @@ private:
 	float m_SpawnDuration{ 0.6f };
 
 	static Texture* m_pTexture;
+	static int m_InstanceCount;
 };

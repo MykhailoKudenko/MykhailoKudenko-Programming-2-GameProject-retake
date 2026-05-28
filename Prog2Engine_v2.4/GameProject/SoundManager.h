@@ -19,6 +19,12 @@ public:
     SoundManager();
     ~SoundManager() = default;
 
+    //rule of 5
+    SoundManager(const SoundManager&) = delete;
+    SoundManager& operator=(const SoundManager&) = delete;
+    SoundManager(SoundManager&&) = delete;
+    SoundManager& operator=(SoundManager&&) = delete;
+
     void PlayMusic();
     void StopMusic();
 
@@ -33,7 +39,7 @@ private:
     SoundEffect m_Throw;
     SoundEffect m_PickUp;
 
-    SoundEffect m_FireDead; // little burp
+    SoundEffect m_FireDead;
 
     SoundEffect m_FlyingKnightSound;
 

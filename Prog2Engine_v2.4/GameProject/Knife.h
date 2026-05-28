@@ -6,14 +6,15 @@ class Knife : public Projectile
 {
 public:
 	Knife(Vector2f pos, bool isRight);
-	virtual ~Knife() = default;
+	~Knife() override;
+
 
 	void Draw() const override;
 
-	static void InitializeAssets();
-	static void FreeAssets();
 
 private:
 	static Texture* m_pTexture;
+	static int m_InstanceCount;
+
 };
 

@@ -6,9 +6,12 @@ class Enemy
 {
 public:
 	Enemy(Rectf Start);
-
-
-	
+	virtual ~Enemy();
+	//rule of 5
+	Enemy(const Enemy&) = delete;
+	Enemy& operator=(const Enemy&) = delete;
+	Enemy(Enemy&&) = delete;
+	Enemy& operator=(Enemy&&) = delete;
 
 	virtual void Update(float elapsedSec) = 0;
 	virtual void Draw() const = 0;
@@ -27,8 +30,7 @@ public:
 
 	int GetScore();
 
-	static void InitializeSharedAssets();
-	static void FreeSharedAssets();
+
 
 	void SetBag(bool DoesHaveBag);
 	bool GetBag() const;
@@ -54,6 +56,7 @@ protected:
 
 	Effect::EffectType m_EffectType{ Effect::EffectType::Blood };
 
+	static int m_EnemyInstanceCount;
 	static Texture* m_pBagTexture;
 };
 

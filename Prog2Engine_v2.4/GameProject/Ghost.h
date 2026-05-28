@@ -15,9 +15,8 @@ class Ghost : public Enemy
 {
 public:
 	Ghost(Vector2f startPos, bool facingRight);
+	~Ghost() override;
 
-	static void InitializeAssets();
-	static void FreeAssets();
 
 	void Update(float elapsedSec) override;
 	void Draw() const override;
@@ -43,4 +42,5 @@ private:
 
 	static Animation* m_pFlyAnimation;
 	static Animation* m_pSpawnAnimation;
+	static int m_InstanceCount;
 };

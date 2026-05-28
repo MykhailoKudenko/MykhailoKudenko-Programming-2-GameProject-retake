@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="3582" height="240" viewBox="0 0 3582 240" xmlns="http://www.w3.org/2000/svg">
+  <g id="level_collision" fill="none" stroke="#ff00ff" stroke-width="2">
+    <path d="M 0 191 L 1661 191 L 1661 240" />
+    <path d="M 600 113 L 1120 113" />
+    <path d="M 1790 240 L 1790 191 L 1949 191 L 1949 240" />
+    <path d="M 1982 240 L 1982 191 L 2013 191 L 2013 240" />
+    <path d="M 2046 240 L 2046 191 L 2445 191 L 2445 240" />
+    <path d="M 2478 240 L 2478 191 L 2701 191 L 2701 240" />
+    <path d="M 2734 240 L 2734 191 L 3582 191 L 3582 240" />
+    <path d="M 0 240 L 0 0" />
+    <path d="M 3582 240 L 3582 0" />
+  </g>
+</svg>

@@ -26,11 +26,16 @@
 #include "Drop.h"
 
 
-class EntityManager
+class EntityManager 
 {
 public:
     EntityManager();
     ~EntityManager();
+    //rule of 5
+    EntityManager(const EntityManager&) = delete;
+    EntityManager& operator=(const EntityManager&) = delete;
+    EntityManager(EntityManager&&) = delete;
+    EntityManager& operator=(EntityManager&&) = delete;
 
     void SetLevel(Level* pLevel);
     void SetPlayer(Player* pPlayer);

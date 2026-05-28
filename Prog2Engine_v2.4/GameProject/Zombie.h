@@ -13,9 +13,7 @@ class Zombie : public Enemy
 
 public:
 	Zombie(Vector2f StartPos, bool facingRight);
-
-	static void InitializeAssets();
-	static void FreeAssets();
+	~Zombie() override;
 
 	void Update(float elapsedSec) override;
 	void Draw() const override;
@@ -34,4 +32,5 @@ private:
 
 	static Animation* m_pWalkAnimation;
 	static Animation* m_pSpawnAnimation;
+	static int m_InstanceCount;
 };

@@ -17,14 +17,11 @@ class Torch : public Projectile
 {
 public:
 	Torch(Vector2f pos, bool isRight);
-	virtual ~Torch() = default;
+	~Torch() override;
 
 	void Update(float elapsedSec) override;
 
 	void Draw() const override;
-
-	static void InitializeAssets();
-	static void FreeAssets();
 
 	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
 	void Kill() override;
@@ -36,6 +33,7 @@ private:
 
 	static Texture* m_pTexture;
 	static Animation* m_BurningGround;
+	static int m_InstanceCount;
 
 	float m_AnimTime{ 0.f };
 

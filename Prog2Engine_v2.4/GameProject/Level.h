@@ -58,6 +58,23 @@ public:
 		const std::string& PlatformTexturePath,
 		const std::string& LevelTexturePath);
 
+	Level(const std::string& svgPath,
+		std::vector<std::vector<Vector2f>> playerOnlyVertices,
+		std::vector<Rectf> ladders,
+		std::vector<MovingPlatform> platforms,
+		std::vector<EnemySpawnPoint> enemySpawnPoints,
+		std::vector<EnemySpawnArea> enemySpawnAreas,
+		std::vector<DropSpawnPoint> dropSpawnPoints,
+		const std::string& PlatformTexturePath,
+		const std::string& LevelTexturePath);
+
+	//rule of 5
+	~Level() = default;
+	Level(const Level&) = delete;
+	Level& operator=(const Level&) = delete;
+	Level(Level&&) = delete;
+	Level& operator=(Level&&) = delete;
+
 	const std::vector<std::vector<Vector2f>>& GetVertecies() const;
 	const std::vector<std::vector<Vector2f>>& GetPlatformTopEdges() const;
 	const std::vector<Rectf>& GetLadders() const;
@@ -77,6 +94,7 @@ public:
 	void Update(float elapsedSec);
 
 private:
+	void LoadFromSvg(const std::string& svgPath);
 
 	std::vector<std::vector<Vector2f>> m_Vertices;
 	std::vector<std::vector<Vector2f>> m_PlayerOnlyVertices;

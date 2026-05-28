@@ -5,6 +5,11 @@ class Animation
 {
 public:
 	Animation(const std::string& texturePath, int nrFrames, float frameSec, bool loop = true);
+	//rule of 5
+	Animation(const Animation&) = delete;
+	Animation& operator=(const Animation&) = delete;
+	Animation(Animation&&) = delete;
+	Animation& operator=(Animation&&) = delete;
 
 	void Update(float elapsedSec);
 	void Draw(const Rectf& destRect, bool isMirrored) const;

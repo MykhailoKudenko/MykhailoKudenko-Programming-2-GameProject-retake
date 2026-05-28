@@ -4,6 +4,7 @@
 
 Texture* Torch::m_pTexture{ nullptr };
 Animation* Torch::m_BurningGround{ nullptr };
+int Torch::m_InstanceCount{ 0 };
 
 Torch::Torch(Vector2f pos, bool isRight)
 	: Projectile(Rectf{ pos.x, pos.y, 12.f, 8.f })
@@ -18,6 +19,32 @@ Torch::Torch(Vector2f pos, bool isRight)
 
 	}
 	m_Speed.y = 60;
+
+	++m_InstanceCount;
+
+	if (m_pTexture == nullptr)
+	{
+		m_pTexture = new Texture{ "Torch.png" };
+	}
+	if (m_BurningGround == nullptr)
+	{
+		m_BurningGround = new Animation("BurningGround.png", 2, 0.26f, false);
+	}
+}
+Torch::~Torch()
+{
+	--m_InstanceCount;
+
+	if (m_InstanceCount <= 0)
+	{
+		delete m_pTexture;
+		m_pTexture = nullptr;
+
+		delete m_BurningGround;
+		m_BurningGround = nullptr;
+
+		m_InstanceCount = 0;
+	}
 }
 
 void Torch::Draw() const
@@ -91,26 +118,6 @@ void Torch::Update(float elapsedSec)
 	}
 }
 
-void Torch::InitializeAssets()
-{
-	if (m_pTexture == nullptr)
-	{
-		m_pTexture = new Texture{ "Torch.png" };
-	}
-	if (m_BurningGround == nullptr)
-	{
-		m_BurningGround = new Animation("BurningGround.png", 2, 0.26f, false);
-	}
-}
-
-void Torch::FreeAssets()
-{
-	delete m_pTexture;
-	m_pTexture = nullptr;
-
-	delete m_BurningGround;
-	m_BurningGround = nullptr;
-}
 
 void Torch::Kill()
 {

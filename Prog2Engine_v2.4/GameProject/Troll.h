@@ -17,11 +17,7 @@ class Troll : public Enemy
 {
 public:
 	Troll(Vector2f startPos);
-
-
-	static void InitializeAssets();
-	static void FreeAssets();
-
+	~Troll() override;
 
 	void Update(float elapsedSec) override;
 	void Draw() const override;
@@ -49,6 +45,7 @@ private:
 	static Animation* m_pShootAnimation;
 	static Animation* m_pWalkAnimation;
 	static Animation* m_pSpawnAnimation;
+	static int m_InstanceCount;
 
 	EntityManager* m_pEntityManager{ nullptr };
 	const std::vector<std::vector<Vector2f>>* m_pVertices{ nullptr };

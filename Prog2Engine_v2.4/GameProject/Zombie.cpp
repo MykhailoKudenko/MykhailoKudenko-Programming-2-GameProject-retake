@@ -4,6 +4,7 @@
 
 Animation* Zombie::m_pWalkAnimation{ nullptr };
 Animation* Zombie::m_pSpawnAnimation{ nullptr };
+int Zombie::m_InstanceCount{ 0 };
 
 Zombie::Zombie(Vector2f StartPos, bool facingRight)
 	: Enemy(Rectf{ StartPos.x, StartPos.y, 19, 27 })
@@ -13,6 +14,34 @@ Zombie::Zombie(Vector2f StartPos, bool facingRight)
 	if (!facingRight)
 	{
 		m_Speed *= -1.f;
+	}
+
+	++m_InstanceCount;
+
+	if (m_pWalkAnimation == nullptr)
+	{
+		m_pWalkAnimation = new Animation("ZombieWalk.png", 2, 0.13f, true);
+	}
+
+	if (m_pSpawnAnimation == nullptr)
+	{
+		m_pSpawnAnimation = new Animation("ZombieSpawn.png", 3, 0.39f, false);
+	}
+}
+
+Zombie::~Zombie()
+{
+	--m_InstanceCount;
+
+	if (m_InstanceCount <= 0)
+	{
+		delete m_pWalkAnimation;
+		m_pWalkAnimation = nullptr;
+
+		delete m_pSpawnAnimation;
+		m_pSpawnAnimation = nullptr;
+
+		m_InstanceCount = 0;
 	}
 }
 
@@ -195,28 +224,6 @@ void Zombie::Draw() const
 void Zombie::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
 {
 	m_pVertices = vertices;
-}
-
-void Zombie::InitializeAssets()
-{
-	if (m_pWalkAnimation == nullptr)
-	{
-		m_pWalkAnimation = new Animation("ZombieWalk.png", 2, 0.13f, true);
-	}
-
-	if (m_pSpawnAnimation == nullptr)
-	{
-		m_pSpawnAnimation = new Animation("ZombieSpawn.png", 3, 0.39f, false);
-	}
-}
-
-void Zombie::FreeAssets()
-{
-	delete m_pWalkAnimation;
-	m_pWalkAnimation = nullptr;
-
-	delete m_pSpawnAnimation;
-	m_pSpawnAnimation = nullptr;
 }
 
 

@@ -5,14 +5,12 @@
 Texture* HUD::m_pLanceTexture{ nullptr };
 Texture* HUD::m_pKnifeTexture{ nullptr };
 Texture* HUD::m_pTorchTexture{ nullptr };
+int HUD::m_InstanceCount{ 0 };
 
 HUD::HUD()
     : m_TimeLeft{ 180.f }
 {
-}
-
-void HUD::InitializeAssets()
-{
+    --m_InstanceCount;
     if (m_pLanceTexture == nullptr)
     {
         m_pLanceTexture = new Texture("Lance.png");
@@ -29,16 +27,23 @@ void HUD::InitializeAssets()
     }
 }
 
-void HUD::FreeAssets()
+HUD::~HUD()
 {
-    delete m_pLanceTexture;
-    m_pLanceTexture = nullptr;
+    --m_InstanceCount;
 
-    delete m_pKnifeTexture;
-    m_pKnifeTexture = nullptr;
+    if (m_InstanceCount <= 0)
+    {
+        delete m_pLanceTexture;
+        m_pLanceTexture = nullptr;
 
-    delete m_pTorchTexture;
-    m_pTorchTexture = nullptr;
+        delete m_pKnifeTexture;
+        m_pKnifeTexture = nullptr;
+
+        delete m_pTorchTexture;
+        m_pTorchTexture = nullptr;
+
+        m_InstanceCount = 0;
+    }
 }
 
 void HUD::Update(float elapsedSec)
@@ -158,4 +163,16 @@ std::string HUD::GetTimerText() const
 void HUD::ResetTimer()
 {
     m_TimeLeft = 180.f;
+}
+
+bool HUD::DidTimerFinish()
+{
+    if (m_TimeLeft > 0)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
