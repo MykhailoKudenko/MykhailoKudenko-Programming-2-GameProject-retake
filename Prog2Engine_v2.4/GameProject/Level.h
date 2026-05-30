@@ -37,7 +37,9 @@ public:
 		EnemyType type;
 		Rectf area;
 		bool SpawnAtTheGround{true};
+		float timerMax{ 1.f };
 		float timer{ 0.f };
+	
 	};
 
 	struct DropSpawnPoint

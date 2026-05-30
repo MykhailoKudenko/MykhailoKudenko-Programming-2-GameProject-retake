@@ -10,12 +10,16 @@ int Plant::m_InstanceCount{ 0 };
 Plant::Plant(Vector2f StartPos)
 	: Enemy(Rectf{ StartPos.x, StartPos.y, 16, 24 })
 {
+	++m_InstanceCount;
+
 	m_Speed = 0.f;
-	
+
 	if (m_pPlantAnimation == nullptr)
 	{
 		m_pPlantAnimation = new Animation("Plant.png", 2, 1.06f, false);
 	}
+	m_EffectType = Effect::EffectType::Fire;
+
 }
 
 Plant::~Plant()

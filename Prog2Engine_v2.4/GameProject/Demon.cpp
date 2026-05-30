@@ -17,7 +17,7 @@ Demon::Demon(Vector2f StartPos)
 	: Enemy(Rectf{ StartPos.x, StartPos.y, 24, 26 })
 {
 	m_Speed = 80.f;
-	m_health = 10;
+	m_health = 5;
 	m_IsBoss = true;
 
 	++m_InstanceCount;
@@ -34,6 +34,9 @@ Demon::Demon(Vector2f StartPos)
 	{
 		m_pSpawnAnimation = new Animation("DemonSpawn.png", 3, 0.26f, false);
 	}
+
+	m_EffectType = Effect::EffectType::Fire;
+
 }
 
 Demon::~Demon()
@@ -80,7 +83,9 @@ void Demon::Update(float elapsedSec)
 		if (UpdateShooting(elapsedSec, m_pEntityManager->GetPlayerPosition()))
 		{
 			int choice = std::rand() % 2;
-			
+
+			m_HasLockedParabolaTarget = false;
+
 			if (choice == 0)
 			{
 				if (m_IsAtRightSide)
@@ -88,7 +93,7 @@ void Demon::Update(float elapsedSec)
 				else
 					m_MyState = DemonState::MovingToTheRight;
 			}
-			else if (choice == 1)
+			else
 			{
 				m_MyState = DemonState::MovingDown;
 			}
@@ -286,9 +291,17 @@ bool Demon::MoveToThePoint(float elapsedSec, const Vector2f& targetPoint)
 
 bool Demon::UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bool movingRight)
 {
-	float leftX = playerPos.x - m_TopRightModificatior.x;
-	float rightX = playerPos.x + m_TopRightModificatior.x;
+	if (!m_HasLockedParabolaTarget)
+	{
+		m_ParabolaLockedPlayerPos = playerPos;
+		m_HasLockedParabolaTarget = true;
+	}
+
+	Vector2f lockedPlayerPos = m_ParabolaLockedPlayerPos;
 	//Bounds
+
+	float leftX = lockedPlayerPos.x - m_TopRightModificatior.x;
+	float rightX = lockedPlayerPos.x + m_TopRightModificatior.x;
 
 	float moveDir;
 	if (movingRight)
@@ -329,10 +342,10 @@ bool Demon::UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bo
 		t = 1.f;
 
 	//top heigh
-	float topY = playerPos.y + m_TopRightModificatior.y;
+	float topY = lockedPlayerPos.y + m_TopRightModificatior.y;
 
 	// Height at the middle (when it should hit player)
-	float middleTargetY = playerPos.y + -20.f;
+	float middleTargetY = lockedPlayerPos.y + -20.f;
 
 	// How far down the curve is
 	float depth = topY - middleTargetY;
@@ -364,14 +377,13 @@ bool Demon::UpdateShooting(float elapsedSec, const Vector2f& playerPos)
 	}
 	else
 	{
-		targetPoint = Vector2f
-		{
+		targetPoint = Vector2f{
 			playerPos.x - m_TopRightModificatior.x,
 			playerPos.y + m_TopRightModificatior.y
 		};
 	}
 
-	MoveToThePoint(elapsedSec, targetPoint);
+	bool isAtShootPoint = MoveToThePoint(elapsedSec, targetPoint);
 
 	if (!m_HasFiredThisShot)
 	{
@@ -379,7 +391,11 @@ bool Demon::UpdateShooting(float elapsedSec, const Vector2f& playerPos)
 		m_HasFiredThisShot = true;
 	}
 
-	if (m_pShootAnimation != nullptr && m_pShootAnimation->IsTimeFinished(m_AnimTime))
+	bool animationFinished =
+		m_pShootAnimation != nullptr &&
+		m_pShootAnimation->IsTimeFinished(m_AnimTime);
+
+	if (animationFinished && isAtShootPoint)
 	{
 		m_AnimTime = 0.f;
 		m_HasFiredThisShot = false;

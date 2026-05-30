@@ -10,11 +10,11 @@ Lance::Lance(Vector2f pos, bool isRight)
 {
 	if (isRight)
 	{
-		m_Speed.x = 60.f;
+		m_Speed.x = 100.f;
 	}
 	else
 	{
-		m_Speed.x = -60.f;
+		m_Speed.x = -100.f;
 	}
 
 	++m_InstanceCount;

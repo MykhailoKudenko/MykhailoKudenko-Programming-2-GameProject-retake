@@ -72,6 +72,8 @@ public:
   
 private:
 
+    void KillProjectilesOutsideSpawnArea();
+
     void SpawnEnemyByType(Level::EnemyType type, const Vector2f& pos, bool startsFacingRight);
     bool FindGroundBelow(const Vector2f& pos, float& outGroundY) const;
     void SpawnAreaEnemies(float elapsedSec);
@@ -99,7 +101,6 @@ private:
     float xSpawnLenth{256/2.f + 50};
     float yMinSpawnForAir{ 37.f };
     float yMaxHeight{ 200.f};
-    float m_AreaSpawnInterval{ 1.f };
     //non unique sounds/ group sounds
     bool m_IsGhostSoundPlaying{ false };
     bool m_IsFlyingKnightSoundPlaying{ false };

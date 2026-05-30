@@ -26,6 +26,8 @@ FlyingKnight::FlyingKnight(Vector2f startPos, bool facingRight)
 	{
 		m_pTexture = new Texture("FlyingKnight.png");
 	}
+
+	m_EffectType = Effect::EffectType::Fire;
 }
 FlyingKnight::~FlyingKnight()
 {

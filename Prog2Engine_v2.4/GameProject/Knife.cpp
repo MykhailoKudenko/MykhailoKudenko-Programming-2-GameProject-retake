@@ -11,11 +11,11 @@ Knife::Knife(Vector2f pos, bool isRight)
 {
 	if (isRight)
 	{
-		m_Speed.x = 80.f;
+		m_Speed.x = 120.f;
 	}
 	else
 	{
-		m_Speed.x = -80.f;
+		m_Speed.x = -120.f;
 	}
 
 	++m_InstanceCount;

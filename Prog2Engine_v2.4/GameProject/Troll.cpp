@@ -17,7 +17,7 @@ Troll::Troll(Vector2f StartPos)
 	: Enemy(Rectf{ StartPos.x, StartPos.y, 43, 40 })
 {
 	m_Speed = 30.f;
-	m_health = 20;
+	m_health = 10;
 	m_IsBoss = true;
 
 	++m_InstanceCount;
@@ -40,6 +40,10 @@ Troll::Troll(Vector2f StartPos)
 	{
 		m_pSpawnAnimation = new Animation("TrollStand.png", 1, 0.52f, false);
 	}
+
+	m_EffectType = Effect::EffectType::Fire;
+
+
 }
 Troll::~Troll()
 {
@@ -418,33 +422,26 @@ void Troll::Fire(const Vector2f& playerPos)
 		return;
 	}
 
+	m_IsFacingRight = playerPos.x > m_Collider.left;
+
+	float shootY = m_Collider.bottom + 18.f;
+
 	Vector2f spawnPos
 	{
-		m_Collider.left + m_Collider.width / 2.f,
-		m_Collider.bottom + m_Collider.height / 2.f
+		m_IsFacingRight
+			? m_Collider.left + m_Collider.width
+			: m_Collider.left,
+		shootY
 	};
 
 	Vector2f direction
 	{
-		playerPos.x - spawnPos.x,
-		playerPos.y - spawnPos.y
+		m_IsFacingRight ? 1.f : -1.f,
+		0.f
 	};
-
-	float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-
-	if (length > 0.001f)
-	{
-		direction.x /= length;
-		direction.y /= length;
-	}
-	else
-	{
-		direction = Vector2f{ 1.f, 0.f };
-	}
 
 	m_pEntityManager->SpawnDemonProjectile(spawnPos, direction);
 }
-
 
 void Troll::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
 {

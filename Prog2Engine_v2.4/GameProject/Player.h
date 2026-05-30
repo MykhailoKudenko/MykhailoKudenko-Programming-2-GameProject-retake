@@ -72,6 +72,9 @@ public:
 
 	bool IsFlying() const;
 
+	Vector2f GetThrowPosition() const;
+
+
 private:
 	void UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec);
 	void UpdateInput();
@@ -88,10 +91,10 @@ private:
 	void SnapToCurrentLadderCenter();
 	//movement(speeds)
 	float m_Gravity{-60};
-	float m_MovementSpeed{ 30 };
+	float m_MovementSpeed{ 50 };
 	float m_JumpSpeed{ 60 };
 	float m_KnockBackSpeed{ 80 };
-	float m_ClimbSpeed{ 40.f };
+	float m_ClimbSpeed{ 60.f };
 
 	//input
 	int m_inputDirectionX{ 0 };
@@ -107,7 +110,7 @@ private:
 	const float m_JumpTimeUpMax{ 0.3f };
 	float m_JumpTimeUpCurrent{ 0.f };
 	//KonkBack
-	const float m_InvulnerableTimeMax{ 0.6f };
+	const float m_InvulnerableTimeMax{ 1.f };
 	float m_InvulnerableTimeCurrent{ 0.f };
 	const float	m_KnockbackTimeMax{ 0.2f };
 	float m_KnockbackTimeCurrent{ 0.f };
@@ -145,7 +148,7 @@ private:
 	bool m_PreviousShootPressed{ false };
 	bool m_DoesWantToThrow{ false };
 
-	float m_ThrowCooldownMax{ 0.3f };
+	float m_ThrowCooldownMax{ 0.2f };
 	float m_ThrowCooldownCurrent{ 0.0f };
 
 	//wepon

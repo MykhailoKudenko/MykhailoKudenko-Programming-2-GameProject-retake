@@ -32,7 +32,7 @@ private:
 
 	float m_AnimTime{ 0.f };
 
-	float m_DropDistance{ 12.f };
+	float m_DropDistance{ 30.f };
 	float m_DropSpeed{ 20.f };
 
 	float m_ExtraPastPlayer{ 80.f };

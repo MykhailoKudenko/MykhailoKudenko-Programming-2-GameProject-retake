@@ -16,6 +16,7 @@ public:
 
 	void virtual Draw() const = 0;
 	Rectf GetHitbox() const;
+	Vector2f GetCenterPosition() const;
 
 	void virtual Kill();
 	bool isDead();

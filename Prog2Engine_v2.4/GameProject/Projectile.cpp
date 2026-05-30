@@ -32,3 +32,12 @@ bool Projectile::isDead()
 {
 	return(m_IsDead);
 }
+
+Vector2f Projectile::GetCenterPosition() const
+{
+	return Vector2f
+	{
+		m_Collider.left + m_Collider.width / 2.f,
+		m_Collider.bottom + m_Collider.height / 2.f
+	};
+}

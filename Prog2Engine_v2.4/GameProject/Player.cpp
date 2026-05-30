@@ -5,16 +5,28 @@
 //temp
 #include <iostream>
 
-Player::Player(Vector2f Pos) : m_Collider{ Rectf{Pos.x, Pos.y, 16, 24} }, 
-m_WalkingArmour{ "WalkKnight.png", 3,  0.13f, true }, m_WalkingNaked{ "WalkKnightNaked.png", 3, 0.13f, true }, 
-m_ClimbingArmour{ "ClimbKnight.png", 2,  0.13f, true }, m_ClimbingNaked{ "ClimbKnightNaked.png", 2,  0.13f, true },
-m_ThrowArmour{"ThrowKnight.png", 2,  0.13f, false }, m_ThrowNaked{"ThrowKnightNaked.png", 2,  0.13f, false },
-m_DuckThrowArmour{ "DuckThrowKnight.png", 2,  0.13f, false }, m_DuckThrowNaked{ "DuckThrowKnightNaked.png", 2,  0.13f, false },
-m_DuckArmour{ "DuckKnight.png" }, m_DuckNaked{ "DuckKnightNaked.png" }, 
-m_JumpingArmour{ "JumpKnight.png"}, m_JumpingNaked{ "JumpKnightNaked.png" },
-m_Hit{"HitKnight.png"}, 
-m_DeathKnockBack{"DeadKnockBack.png"},
-m_Death{"DeadGround.png"}
+Player::Player(Vector2f Pos) : m_Collider{ Rectf{Pos.x, Pos.y, 16, 24} },
+m_WalkingArmour{ "WalkKnight.png", 3,  0.10f, true },
+m_WalkingNaked{ "WalkKnightNaked.png", 3, 0.10f, true },
+
+m_ClimbingArmour{ "ClimbKnight.png", 2,  0.10f, true },
+m_ClimbingNaked{ "ClimbKnightNaked.png", 2,  0.10f, true },
+
+m_ThrowArmour{ "ThrowKnight.png", 2,  0.10f, false },
+m_ThrowNaked{ "ThrowKnightNaked.png", 2,  0.10f, false },
+
+m_DuckThrowArmour{ "DuckThrowKnight.png", 2,  0.10f, false },
+m_DuckThrowNaked{ "DuckThrowKnightNaked.png", 2,  0.10f, false },
+
+m_DuckArmour{ "DuckKnight.png" },
+m_DuckNaked{ "DuckKnightNaked.png" },
+
+m_JumpingArmour{ "JumpKnight.png" },
+m_JumpingNaked{ "JumpKnightNaked.png" },
+
+m_Hit{ "HitKnight.png" },
+m_DeathKnockBack{ "DeadKnockBack.png" },
+m_Death{ "DeadGround.png" }
 {
 }
 Player::~Player()
@@ -75,9 +87,9 @@ void Player::Draw() const
 		break;
 	case PlayerState::DuckingThrow:
 		if (m_IsWearingArmour)
-			m_DuckThrowArmour.Draw(m_Collider, !m_isFacingRight);
+			m_DuckThrowArmour.Draw(Rectf{ m_Collider.left, m_Collider.bottom, m_DuckThrowArmour.GetFrameWidth(), m_DuckThrowArmour.GetFrameHeight() }, !m_isFacingRight);
 		else
-			m_DuckThrowNaked.Draw(m_Collider, !m_isFacingRight);
+			m_DuckThrowNaked.Draw(Rectf{ m_Collider.left, m_Collider.bottom, m_DuckThrowArmour.GetFrameWidth(), m_DuckThrowArmour.GetFrameHeight() }, !m_isFacingRight);
 		break;
 	case PlayerState::Dead:
 		m_Death.Draw(Vector2f{ m_isFacingRight ? m_Collider.left : m_Collider.left - m_Death.GetWidth() + m_Collider.width , m_Collider.bottom }, !m_isFacingRight);
@@ -152,11 +164,16 @@ void Player::UpdateInput()
 
 	bool isPressedNow = pStates[SDL_SCANCODE_E];
 
-	if (isPressedNow && !m_PreviousShootPressed && m_ThrowCooldownCurrent <= 0)
+	bool isOnLadder =
+		m_Mystate == PlayerState::Climbing ||
+		m_Mystate == PlayerState::ClimbingStill;
+
+	if (isPressedNow && !m_PreviousShootPressed && m_ThrowCooldownCurrent <= 0 && !isOnLadder)
 	{
 		m_DoesWantToThrow = true;
 		m_ThrowCooldownCurrent = m_ThrowCooldownMax;
-	}else
+	}
+	else
 	{
 		m_DoesWantToThrow = false;
 	}
@@ -608,9 +625,9 @@ void Player::UpdateMovmentVertical(
 //getters/ setters
 Rectf Player::GetHitbox() const
 {
-	if (m_Mystate == PlayerState::Ducking || m_Mystate == PlayerState::DuckingThrow)
+	if (m_Mystate == PlayerState::Ducking)
 	{
-		return(Rectf{ m_Collider.left, m_Collider.bottom, m_Collider.width, m_Collider.height/2});
+		return(Rectf{ m_Collider.left, m_Collider.bottom, m_Collider.width, m_Collider.height-16});
 	}
 	else
 	{
@@ -799,4 +816,25 @@ void Player::SetFlying(bool isFlying)
 bool Player::IsFlying() const
 {
 	return m_IsFlying;
+}
+
+Vector2f Player::GetThrowPosition() const
+{
+	float xOffset = 0;
+	if (m_isFacingRight)
+	xOffset = m_Collider.width;
+	else
+	xOffset = -m_Collider.width;
+
+	float yOffset = 16.f;
+
+	if (m_Mystate == PlayerState::Ducking || m_Mystate == PlayerState::DuckingThrow)
+	{
+		yOffset = 8.f;
+	}
+
+	return Vector2f{
+		m_Collider.left + xOffset,
+		m_Collider.bottom + yOffset
+	};
 }

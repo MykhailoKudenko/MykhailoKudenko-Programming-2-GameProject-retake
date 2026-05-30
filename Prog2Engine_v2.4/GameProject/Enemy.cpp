@@ -109,3 +109,8 @@ bool Enemy::IsFacingRight() const
 {
 	return m_IsFacingRight;
 }
+
+bool Enemy::IsBoss() const
+{
+	return m_IsBoss;
+}

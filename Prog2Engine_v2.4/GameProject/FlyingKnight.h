@@ -25,7 +25,7 @@ private:
 	float m_FlyTime{ 0.f };
 	float m_StartY{};
 
-	float m_Amplitude{ 20.f };
+	float m_Amplitude{ 50.f };
 	float m_Frequency{ 2.f };
 	float m_SpawnDuration{ 0.6f };
 

@@ -162,7 +162,7 @@ std::string HUD::GetTimerText() const
 
 void HUD::ResetTimer()
 {
-    m_TimeLeft = 180.f;
+    m_TimeLeft = 240.f;
 }
 
 bool HUD::DidTimerFinish()

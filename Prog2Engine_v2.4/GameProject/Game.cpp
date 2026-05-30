@@ -303,41 +303,106 @@ void Game::ClearBackground( ) const
 
 void Game::LoadLevel1()
 {
-	delete m_level1;
-	m_level1 = nullptr;
-
-	m_level1 = new Level(
-		"Level1.svg",
-
-		std::vector<std::vector<Vector2f>>
+	if (m_level1 != nullptr)
 	{
-		{
-			Vector2f{ 46, 49 },
-				Vector2f{ 46, 64 },
-				Vector2f{ 61, 64 },
-				Vector2f{ 61, 49 },
-		},
-			{
-				Vector2f{ 238, 49 },
-				Vector2f{ 238, 64 },
-				Vector2f{ 253, 64 },
-				Vector2f{ 253, 49 },
-			},
-			// paste the rest of your player-only blocks here
+		delete m_level1;
+		m_level1 = nullptr;
+	}
+	// make it readabl for a file svg (game technique)
+	m_level1 = new Level(
+		"Level1.svg"
+	, std::vector<std::vector<Vector2f>>
+	{
+	{
+		Vector2f{ 0 + 46, 0 + 49 },
+		Vector2f{ 0 + 46, 49 + 15 },
+		Vector2f{ 46 + 15, 49 + 15 },
+		Vector2f{ 46 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 238, 0 + 49 },
+		Vector2f{ 0 + 238, 49 + 15 },
+		Vector2f{ 238 + 15, 49 + 15 },
+		Vector2f{ 238 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 414, 0 + 49 },
+		Vector2f{ 0 + 414, 49 + 15 },
+		Vector2f{ 414 + 15, 49 + 15 },
+		Vector2f{ 414 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 526, 0 + 49 },
+		Vector2f{ 0 + 526, 49 + 15 },
+		Vector2f{ 526 + 15, 49 + 15 },
+		Vector2f{ 526 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 750, 0 + 49 },
+		Vector2f{ 0 + 750, 49 + 15 },
+		Vector2f{ 750 + 15, 49 + 15 },
+		Vector2f{ 750 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 958, 0 + 49 },
+		Vector2f{ 0 + 958, 49 + 15 },
+		Vector2f{ 958 + 15, 49 + 15 },
+		Vector2f{ 958 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 1102, 0 + 49 },
+		Vector2f{ 0 + 1102, 49 + 15 },
+		Vector2f{ 1102 + 15, 49 + 15 },
+		Vector2f{ 1102 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 1262, 0 + 49 },
+		Vector2f{ 0 + 1262, 49 + 15 },
+		Vector2f{ 1262 + 15, 49 + 15 },
+		Vector2f{ 1262 + 15, 0 + 49 },
+	},
+	{
+		Vector2f{ 0 + 1518, 0 + 49 },
+		Vector2f{ 0 + 1518, 49 + 15 },
+		Vector2f{ 1518 + 15, 49 + 15 },
+		Vector2f{ 1518 + 15, 0 + 49 },
 	},
 
-	std::vector<Rectf>
+	{
+		Vector2f{ 0 + 766, 0 + 127 },
+		Vector2f{ 0 + 766, 127 + 15 },
+		Vector2f{ 766 + 15, 127 + 15 },
+		Vector2f{ 766 + 15, 0 + 127 },
+	},
+	{
+		Vector2f{ 0 + 862, 0 + 127 },
+		Vector2f{ 0 + 862, 127 + 15 },
+		Vector2f{ 862 + 15, 127 + 15 },
+		Vector2f{ 862 + 15, 0 + 127 },
+	},
+	{
+		Vector2f{ 0 + 958, 0 + 127 },
+		Vector2f{ 0 + 958, 127 + 15 },
+		Vector2f{ 958 + 15, 127 + 15 },
+		Vector2f{ 958 + 15, 0 + 127 },
+	}
+	},
+		std::vector<Rectf>
 	{
 		Rectf{ 719.f, 50.f, 16.f, 80.f },
-			Rectf{ 911.f, 50.f, 16.f, 80.f },
-			Rectf{ 1071.f, 50.f, 16.f, 80.f }
+		Rectf{ 911.f, 50.f, 16.f, 80.f },
+		Rectf{ 1066.f, 50.f, 16.f, 80.f }
 	},
-
 		std::vector<Level::MovingPlatform>
 	{
-		{ Rectf{ 1664, 24.f, 32.f, 13.f }, 20.f, 1664.f, 1789.f }
+		Level::MovingPlatform
+		{
+			Rectf{ 1664, 24.f, 32.f, 13.f },
+			20.f,
+			1664.f,
+			1789.f
+		}
 	},
-
 		std::vector<Level::EnemySpawnPoint>
 	{
 		{ Level::EnemyType::Plant, Vector2f{ 798.f, 128.f } },
@@ -362,13 +427,11 @@ void Game::LoadLevel1()
 
 		{ Level::EnemyType::Troll, Vector2f{ 3424.f, 49.f } }
 	},
-
 		std::vector<Level::EnemySpawnArea>
 	{
-		{ Level::EnemyType::Zombie, Rectf{ 0, 49.f, 1200.f, 150.f } },
-		{ Level::EnemyType::Ghost, Rectf{ 2670, 49.f, 480.f, 150.f }, false }
+		{ Level::EnemyType::Zombie, Rectf{ 0, 49.f, 1200.f, 150.f }, true, 2.f },
+		{ Level::EnemyType::Ghost, Rectf{ 2670, 49.f+5.f, 300.f, 80.f }, false , 4.f}
 	},
-
 		std::vector<Level::DropSpawnPoint>
 	{
 		{ PickupType::MoneyBag, Vector2f{ 304.f, 49.f } },
@@ -378,12 +441,13 @@ void Game::LoadLevel1()
 		{ PickupType::MoneyBag, Vector2f{ 2382.f, 49.f } },
 		{ PickupType::MoneyBag, Vector2f{ 2436.f, 49.f } },
 		{ PickupType::MoneyBag, Vector2f{ 2940.f, 49.f } },
-	},
 
+	},
 		"Platform.png",
 		"Level1.png"
 	);
 }
+
 
 //void Game::LoadLevel1()
 //{
@@ -591,6 +655,8 @@ void Game::ResetLevel()
 
 	m_P1->Respawn(Vector2f{ 150.f, 38.f });
 	m_P1->SetPlayerScore(savedScore);
+
+	m_hud->ResetTimer();
 
 	m_pEntityManager->SetLevel(m_level1);
 	m_pEntityManager->SetPlayer(m_P1);

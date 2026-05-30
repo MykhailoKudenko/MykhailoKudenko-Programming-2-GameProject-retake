@@ -32,7 +32,7 @@ EntityManager::~EntityManager()
     }
 }
 
-void EntityManager::Update(float elapsedSec) //pass player here
+void EntityManager::Update(float elapsedSec)
 {
     if (m_pPlayer == nullptr || m_pLevel == nullptr)
     {
@@ -60,9 +60,15 @@ void EntityManager::Update(float elapsedSec) //pass player here
     {
         float dx = std::abs(enemy->GetCenterPosition().x - playerPos.x);
 
-        if (!enemy->GetIsActive() && dx <= UpdateLenth)
+
+        if (dx <= UpdateLenth)
         {
             enemy->SetIsActive(true);
+        }
+        else
+        {
+            if (enemy->IsBoss() == false)
+                enemy->SetIsActive(false);
         }
 
         if (enemy->GetIsActive())
@@ -160,13 +166,13 @@ void EntityManager::Update(float elapsedSec) //pass player here
         switch (m_pPlayer->GetPlayerWeapon())
         {
         case PlayerWeapon::Lance:
-            SpawnLance(m_pPlayer->GetCenterPosition(), m_pPlayer->IsFacingRight());
+            SpawnLance(m_pPlayer->GetThrowPosition(), m_pPlayer->IsFacingRight());
             break;
         case PlayerWeapon::Knife:
-            SpawnKnife(m_pPlayer->GetCenterPosition(), m_pPlayer->IsFacingRight());
+            SpawnKnife(m_pPlayer->GetThrowPosition(), m_pPlayer->IsFacingRight());
             break;
         case PlayerWeapon::Tourch:
-            SpawnTourch(m_pPlayer->GetCenterPosition(), m_pPlayer->IsFacingRight());
+            SpawnTourch(m_pPlayer->GetThrowPosition(), m_pPlayer->IsFacingRight());
             break;
         }
     }
@@ -194,6 +200,10 @@ void EntityManager::Update(float elapsedSec) //pass player here
                         m_pSoundManager->PlayEffect(SFX::FireDead);
                     }
                 }
+                else if (enemy->IsBoss())
+                {
+                    SpawnEffect(proj->GetCenterPosition(), Effect::EffectType::Blink, false);
+                }
 
                 proj->Kill();
             }
@@ -201,6 +211,7 @@ void EntityManager::Update(float elapsedSec) //pass player here
     }
 
     RemoveDeadEntities();
+    KillProjectilesOutsideSpawnArea();
 }
 
 
@@ -387,7 +398,7 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
 
         spawnArea.timer += elapsedSec;
 
-        if (spawnArea.timer < m_AreaSpawnInterval)
+        if (spawnArea.timer < spawnArea.timerMax)
         {
             continue;
         }
@@ -425,8 +436,23 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
 
         if (!spawnArea.SpawnAtTheGround)
         {
-            y = targetSpawnArea.bottom +
-                float(std::rand()) / float(RAND_MAX) * targetSpawnArea.height;
+            float groundY{ 0.f };
+            Vector2f rayStart{ x, playerPos.y + yMaxHeight };
+
+            if (!FindGroundBelow(rayStart, groundY))
+            {
+                continue;
+            }
+
+            float minY = groundY + 30.f;
+            float maxY = targetSpawnArea.bottom + targetSpawnArea.height;
+
+            if (minY > maxY)
+            {
+                continue;
+            }
+
+            y = minY + float(std::rand()) / float(RAND_MAX) * (maxY - minY);
         }
         else
         {
@@ -666,5 +692,34 @@ PickupType EntityManager::GetRandomBagDrop() const
     case 3: return PickupType::Doll;
     case 4: return PickupType::MoneyBag;
     default: return PickupType::Doll;
+    }
+}
+
+void EntityManager::KillProjectilesOutsideSpawnArea()
+{
+    Vector2f playerPos = m_pPlayer->GetCenterPosition();
+
+    Rectf activeArea
+    {
+        playerPos.x - UpdateLenth,
+        playerPos.y - UpdateLenth,
+        UpdateLenth * 2.f,
+        UpdateLenth * 2.f
+    };
+
+    for (Projectile* proj : m_PlayerProjectiles)
+    {
+        if (!utils::IsPointInRect(proj->GetCenterPosition(), activeArea))
+        {
+            proj->Kill();
+        }
+    }
+
+    for (Projectile* proj : m_EnemyProjectiles)
+    {
+        if (!utils::IsPointInRect(proj->GetCenterPosition(), activeArea))
+        {
+            proj->Kill();
+        }
     }
 }

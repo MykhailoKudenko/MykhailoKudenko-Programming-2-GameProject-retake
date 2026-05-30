@@ -11,14 +11,14 @@ Torch::Torch(Vector2f pos, bool isRight)
 {
 	if (isRight)
 	{
-		m_Speed.x = 60.f;
+		m_Speed.x = 80.f;
 	}
 	else
 	{
-		m_Speed.x = -60.f;
+		m_Speed.x = -80.f;
 
 	}
-	m_Speed.y = 60;
+	m_Speed.y = 50;
 
 	++m_InstanceCount;
 

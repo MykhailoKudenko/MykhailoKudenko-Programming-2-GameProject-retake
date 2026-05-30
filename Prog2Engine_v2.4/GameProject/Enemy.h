@@ -39,7 +39,7 @@ public:
 	Effect::EffectType GetEffectType();
 
 	bool IsFacingRight() const;
-
+	bool IsBoss() const;
 protected:
 	Rectf m_Collider;
 	float m_Speed{ 0.f };

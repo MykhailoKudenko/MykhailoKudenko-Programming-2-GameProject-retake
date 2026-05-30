@@ -12,7 +12,7 @@ Ghost::Ghost(Vector2f startPos, bool facingRight)
 	, m_State{ GhostState::Spawning }
 {
 	m_IsFacingRight = facingRight;
-	m_Speed = 60.f;
+	m_Speed = 40.f;
 
 	if (!facingRight)
 	{
@@ -30,6 +30,8 @@ Ghost::Ghost(Vector2f startPos, bool facingRight)
 	{
 		m_pSpawnAnimation = new Animation("GhostSpawn.png", 2, 0.39f, false);
 	}
+	m_EffectType = Effect::EffectType::Fire;
+
 }
 Ghost::~Ghost()
 {

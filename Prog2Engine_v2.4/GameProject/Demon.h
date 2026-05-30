@@ -49,7 +49,10 @@ private:
 	float m_AnimTime{ 0.f };
 
 	float m_ParabolaProgress{ 0.f };
-	float m_ParabolaHorizontalSpeed{ 140.f };
+	float m_ParabolaHorizontalSpeed{ 60.f };
+
+	Vector2f m_ParabolaLockedPlayerPos{};
+	bool m_HasLockedParabolaTarget{ false };
 
 	DemonState m_MyState{ DemonState::Spawning };
 	
