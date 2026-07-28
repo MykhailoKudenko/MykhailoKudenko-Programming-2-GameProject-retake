@@ -24,14 +24,6 @@ public:
 	Drop(const Vector2f& pos, PickupType type);
 	~Drop();
 
-
-	// Rule of 5
-	Drop(const Drop& other);
-	Drop& operator=(const Drop& other);
-
-	Drop(Drop&& other) noexcept;
-	Drop& operator=(Drop&& other) noexcept;
-
 	void Update(float elapsedSec);
 	void Draw() const;
 
