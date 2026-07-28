@@ -5,11 +5,6 @@ public:
 	Projectile(Rectf Start);
 	virtual ~Projectile();
 
-	//rule of 5
-	Projectile(const Projectile&) = delete;
-	Projectile& operator=(const Projectile&) = delete;
-	Projectile(Projectile&&) = delete;
-	Projectile& operator=(Projectile&&) = delete;
 
 
 	void virtual Update(float elapsedSec);

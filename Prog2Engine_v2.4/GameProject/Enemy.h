@@ -7,11 +7,7 @@ class Enemy
 public:
 	Enemy(Rectf Start);
 	virtual ~Enemy();
-	//rule of 5
-	Enemy(const Enemy&) = delete;
-	Enemy& operator=(const Enemy&) = delete;
-	Enemy(Enemy&&) = delete;
-	Enemy& operator=(Enemy&&) = delete;
+	
 
 	virtual void Update(float elapsedSec) = 0;
 	virtual void Draw() const = 0;
