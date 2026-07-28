@@ -17,7 +17,7 @@ public:
     void Draw(int score, PlayerWeapon weapon) const;
 
     void ResetTimer();
-    bool DidTimerFinish();
+    bool DidTimerFinish() const;
 private:
     std::string GetTimerText() const;
 

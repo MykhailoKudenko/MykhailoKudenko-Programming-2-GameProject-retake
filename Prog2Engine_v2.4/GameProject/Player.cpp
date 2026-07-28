@@ -707,7 +707,7 @@ bool Player::TryClimb(const std::vector<Rectf>& ladders, bool isGoingUp)
 }
 
 
-bool Player::IsDeathAnimationFinished()
+bool Player::IsDeathAnimationFinished() const
 {
 	return (m_Mystate == PlayerState::Dead || m_Mystate == PlayerState::KnockbackDead)
 		&& m_DeathTimeCurrent <= 0.f;

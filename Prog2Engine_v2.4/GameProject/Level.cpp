@@ -74,20 +74,20 @@ const std::vector<Rectf>& Level::GetLadders() const
 	return m_Ladders;
 }
 
-std::vector<Level::EnemySpawnPoint>& Level::GetEnemySpawnPoints()
+ std::vector<Level::EnemySpawnPoint>& Level::GetEnemySpawnPoints()
 {
 	return m_EnemySpawnPoints;
 }
 
-std::vector<Level::EnemySpawnArea>& Level::GetEnemySpawnAreas()
+ std::vector<Level::EnemySpawnArea>& Level::GetEnemySpawnAreas()
 {
 	return m_EnemySpawnAreas;
 }
-std::vector<Level::DropSpawnPoint>& Level::GetDropSpawnPoints()
+ std::vector<Level::DropSpawnPoint>& Level::GetDropSpawnPoints()
 {
 	return m_DropSpawnPoints;
 }
-std::vector<std::vector<Vector2f>>& Level::GetPlayerOnlyVertices() 
+ std::vector<std::vector<Vector2f>>& Level::GetPlayerOnlyVertices()
 {
 	return m_PlayerOnlyVertices;
 }

@@ -59,7 +59,7 @@ Vector2f Enemy::GetCenterPosition() const
 }
 
 
-bool Enemy::isSpawning()
+bool Enemy::isSpawning() const
 {
 	return false;
 }
@@ -74,7 +74,7 @@ void Enemy::SetIsActive(bool isActive)
 	m_IsActive = isActive;
 }
 
-int Enemy::GetScore()
+int Enemy::GetScore() const
 {
 	return m_score;
 }
@@ -99,7 +99,7 @@ void Enemy::DrawBag() const
 	);
 }
 
-Effect::EffectType Enemy::GetEffectType()
+Effect::EffectType Enemy::GetEffectType() const
 {
 	return m_EffectType;
 }

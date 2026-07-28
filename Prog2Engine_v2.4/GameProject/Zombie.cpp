@@ -227,7 +227,7 @@ void Zombie::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
 }
 
 
-bool Zombie::isSpawning()
+bool Zombie::isSpawning() const
 {
 	if (m_State == ZombieState::Spawning)
 	{

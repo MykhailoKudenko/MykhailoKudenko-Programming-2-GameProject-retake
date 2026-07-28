@@ -23,7 +23,7 @@ public:
 
 	void SetEntityManager(EntityManager* manager);
 
-	bool isSpawning() override;
+	bool isSpawning() const override;
 private:
 
 	EntityManager* m_pEntityManager{ nullptr };

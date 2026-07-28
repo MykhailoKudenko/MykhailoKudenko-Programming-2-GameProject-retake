@@ -128,7 +128,7 @@ void Torch::Kill()
 }
 
 
-bool Torch::CheckBottomCollision()
+bool Torch::CheckBottomCollision() const
 {
 	utils::HitInfo myInfoLeft{};
 	utils::HitInfo myInfoRight{};

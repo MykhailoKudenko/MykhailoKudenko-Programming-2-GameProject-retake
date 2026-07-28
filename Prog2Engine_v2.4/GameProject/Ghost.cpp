@@ -179,7 +179,7 @@ void Ghost::SetEntityManager(EntityManager* manager)
 }
 
 
-bool Ghost::isSpawning()
+bool Ghost::isSpawning() const
 {
 	if (m_State == GhostState::Spawning)
 	{

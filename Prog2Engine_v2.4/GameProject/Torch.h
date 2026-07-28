@@ -27,7 +27,7 @@ public:
 	void Kill() override;
 private:
 
-	bool CheckBottomCollision();
+	bool CheckBottomCollision() const;
 
 	const std::vector<std::vector<Vector2f>>* m_pVertices{};
 

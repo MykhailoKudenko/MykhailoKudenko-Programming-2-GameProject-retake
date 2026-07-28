@@ -178,7 +178,7 @@ void Drop::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
 	m_pVertices = vertices;
 }
 
-bool Drop::CheckBottomCollision()
+bool Drop::CheckBottomCollision() const
 {
 	utils::HitInfo myInfoLeft{};
 	utils::HitInfo myInfoRight{};

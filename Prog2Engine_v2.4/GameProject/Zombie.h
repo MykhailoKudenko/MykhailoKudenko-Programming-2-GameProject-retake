@@ -20,7 +20,7 @@ public:
 
 	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
 
-	bool isSpawning() override;
+	bool isSpawning() const override;
 
 private:
 	const std::vector<std::vector<Vector2f>>* m_pVertices{};

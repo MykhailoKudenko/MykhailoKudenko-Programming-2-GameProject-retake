@@ -165,7 +165,7 @@ void HUD::ResetTimer()
     m_TimeLeft = 240.f;
 }
 
-bool HUD::DidTimerFinish()
+bool HUD::DidTimerFinish() const
 {
     if (m_TimeLeft > 0)
     {

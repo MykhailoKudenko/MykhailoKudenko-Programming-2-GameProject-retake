@@ -43,7 +43,7 @@ public:
 	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
 
 private:
-	bool CheckBottomCollision();
+	bool CheckBottomCollision() const;
 
 	const std::vector<std::vector<Vector2f>>* m_pVertices{ nullptr };
 

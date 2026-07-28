@@ -28,7 +28,7 @@ void Projectile::Kill()
 {
 	m_IsDead = true;
 }
-bool Projectile::isDead()
+bool Projectile::isDead() const
 {
 	return(m_IsDead);
 }

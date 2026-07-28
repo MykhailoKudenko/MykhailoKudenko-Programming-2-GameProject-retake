@@ -6,6 +6,7 @@
 
 EntityManager::EntityManager()
 {
+    //test
 }
 
 EntityManager::~EntityManager()
@@ -281,15 +282,15 @@ void EntityManager::DebugSpawnDraw() const
 {
     utils::SetColor(Color4f{ 0, 1, 0, 1 });
 
-    std::vector<Level::EnemySpawnPoint>& spawnPoints = m_pLevel->GetEnemySpawnPoints();
+   std::vector<Level::EnemySpawnPoint>& spawnPoints = m_pLevel->GetEnemySpawnPoints();
 
     for (Level::EnemySpawnPoint& spawnPoint : spawnPoints)
     {
         utils::DrawEllipse(spawnPoint.position, 10, 10);
     }
-    std::vector<Level::EnemySpawnArea>& spawnAreas = m_pLevel->GetEnemySpawnAreas();
+     std::vector<Level::EnemySpawnArea>& spawnAreas = m_pLevel->GetEnemySpawnAreas();
 
-    for (Level::EnemySpawnArea& spawnArea : spawnAreas)
+    for (  Level::EnemySpawnArea& spawnArea : spawnAreas)
     {
         utils::DrawRect(spawnArea.area);
     }
@@ -297,9 +298,9 @@ void EntityManager::DebugSpawnDraw() const
 
     utils::DrawEllipse(playerPos, xSpawnLenth, xSpawnLenth);
 
-    std::vector<Level::DropSpawnPoint>& DropspawnPoints = m_pLevel->GetDropSpawnPoints();
+     std::vector<Level::DropSpawnPoint>& DropspawnPoints = m_pLevel->GetDropSpawnPoints();
 
-    for (Level::DropSpawnPoint& SpawnPoint : DropspawnPoints)
+    for (  Level::DropSpawnPoint& SpawnPoint : DropspawnPoints)
     {
         utils::DrawEllipse(SpawnPoint.position, 10, 10);
     }
@@ -361,7 +362,7 @@ void EntityManager::SpawnPointDrops()
     std::vector<Level::DropSpawnPoint>& dropSpawnPoints = m_pLevel->GetDropSpawnPoints();
     Vector2f playerPos = m_pPlayer->GetCenterPosition();
 
-    for (Level::DropSpawnPoint& dropSpawn : dropSpawnPoints)
+    for ( Level::DropSpawnPoint& dropSpawn : dropSpawnPoints)
     {
         if (dropSpawn.spawned)
         {

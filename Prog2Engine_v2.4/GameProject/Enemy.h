@@ -23,12 +23,12 @@ public:
 	void TakeDamage();
 	Vector2f GetCenterPosition() const;
 
-	virtual bool isSpawning();
+	virtual bool isSpawning() const;
 
 	bool GetIsActive() const; 
 	void SetIsActive(bool isActive);
 
-	int GetScore();
+	int GetScore() const;
 
 
 
@@ -36,7 +36,7 @@ public:
 	bool GetBag() const;
 	void DrawBag() const;
 
-	Effect::EffectType GetEffectType();
+	Effect::EffectType GetEffectType() const;
 
 	bool IsFacingRight() const;
 	bool IsBoss() const;

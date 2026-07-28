@@ -58,7 +58,7 @@ public:
 	void AddToPLayerScore(int Score);
 	void SetPlayerScore(int NewScore);
 
-	bool IsDeathAnimationFinished();
+	bool IsDeathAnimationFinished() const;
 
 	void Respawn(const Vector2f& pos);
 
