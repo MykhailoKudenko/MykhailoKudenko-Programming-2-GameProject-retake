@@ -39,6 +39,6 @@ private:
 
 	TourchStates m_MyState = TourchStates::FlyingUp;
 
-	float TimeFliyngUp = 0.5f;
+	float m_TimeFliyngUp = 0.5f;
 };
 

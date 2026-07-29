@@ -19,12 +19,6 @@ public:
     SoundManager();
     ~SoundManager() = default;
 
-    //rule of 5
-    SoundManager(const SoundManager&) = delete;
-    SoundManager& operator=(const SoundManager&) = delete;
-    SoundManager(SoundManager&&) = delete;
-    SoundManager& operator=(SoundManager&&) = delete;
-
     void PlayMusic();
     void StopMusic();
 

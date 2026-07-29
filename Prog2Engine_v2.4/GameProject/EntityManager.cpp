@@ -11,23 +11,23 @@ EntityManager::EntityManager()
 
 EntityManager::~EntityManager()
 {
-    for (Enemy* enemy : m_Enemies)
+    for (Enemy* enemy : m_pEnemies)
     {
         delete enemy;
     }
-    for (Projectile* proj : m_PlayerProjectiles)
+    for (Projectile* proj : m_pPlayerProjectiles)
     {
         delete proj;
     }
-    for (Projectile* proj : m_EnemyProjectiles)
+    for (Projectile* proj : m_pEnemyProjectiles)
     {
         delete proj;
     }
-    for (Drop* drop : m_Drops)
+    for (Drop* drop : m_pDrops)
     {
         delete drop;
     }
-    for (Effect* effect : m_Effects)
+    for (Effect* effect : m_pEffects)
     {
         delete effect;
     }
@@ -44,7 +44,7 @@ void EntityManager::Update(float elapsedSec)
     SpawnPointDrops();
     SpawnAreaEnemies(elapsedSec);
 
-    for (Effect* effect : m_Effects)
+    for (Effect* effect : m_pEffects)
     {
         effect->Update(elapsedSec);
     }
@@ -57,12 +57,12 @@ void EntityManager::Update(float elapsedSec)
     bool hasGhostInRange{ false };
     bool hasFlyingKnightInRange{ false };
 
-    for (Enemy* enemy : m_Enemies)
+    for (Enemy* enemy : m_pEnemies)
     {
         float dx = std::abs(enemy->GetCenterPosition().x - playerPos.x);
 
 
-        if (dx <= UpdateLenth)
+        if (dx <= m_UpdateLenth)
         {
             enemy->SetIsActive(true);
         }
@@ -119,12 +119,12 @@ void EntityManager::Update(float elapsedSec)
         m_FlyingKnightSoundTimer = m_FlyingKnightSoundCooldown;
     }
 
-    for (Projectile* proj : m_PlayerProjectiles)
+    for (Projectile* proj : m_pPlayerProjectiles)
     {
         proj->Update(elapsedSec);
     }
 
-    for (Projectile* proj : m_EnemyProjectiles)
+    for (Projectile* proj : m_pEnemyProjectiles)
     {
         proj->Update(elapsedSec);
         if (utils::IsOverlapping(m_pPlayer->GetHitbox(), proj->GetHitbox()))
@@ -134,7 +134,7 @@ void EntityManager::Update(float elapsedSec)
         }
     }
 
-    for (Drop* drop : m_Drops)
+    for (Drop* drop : m_pDrops)
     {
         drop->Update(elapsedSec);
         if (utils::IsOverlapping(m_pPlayer->GetHitbox(), drop->GetHitbox()))
@@ -178,9 +178,9 @@ void EntityManager::Update(float elapsedSec)
         }
     }
 
-    for (Enemy* enemy : m_Enemies)
+    for (Enemy* enemy : m_pEnemies)
     {
-        for (Projectile* proj : m_PlayerProjectiles)
+        for (Projectile* proj : m_pPlayerProjectiles)
         {
             if (utils::IsOverlapping(enemy->GetHitbox(), proj->GetHitbox()))
             {
@@ -219,12 +219,12 @@ void EntityManager::Update(float elapsedSec)
 
 void EntityManager::Draw(bool isDebug) const
 {
-    for (const Effect* effect : m_Effects)
+    for (const Effect* effect : m_pEffects)
     {
         effect->Draw();
     }
 
-    for (const Enemy* enemy : m_Enemies)
+    for (const Enemy* enemy : m_pEnemies)
     {
         enemy->Draw(); 
         if (enemy->GetBag())
@@ -239,7 +239,7 @@ void EntityManager::Draw(bool isDebug) const
         }
     }
 
-    for (const Projectile* proj : m_PlayerProjectiles)
+    for (const Projectile* proj : m_pPlayerProjectiles)
     {
 
         proj->Draw(); 
@@ -250,7 +250,7 @@ void EntityManager::Draw(bool isDebug) const
         }
     }
 
-    for (const Projectile* proj : m_EnemyProjectiles)
+    for (const Projectile* proj : m_pEnemyProjectiles)
     {
         proj->Draw();
         if (isDebug)
@@ -259,7 +259,7 @@ void EntityManager::Draw(bool isDebug) const
             utils::DrawRect(proj->GetHitbox());
         }
     }
-    for (const Drop* drop : m_Drops)
+    for (const Drop* drop : m_pDrops)
     {
         drop->Draw();
         if (isDebug)
@@ -296,7 +296,7 @@ void EntityManager::DebugSpawnDraw() const
     }
     Vector2f playerPos = m_pPlayer->GetCenterPosition();
 
-    utils::DrawEllipse(playerPos, xSpawnLenth, xSpawnLenth);
+    utils::DrawEllipse(playerPos, m_XSpawnLenth, m_XSpawnLenth);
 
      std::vector<Level::DropSpawnPoint>& DropspawnPoints = m_pLevel->GetDropSpawnPoints();
 
@@ -371,7 +371,7 @@ void EntityManager::SpawnPointDrops()
 
         float dx = std::abs(dropSpawn.position.x - playerPos.x);
 
-        if (dx <= UpdateLenth)
+        if (dx <= m_UpdateLenth)
         {
             AddDrop(dropSpawn.position, dropSpawn.type);
             dropSpawn.spawned = true;
@@ -407,10 +407,10 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
         spawnArea.timer = 0.f;
 
         Rectf targetSpawnArea{};
-        targetSpawnArea.left = playerPos.x - xSpawnLenth;
-        targetSpawnArea.width = xSpawnLenth * 2.f;
-        targetSpawnArea.bottom = yMinSpawnForAir;
-        targetSpawnArea.height = yMaxHeight;
+        targetSpawnArea.left = playerPos.x - m_XSpawnLenth;
+        targetSpawnArea.width = m_XSpawnLenth * 2.f;
+        targetSpawnArea.bottom = m_YMinSpawnForAir;
+        targetSpawnArea.height = m_YMaxHeight;
 
         float areaLeft = spawnArea.area.left;
         float areaRight = spawnArea.area.left + spawnArea.area.width;
@@ -438,7 +438,7 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
         if (!spawnArea.SpawnAtTheGround)
         {
             float groundY{ 0.f };
-            Vector2f rayStart{ x, playerPos.y + yMaxHeight };
+            Vector2f rayStart{ x, playerPos.y + m_YMaxHeight };
 
             if (!FindGroundBelow(rayStart, groundY))
             {
@@ -504,38 +504,38 @@ void EntityManager::AddZombie(const Vector2f& SpawnPos, bool startsFacingRight)
 
     zombie->SetBag(RollBagDrop());
 
-    m_Enemies.push_back(zombie);
+    m_pEnemies.push_back(zombie);
 }
 void EntityManager::AddBird(const Vector2f& SpawnPos, bool startsFacingRight)
 {
     Bird* bird = new Bird(SpawnPos, startsFacingRight);
 
-    m_Enemies.push_back(bird);
+    m_pEnemies.push_back(bird);
 }
 void EntityManager::AddFlyingKnight(const Vector2f& SpawnPos, bool startsFacingRight)
 {
     FlyingKnight* knight = new FlyingKnight(SpawnPos, startsFacingRight);
 
-    m_Enemies.push_back(knight);
+    m_pEnemies.push_back(knight);
 }
 void EntityManager::AddGhost(const Vector2f& SpawnPos, bool startsFacingRight)
 {
     Ghost* ghost = new Ghost(SpawnPos, startsFacingRight);
     ghost->SetEntityManager(this);
     ghost->SetBag(RollBagDrop());
-    m_Enemies.push_back(ghost);
+    m_pEnemies.push_back(ghost);
 }
 void EntityManager::AddPlant(const Vector2f& spawnPos)
 {
     Plant* palnt = new Plant(spawnPos);
     palnt->SetEntityManager(this);
-    m_Enemies.push_back(palnt);
+    m_pEnemies.push_back(palnt);
 }
 void EntityManager::AddDemon(const Vector2f& spawnPos)
 {
     Demon* demon = new Demon(spawnPos);
     demon->SetEntityManager(this);
-    m_Enemies.push_back(demon);
+    m_pEnemies.push_back(demon);
 }
 
 void EntityManager::AddTroll(const Vector2f& spawnPos)
@@ -546,19 +546,19 @@ void EntityManager::AddTroll(const Vector2f& spawnPos)
     {
         troll->SetWorld(&m_pLevel->GetVertecies());
     }
-    m_Enemies.push_back(troll);
+    m_pEnemies.push_back(troll);
 }
 void EntityManager::SpawnLance(const Vector2f& pos, bool isRight)
 {
     m_pSoundManager->PlayEffect(SFX::Throw);
     Lance* lance = new Lance(pos, isRight);
-    m_PlayerProjectiles.push_back(lance);
+    m_pPlayerProjectiles.push_back(lance);
 }
 void EntityManager::SpawnKnife(const Vector2f& pos, bool isRight)
 {
     m_pSoundManager->PlayEffect(SFX::Throw);
     Knife* knife = new Knife(pos, isRight);
-    m_PlayerProjectiles.push_back(knife);
+    m_pPlayerProjectiles.push_back(knife);
 
 }
 void EntityManager::SpawnTourch(const Vector2f& pos, bool isRight)
@@ -569,21 +569,21 @@ void EntityManager::SpawnTourch(const Vector2f& pos, bool isRight)
     {
         torch->SetWorld(&m_pLevel->GetVertecies());
     }
-    m_PlayerProjectiles.push_back(torch);
+    m_pPlayerProjectiles.push_back(torch);
 }
 
 void EntityManager::SpawnPlantProjectile(const Vector2f& pos, const Vector2f& direction)
 {
     PlantProjectile* proj = new PlantProjectile(pos, direction);
 
-    m_EnemyProjectiles.push_back(proj);
+    m_pEnemyProjectiles.push_back(proj);
 }
 
 void EntityManager::SpawnDemonProjectile(const Vector2f& pos, const Vector2f& direction)
 {
     DemonProjectile* proj = new DemonProjectile(pos, direction);
 
-    m_EnemyProjectiles.push_back(proj);
+    m_pEnemyProjectiles.push_back(proj);
 }
 void EntityManager::AddDrop(const Vector2f& pos, PickupType type)
 {
@@ -592,60 +592,60 @@ void EntityManager::AddDrop(const Vector2f& pos, PickupType type)
     {
         drop->SetWorld(&m_pLevel->GetVertecies());
     }
-    m_Drops.push_back(drop);
+    m_pDrops.push_back(drop);
 }
 void EntityManager::SpawnEffect(const Vector2f& pos, Effect::EffectType type, bool isMirrored)
 {
     Effect* effect = new Effect(pos, type, isMirrored);
-    m_Effects.push_back(effect);
+    m_pEffects.push_back(effect);
 }
 void EntityManager::RemoveDeadEntities()
 {
-    for (int i = 0; i < m_Enemies.size(); ++i)
+    for (size_t i = 0; i < m_pEnemies.size(); ++i)
     {
-        if (m_Enemies[i]->isDead())
+        if (m_pEnemies[i]->isDead())
         {
-            delete m_Enemies[i];
-            m_Enemies.erase(m_Enemies.begin() + i);
+            delete m_pEnemies[i];
+            m_pEnemies.erase(m_pEnemies.begin() + i);
             --i;
         }
     }
 
-    for (int i = 0; i < m_PlayerProjectiles.size(); ++i)
+    for (size_t i = 0; i < m_pPlayerProjectiles.size(); ++i)
     {
-        if (m_PlayerProjectiles[i]->isDead())
+        if (m_pPlayerProjectiles[i]->isDead())
         {
-            delete m_PlayerProjectiles[i];
-            m_PlayerProjectiles.erase(m_PlayerProjectiles.begin() + i);
+            delete m_pPlayerProjectiles[i];
+            m_pPlayerProjectiles.erase(m_pPlayerProjectiles.begin() + i);
             --i;
         }
     }
 
-    for (int i = 0; i < m_EnemyProjectiles.size(); ++i)
+    for (size_t i = 0; i < m_pEnemyProjectiles.size(); ++i)
     {
-        if (m_EnemyProjectiles[i]->isDead())
+        if (m_pEnemyProjectiles[i]->isDead())
         {
-            delete m_EnemyProjectiles[i];
-            m_EnemyProjectiles.erase(m_EnemyProjectiles.begin() + i);
+            delete m_pEnemyProjectiles[i];
+            m_pEnemyProjectiles.erase(m_pEnemyProjectiles.begin() + i);
             --i;
         }
     }
-    for (int i = 0; i < m_Drops.size(); ++i)
+    for (size_t i = 0; i < m_pDrops.size(); ++i)
     {
-        if (m_Drops[i]->IsDead())
+        if (m_pDrops[i]->IsDead())
         {
-            delete m_Drops[i];
-            m_Drops.erase(m_Drops.begin() + i);
+            delete m_pDrops[i];
+            m_pDrops.erase(m_pDrops.begin() + i);
             --i;
         }
     }
 
-    for (int i = 0; i < m_Effects.size(); ++i)
+    for (size_t i = 0; i < m_pEffects.size(); ++i)
     {
-        if (m_Effects[i]->IsFinished())
+        if (m_pEffects[i]->IsFinished())
         {
-            delete m_Effects[i];
-            m_Effects.erase(m_Effects.begin() + i);
+            delete m_pEffects[i];
+            m_pEffects.erase(m_pEffects.begin() + i);
             --i;
         }
     }
@@ -702,13 +702,13 @@ void EntityManager::KillProjectilesOutsideSpawnArea()
 
     Rectf activeArea
     {
-        playerPos.x - UpdateLenth,
-        playerPos.y - UpdateLenth,
-        UpdateLenth * 2.f,
-        UpdateLenth * 2.f
+        playerPos.x - m_UpdateLenth,
+        playerPos.y - m_UpdateLenth,
+        m_UpdateLenth * 2.f,
+        m_UpdateLenth * 2.f
     };
 
-    for (Projectile* proj : m_PlayerProjectiles)
+    for (Projectile* proj : m_pPlayerProjectiles)
     {
         if (!utils::IsPointInRect(proj->GetCenterPosition(), activeArea))
         {
@@ -716,7 +716,7 @@ void EntityManager::KillProjectilesOutsideSpawnArea()
         }
     }
 
-    for (Projectile* proj : m_EnemyProjectiles)
+    for (Projectile* proj : m_pEnemyProjectiles)
     {
         if (!utils::IsPointInRect(proj->GetCenterPosition(), activeArea))
         {

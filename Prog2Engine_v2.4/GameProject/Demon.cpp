@@ -17,7 +17,7 @@ Demon::Demon(Vector2f StartPos)
 	: Enemy(Rectf{ StartPos.x, StartPos.y, 24, 26 })
 {
 	m_Speed = 80.f;
-	m_health = 5;
+	m_Health = 5;
 	m_IsBoss = true;
 
 	++m_InstanceCount;

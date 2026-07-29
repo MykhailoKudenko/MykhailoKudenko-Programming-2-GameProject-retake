@@ -10,7 +10,7 @@ int HUD::m_InstanceCount{ 0 };
 HUD::HUD()
     : m_TimeLeft{ 180.f }
 {
-    --m_InstanceCount;
+    ++m_InstanceCount;
     if (m_pLanceTexture == nullptr)
     {
         m_pLanceTexture = new Texture("Lance.png");

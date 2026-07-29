@@ -25,7 +25,7 @@ Effect::Effect(const Vector2f& pos, EffectType type, bool isMirrored)
 
     if (m_pBlinkAnimation == nullptr)
     {
-        m_pBlinkAnimation = new Animation("Sparklinghit.png", 2, 0.13f, false);
+        m_pBlinkAnimation = new Animation("SparklingHit.png", 2, 0.13f, false);
     }
 }
 Effect::~Effect()
@@ -69,8 +69,9 @@ void Effect::Draw() const
     }
 
     if (anim == nullptr)
+    {
         return;
-
+    }
     // Center the animation on position
     float width = anim->GetFrameWidth();
     float height = anim->GetFrameHeight();
@@ -101,7 +102,10 @@ bool Effect::IsFinished() const
     }
 
     if (anim == nullptr)
+    {
         return true;
+
+    }
 
     return anim->IsTimeFinished(m_AnimTime);
 }

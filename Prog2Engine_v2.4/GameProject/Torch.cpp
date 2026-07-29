@@ -83,9 +83,9 @@ void Torch::Update(float elapsedSec)
 	switch (m_MyState)
 	{
 	case TourchStates::FlyingUp:
-		TimeFliyngUp -= elapsedSec;
+		m_TimeFliyngUp -= elapsedSec;
 
-		if (TimeFliyngUp <= 0)
+		if (m_TimeFliyngUp <= 0)
 		{
 			m_MyState = TourchStates::FlyingDown;
 		}

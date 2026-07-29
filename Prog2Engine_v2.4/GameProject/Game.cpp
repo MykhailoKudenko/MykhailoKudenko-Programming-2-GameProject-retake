@@ -29,7 +29,7 @@ void Game::Initialize()
 
 	m_level1 = nullptr;
 
-	PLayerLivesCurrent = PlayerLivesMax;
+	m_PLayerLivesCurrent = m_PlayerLivesMax;
 	m_MyState = GameState::MainMenu;
 
 	m_SoundManager->SetMusicVolume(20);
@@ -99,11 +99,11 @@ void Game::Update(float elapsedSec)
 
 		if (m_P1->IsDeathAnimationFinished() || m_P1->GetCenterPosition().y < 0)
 		{
-			PLayerLivesCurrent -= 1;
+			m_PLayerLivesCurrent -= 1;
 
 			m_SoundManager->StopMusic();
 
-			if (PLayerLivesCurrent > 0)
+			if (m_PLayerLivesCurrent > 0)
 			{
 				m_MyState = GameState::DeathMenu;
 				m_SoundManager->PlayEffect(SFX::Death);
@@ -191,25 +191,41 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 	case SDLK_F1:
 		m_DebugShowColliders = !m_DebugShowColliders;
 		if (m_DebugShowColliders)
+		{
 			std::cout << "DEBUG: COLLIDERS SHOW ON" << std::endl;
+
+		}
 		else
+		{
 			std::cout << "DEBUG: COLLIDERS SHOW OFF" << std::endl;
+
+		}
 		break;
 	case SDLK_F2:
 		
 		m_P1->SetImmortal(!m_P1->IsImmortal());
 		if (m_P1->IsImmortal())
+		{
 			std::cout << "DEBUG: IMMORTALITY ON" << std::endl;
+		}
 		else
+		{
 			std::cout << "DEBUG: IMMORTALITY OFF" << std::endl;
+		}
 		break;
 	case SDLK_F3:
 
 		m_P1->SetFlying(!m_P1->IsFlying());
 		if (m_P1->IsFlying())
+		{
 			std::cout << "DEBUG: FLYING ON" << std::endl;
+
+		}
 		else
+		{
 			std::cout << "DEBUG: FLYING OFF" << std::endl;
+
+		}
 		break;
 	case SDLK_F5:
 		if (m_CameraScale < 10)
@@ -667,7 +683,7 @@ void Game::ResetLevel()
 }
 void Game::StartNewRun()
 {
-	PLayerLivesCurrent = PlayerLivesMax;
+	m_PLayerLivesCurrent = m_PlayerLivesMax;
 	m_P1->SetPlayerScore(0);
 	ResetLevel();
 	m_MyState = GameState::Playing;

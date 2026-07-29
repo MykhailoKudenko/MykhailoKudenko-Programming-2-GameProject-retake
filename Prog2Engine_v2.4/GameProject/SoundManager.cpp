@@ -31,31 +31,52 @@ void SoundManager::PlayEffect(SFX effect)
     switch (effect)
     {
     case SFX::Throw:
-        if (m_Throw.IsLoaded()) m_Throw.Play(0);
+        if (m_Throw.IsLoaded())
+        {
+            m_Throw.Play(0);
+        }
         break;
 
     case SFX::PickUp:
-        if (m_PickUp.IsLoaded()) m_PickUp.Play(0);
+        if (m_PickUp.IsLoaded())
+        {
+            m_PickUp.Play(0);
+        }
         break;
 
     case SFX::FireDead:
         if (m_FireDead.IsLoaded()) m_FireDead.Play(0);
+        {
+            m_FireDead.Play(0);
+        }
         break;
 
     case SFX::FlyingKnight:
         if (m_FlyingKnightSound.IsLoaded()) m_FlyingKnightSound.Play(0);
+        {
+            m_FlyingKnightSound.Play(0);
+        }
         break;
 
     case SFX::Ghost:
         if (m_GhostSound.IsLoaded()) m_GhostSound.Play(0);
+        {
+            m_GhostSound.Play(0);
+        }
         break;
 
     case SFX::Death:
         if (m_Death.IsLoaded()) m_Death.Play(0);
+        {
+            m_Death.Play(0);
+        }
         break;
 
     case SFX::LevelComplete:
         if (m_LevelComplete.IsLoaded()) m_LevelComplete.Play(0);
+        {
+            m_LevelComplete.Play(0);
+        }
         break;
     }
 }

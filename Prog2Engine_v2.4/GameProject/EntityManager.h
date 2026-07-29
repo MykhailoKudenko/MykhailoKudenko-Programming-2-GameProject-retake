@@ -89,18 +89,18 @@ private:
 
     SoundManager* m_pSoundManager{ nullptr };
 
-    std::vector<Enemy*> m_Enemies;
-    std::vector<Projectile*> m_PlayerProjectiles;
-    std::vector<Projectile*> m_EnemyProjectiles;
-    std::vector<Drop*> m_Drops;
-    std::vector<Effect*> m_Effects;
+    std::vector<Enemy*> m_pEnemies;
+    std::vector<Projectile*> m_pPlayerProjectiles;
+    std::vector<Projectile*> m_pEnemyProjectiles;
+    std::vector<Drop*> m_pDrops;
+    std::vector<Effect*> m_pEffects;
 
-    float UpdateLenth{ 256 / 2.f + 50 };
-    float DeathLenth{ 256 / 2.f + 150 };
+    float m_UpdateLenth{ 256 / 2.f + 50 };
+    float m_DeathLenth{ 256 / 2.f + 150 };
 
-    float xSpawnLenth{256/2.f + 50};
-    float yMinSpawnForAir{ 37.f };
-    float yMaxHeight{ 200.f};
+    float m_XSpawnLenth{256/2.f + 50};
+    float m_YMinSpawnForAir{ 37.f };
+    float m_YMaxHeight{ 200.f};
     //non unique sounds/ group sounds
     bool m_IsGhostSoundPlaying{ false };
     bool m_IsFlyingKnightSoundPlaying{ false };

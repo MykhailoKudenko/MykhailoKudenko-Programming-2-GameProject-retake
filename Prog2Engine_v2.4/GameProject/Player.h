@@ -31,7 +31,7 @@ class Player
 {
 public:
 	Player(Vector2f Pos);
-	~Player();
+	~Player() = default;
 	//rule of 5
 	Player(const Player&) = delete;
 	Player& operator=(const Player&) = delete;
@@ -42,7 +42,7 @@ public:
 	void Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& vertices, 
 		const std::vector<std::vector<Vector2f>>& playerOnlyVertices,
 		const std::vector<Rectf>& ladders, 
-		std::vector<std::vector<Vector2f>> platfroms); 
+		const std::vector<std::vector<Vector2f>>& platfroms);
 
 	Vector2f GetCenterPosition() const;
 	Rectf GetHitbox() const;
@@ -97,12 +97,12 @@ private:
 	float m_ClimbSpeed{ 60.f };
 
 	//input
-	int m_inputDirectionX{ 0 };
-	int m_inputDirectionY{ 0 };
+	int m_InputDirectionX{ 0 };
+	int m_InputDirectionY{ 0 };
 	bool m_IsShootButtonPressed{false};
 	//POSITION
-	bool m_isFacingRight = true;
-	bool m_isOnTheGround = false;
+	bool m_IsFacingRight = true;
+	bool m_IsOnTheGround = false;
 	Rectf m_Collider;
 
 	//jumping
@@ -153,8 +153,8 @@ private:
 
 	//wepon
 	PlayerWeapon m_MyWeapon{ PlayerWeapon::Lance };
-	//int Score
-	float m_Score{ 0 };
+
+	int m_Score{ 0 };
 	//Death
 	bool m_IsImmortal{ false };
 	const float m_DeathTimerMax{1.f};

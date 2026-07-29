@@ -17,19 +17,35 @@ void Camera::Aim(float levelWidth, float levelHeight, float XNegativeSpace, floa
 	float cameraBottom = trackCenter.y - viewHeight / 2.0f;
 
 	if (cameraLeft < -XNegativeSpace)
+	{
 		cameraLeft = -XNegativeSpace;
+
+	}
 	if (cameraLeft > levelWidth - viewWidth)
+	{
 		cameraLeft = levelWidth - viewWidth;
 
+	}
 	if (cameraBottom < -YNegativeSpace)
+	{
 		cameraBottom = -YNegativeSpace;
+
+	}
 	if (cameraBottom > levelHeight - viewHeight)
+	{
 		cameraBottom = levelHeight - viewHeight;
 
+	}
 	if (levelWidth < viewWidth)
+	{
 		cameraLeft = -XNegativeSpace;
+
+	}
 	if (levelHeight < viewHeight)
+	{
 		cameraBottom = -YNegativeSpace;
+
+	}
 
 	glPushMatrix();
 	glScalef(zoom, zoom, 1.0f);

@@ -3,7 +3,7 @@ class Projectile
 {
 public:
 	Projectile(Rectf Start);
-	virtual ~Projectile();
+	virtual ~Projectile() = default;
 
 
 

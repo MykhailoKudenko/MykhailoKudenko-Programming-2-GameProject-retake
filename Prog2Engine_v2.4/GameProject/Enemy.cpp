@@ -38,8 +38,8 @@ Rectf Enemy::GetHitbox() const
 
 void Enemy::TakeDamage()
 {
-	m_health--;
-	if (m_health <= 0)
+	m_Health--;
+	if (m_Health <= 0)
 	{
 		this->Kill();
 	}
@@ -76,7 +76,7 @@ void Enemy::SetIsActive(bool isActive)
 
 int Enemy::GetScore() const
 {
-	return m_score;
+	return m_Score;
 }
 
 

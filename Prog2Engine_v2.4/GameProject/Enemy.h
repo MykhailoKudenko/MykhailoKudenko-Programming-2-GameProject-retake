@@ -41,8 +41,8 @@ protected:
 	float m_Speed{ 0.f };
 	Vector2f m_Velocity{ 0.f, 0.f };
 
-	int m_health{ 1 };
-	int m_score{ 100 };
+	int m_Health{ 1 };
+	int m_Score{ 100 };
 	bool m_IsDead{ false };
 	bool m_IsBoss{ false };
 	bool m_IsActive{ false };

@@ -17,7 +17,7 @@ Troll::Troll(Vector2f StartPos)
 	: Enemy(Rectf{ StartPos.x, StartPos.y, 43, 40 })
 {
 	m_Speed = 30.f;
-	m_health = 10;
+	m_Health = 10;
 	m_IsBoss = true;
 
 	++m_InstanceCount;

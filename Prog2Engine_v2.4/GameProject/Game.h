@@ -61,8 +61,8 @@ private:
 	HUD* m_hud;
 
 	GameState m_MyState{ GameState::DeathMenu };
-	const int PlayerLivesMax = 3;
-	int PLayerLivesCurrent = 3;
+	const int m_PlayerLivesMax = 3;
+	int m_PLayerLivesCurrent = 3;
 
 	Texture* m_MainMenu;
 	Texture* m_DeathMenu;
