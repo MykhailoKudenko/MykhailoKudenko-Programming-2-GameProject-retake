@@ -26,7 +26,7 @@ void SoundManager::StopMusic()
     SoundStream::Stop();
 }
 
-void SoundManager::PlayEffect(SFX effect)
+void SoundManager::PlayEffect(SoundManager::SFX effect)
 {
     switch (effect)
     {

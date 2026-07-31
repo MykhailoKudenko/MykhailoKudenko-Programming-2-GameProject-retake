@@ -2,27 +2,30 @@
 #include "SoundStream.h"
 #include "SoundEffect.h"
 
-enum class SFX
-{
-    Throw,
-    PickUp,
-    FireDead,
-    FlyingKnight,
-    Ghost,
-    Death,
-    LevelComplete
-};
+
 
 class SoundManager final
 {
 public:
+
+    enum class SFX
+    {
+        Throw,
+        PickUp,
+        FireDead,
+        FlyingKnight,
+        Ghost,
+        Death,
+        LevelComplete
+    };
+
     SoundManager();
     ~SoundManager() = default;
 
     void PlayMusic();
     void StopMusic();
 
-    void PlayEffect(SFX effect);
+    void PlayEffect(SoundManager::SFX effect);
 
     void SetMusicVolume(int volume);
     void SetEffectVolume(int volume);

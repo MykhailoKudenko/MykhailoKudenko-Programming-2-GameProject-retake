@@ -56,7 +56,7 @@ void HUD::Update(float elapsedSec)
     }
 }
 
-void HUD::Draw(int score, PlayerWeapon weapon) const
+void HUD::Draw(int score, Player::PlayerWeapon weapon) const
 {
     const float screenWidth = 1024.f;
     const float screenHeight = 960.f;
@@ -83,7 +83,7 @@ void HUD::Draw(int score, PlayerWeapon weapon) const
 
     switch (weapon)
     {
-    case PlayerWeapon::Lance:
+    case Player::PlayerWeapon::Lance:
         if (m_pLanceTexture)
         {
             float w = m_pLanceTexture->GetWidth();
@@ -104,7 +104,7 @@ void HUD::Draw(int score, PlayerWeapon weapon) const
         }
         break;
 
-    case PlayerWeapon::Knife:
+    case Player::PlayerWeapon::Knife:
         if (m_pKnifeTexture)
         {
             float w = m_pKnifeTexture->GetWidth();
@@ -125,7 +125,7 @@ void HUD::Draw(int score, PlayerWeapon weapon) const
         }
         break;
 
-    case PlayerWeapon::Torch:
+    case Player::PlayerWeapon::Torch:
         if (m_pTorchTexture)
         {
             float w = m_pTorchTexture->GetWidth();

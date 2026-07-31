@@ -4,14 +4,7 @@
 
 class EntityManager;
 
-enum class TrollState
-{
-	Spawning,
-	Shooting,
-	Walking,
-	Jumping,
-	Falling
-};
+
 
 class Troll final : public Enemy
 {
@@ -29,6 +22,16 @@ public:
 		
 	
 private:
+
+	enum class TrollState
+	{
+		Spawning,
+		Shooting,
+		Walking,
+		Jumping,
+		Falling
+	};
+
 	bool SpawnUpdate(float elapsedSec);
 	bool UpdateShooting(float elapsedSec, const Vector2f& playerPos);
 	bool UpdateWalking(float elapsedSec, const Vector2f& playerPos);

@@ -4,16 +4,7 @@
 
 class EntityManager;
 
-enum class DemonState
-{
-    Spawning,
-    MoveToTopRight,
-    Shooting,
-    MovingToTheRight,
-    MovingToTheLeft,
-    MovingUp,
-    MovingDown
-};
+
 
 class Demon final : public Enemy
 {
@@ -29,6 +20,19 @@ public:
 	
 
 private:
+
+	enum class DemonState
+	{
+		Spawning,
+		MoveToTopRight,
+		Shooting,
+		MovingToTheRight,
+		MovingToTheLeft,
+		MovingUp,
+		MovingDown
+	};
+
+
 	bool SpawnUpdate(float elapsedSec);
 	bool MoveToThePoint(float elapsedSec, const Vector2f& TargetPoint);
 	bool UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bool movingRight);

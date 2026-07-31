@@ -4,12 +4,7 @@
 
 class EntityManager;
 
-enum class GhostState
-{
-	Spawning,
-	Flying,
-	Dropping
-};
+
 
 class Ghost final : public Enemy
 {
@@ -25,7 +20,15 @@ public:
 
 	bool IsSpawning() const override;
 
+
 private:
+
+	enum class GhostState
+	{
+		Spawning,
+		Flying,
+		Dropping
+	};
 
 	EntityManager* m_pEntityManager{ nullptr };
 

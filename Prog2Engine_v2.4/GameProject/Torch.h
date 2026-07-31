@@ -6,12 +6,7 @@
 #include "Animation.h"
 
 
-enum class TorchStates
-{
-	FlyingUp,
-	FlyingDown,
-	Burning
-};
+
 
 class Torch final : public Projectile
 {
@@ -26,6 +21,13 @@ public:
 	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
 	void Kill() override;
 private:
+
+	enum class TorchStates
+	{
+		FlyingUp,
+		FlyingDown,
+		Burning
+	};
 
 	bool CheckBottomCollision() const;
 

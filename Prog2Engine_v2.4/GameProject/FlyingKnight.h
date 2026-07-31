@@ -2,11 +2,7 @@
 #include "Enemy.h"
 #include "Texture.h"
 
-enum class FlyingKnightState
-{
-	Spawning,
-	Flying
-};
+
 
 class FlyingKnight final : public Enemy
 {
@@ -18,6 +14,12 @@ public:
 	void Draw() const override;
 
 private:
+
+	enum class FlyingKnightState
+	{
+		Spawning,
+		Flying
+	};
 
 	FlyingKnightState m_State{ FlyingKnightState::Spawning };
 

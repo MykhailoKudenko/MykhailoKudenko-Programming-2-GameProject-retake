@@ -4,32 +4,20 @@
 
 #include "Animation.h"
 
-enum class PlayerState
-{
-	Standing,
-	Walking,
-	Jumping,
-	Climbing,
-	ClimbingStill,
-	Knockback,
-	Ducking,
-	Throwing,
-	DuckingThrow,
-	KnockbackDead,
-	Dead
-};
 
-enum class PlayerWeapon
-{
-	Lance,
-	Knife,
-	Torch
-};
 
 
 class Player final
 {
 public:
+
+	enum class PlayerWeapon
+	{
+		Lance,
+		Knife,
+		Torch
+	};
+
 	Player(Vector2f startPos);
 	~Player() = default;
 	//rule of 5
@@ -51,8 +39,8 @@ public:
 	bool DoesWantToThrow() const;
 	bool IsFacingRight() const;
 
-	PlayerWeapon GetPlayerWeapon() const;
-	void SetPlayerWeapon(PlayerWeapon weapon);
+	Player::PlayerWeapon GetPlayerWeapon() const;
+	void SetPlayerWeapon(Player::PlayerWeapon weapon);
 
 	int GetPlayerScore() const;
 	void AddToPLayerScore(int score);
@@ -76,6 +64,22 @@ public:
 
 
 private:
+
+	enum class PlayerState
+	{
+		Standing,
+		Walking,
+		Jumping,
+		Climbing,
+		ClimbingStill,
+		Knockback,
+		Ducking,
+		Throwing,
+		DuckingThrow,
+		KnockbackDead,
+		Dead
+	};
+
 	void UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec);
 	void UpdateInput();
 	void UpdateTimers(float elapsedSec);

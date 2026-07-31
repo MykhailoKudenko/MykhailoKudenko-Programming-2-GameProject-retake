@@ -784,11 +784,11 @@ void Player::SnapToCurrentLadderCenter()
 		+ (m_pCurrentLadder->width - m_Collider.width) / 2.0f;
 }
 
-PlayerWeapon Player::GetPlayerWeapon() const
+Player::PlayerWeapon Player::GetPlayerWeapon() const
 {
 	return(m_MyWeapon);
 }
-void Player::SetPlayerWeapon(PlayerWeapon weapon)
+void Player::SetPlayerWeapon(Player::PlayerWeapon weapon)
 {
 	m_MyWeapon = weapon;
 }

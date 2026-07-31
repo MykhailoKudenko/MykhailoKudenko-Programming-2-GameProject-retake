@@ -10,7 +10,7 @@ public:
 
 
     void Update(float elapsedSec);
-    void Draw(int score, PlayerWeapon weapon) const;
+    void Draw(int score, Player::PlayerWeapon weapon) const;
 
     void ResetTimer();
     bool DidTimerFinish() const;

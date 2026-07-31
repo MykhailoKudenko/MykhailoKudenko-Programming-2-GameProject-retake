@@ -106,7 +106,7 @@ void Game::Update(float elapsedSec)
 			if (m_PLayerLivesCurrent > 0)
 			{
 				m_MyState = GameState::DeathMenu;
-				m_SoundManager->PlayEffect(SFX::Death);
+				m_SoundManager->PlayEffect(SoundManager::SFX::Death);
 
 			}
 			else

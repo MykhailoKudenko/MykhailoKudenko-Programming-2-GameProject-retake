@@ -2,11 +2,7 @@
 #include "Enemy.h"
 #include "Animation.h"
 
-enum class ZombieState
-{
-	Spawning,
-	Walking
-};
+
 
 class Zombie final : public Enemy
 {
@@ -23,6 +19,12 @@ public:
 	bool IsSpawning() const override;
 
 private:
+	enum class ZombieState
+	{
+		Spawning,
+		Walking
+	};
+
 	const std::vector<std::vector<Vector2f>>* m_pVertices{};
 	static constexpr float m_Gravity{ -60.f };
 
