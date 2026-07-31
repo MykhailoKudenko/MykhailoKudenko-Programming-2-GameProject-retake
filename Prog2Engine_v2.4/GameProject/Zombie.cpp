@@ -76,13 +76,13 @@ void Zombie::Update(float elapsedSec)
 
 	if (m_Velocity.x > 0)
 	{
-		bool hitTopSide = utils::LoopOverVertecies(
+		bool hitTopSide = utils::LoopOverVertices(
 			*m_pVertices,
 			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
 			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom + m_Collider.height },
 			myInfoTopSide);
 
-		bool hitBottomSide = utils::LoopOverVertecies(
+		bool hitBottomSide = utils::LoopOverVertices(
 			*m_pVertices,
 			Vector2f{ m_Collider.left, m_Collider.bottom + 1 },
 			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom + 1 },
@@ -115,13 +115,13 @@ void Zombie::Update(float elapsedSec)
 	}
 	else if (m_Velocity.x < 0)
 	{
-		bool hitTopSide = utils::LoopOverVertecies(
+		bool hitTopSide = utils::LoopOverVertices(
 			*m_pVertices,
 			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
 			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom + m_Collider.height },
 			myInfoTopSide);
 
-		bool hitBottomSide = utils::LoopOverVertecies(
+		bool hitBottomSide = utils::LoopOverVertices(
 			*m_pVertices,
 			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1 },
 			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom + 1 },
@@ -156,13 +156,13 @@ void Zombie::Update(float elapsedSec)
 	utils::HitInfo myInfoLeft{};
 	utils::HitInfo myInfoRight{};
 
-	bool hitLeft = utils::LoopOverVertecies(
+	bool hitLeft = utils::LoopOverVertices(
 		*m_pVertices,
 		Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
 		Vector2f{ m_Collider.left, m_Collider.bottom - 1.f },
 		myInfoLeft);
 
-	bool hitRight = utils::LoopOverVertecies(
+	bool hitRight = utils::LoopOverVertices(
 		*m_pVertices,
 		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
 		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom - 1.f },

@@ -8,7 +8,7 @@ enum class FlyingKnightState
 	Flying
 };
 
-class FlyingKnight : public Enemy
+class FlyingKnight final : public Enemy
 {
 public:
 	FlyingKnight(Vector2f startPos, bool facingRight);

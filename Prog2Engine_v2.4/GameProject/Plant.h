@@ -5,7 +5,7 @@
 
 class EntityManager;
 
-class Plant : public Enemy
+class Plant final : public Enemy
 {
 public:
 	Plant(Vector2f startPos);

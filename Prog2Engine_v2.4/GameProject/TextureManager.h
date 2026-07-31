@@ -2,7 +2,7 @@
 #include "Texture.h"
 #include <vector>
 
-class TextureManager
+class TextureManager final
 {
 public:
 

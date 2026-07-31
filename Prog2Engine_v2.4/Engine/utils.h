@@ -83,7 +83,7 @@ namespace utils
 	bool IntersectRectLine(const Rectf& r, const Vector2f& p1, const Vector2f& p2, float& intersectMin, float& intersectMax);
 
 	//MY STUFF
-	bool LoopOverVertecies(const std::vector<std::vector<Vector2f>>& vertices, const Vector2f& rayP1, const Vector2f& rayP2, utils::HitInfo& myInfo);// same as raycast but for a few vectors 
+	bool LoopOverVertices(const std::vector<std::vector<Vector2f>>& vertices, const Vector2f& rayP1, const Vector2f& rayP2, utils::HitInfo& myInfo);// same as raycast but for a few vectors 
 #pragma endregion CollisionFunctionality
 
 	bool AlmostEqual(float a, float b, float epsilon = 0.0001f);

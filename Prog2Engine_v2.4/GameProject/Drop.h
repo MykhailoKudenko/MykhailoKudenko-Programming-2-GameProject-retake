@@ -18,7 +18,7 @@ enum class State
 	NotFalling
 };
 
-class Drop
+class Drop final
 {
 public:
 	Drop(const Vector2f& pos, PickupType type);

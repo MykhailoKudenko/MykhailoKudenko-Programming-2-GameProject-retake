@@ -11,7 +11,7 @@ enum class GhostState
 	Dropping
 };
 
-class Ghost : public Enemy
+class Ghost final : public Enemy
 {
 public:
 	Ghost(Vector2f startPos, bool facingRight);
@@ -24,6 +24,7 @@ public:
 	void SetEntityManager(EntityManager* manager);
 
 	bool IsSpawning() const override;
+
 private:
 
 	EntityManager* m_pEntityManager{ nullptr };

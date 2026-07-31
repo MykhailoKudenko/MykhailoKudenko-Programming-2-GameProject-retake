@@ -13,7 +13,7 @@ enum class TorchStates
 	Burning
 };
 
-class Torch : public Projectile
+class Torch final : public Projectile
 {
 public:
 	Torch(Vector2f pos, bool isRight);

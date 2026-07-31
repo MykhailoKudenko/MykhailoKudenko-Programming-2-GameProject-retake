@@ -1,6 +1,6 @@
 #pragma once
 
-class Camera
+class Camera final
 {
 public:
 	Camera(float screenWidth, float screenHeight);

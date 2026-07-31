@@ -13,7 +13,7 @@ enum class SFX
     LevelComplete
 };
 
-class SoundManager
+class SoundManager final
 {
 public:
     SoundManager();

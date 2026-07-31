@@ -13,7 +13,7 @@ enum class TrollState
 	Falling
 };
 
-class Troll : public Enemy
+class Troll final : public Enemy
 {
 public:
 	Troll(Vector2f startPos);

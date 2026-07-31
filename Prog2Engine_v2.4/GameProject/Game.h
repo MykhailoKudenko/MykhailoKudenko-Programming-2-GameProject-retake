@@ -12,7 +12,7 @@
 #include "SoundManager.h"
 
 #include "HUD.h"
-class Game : public BaseGame
+class Game : public BaseGame 
 {
 public:
 	explicit Game( const Window& window );

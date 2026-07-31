@@ -115,13 +115,13 @@ bool Drop::CheckBottomCollision() const
 	utils::HitInfo myInfoLeft{};
 	utils::HitInfo myInfoRight{};
 
-	bool hitLeft = utils::LoopOverVertecies(
+	bool hitLeft = utils::LoopOverVertices(
 		*m_pVertices,
 		Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
 		Vector2f{ m_Collider.left, m_Collider.bottom - 1.f },
 		myInfoLeft);
 
-	bool hitRight = utils::LoopOverVertecies(
+	bool hitRight = utils::LoopOverVertices(
 		*m_pVertices,
 		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
 		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom - 1.f },

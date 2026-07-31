@@ -15,7 +15,7 @@ enum class DemonState
     MovingDown
 };
 
-class Demon : public Enemy
+class Demon final : public Enemy
 {
 public:
 	Demon(Vector2f startPos);
@@ -38,7 +38,7 @@ private:
 
 	EntityManager* m_pEntityManager{ nullptr };
 
-	Vector2f m_TopRightModificatior{ 100, 80 };
+	Vector2f m_TopRightModifier{ 100, 80 };
 
 
 	static Animation* m_pFlyAnimation;

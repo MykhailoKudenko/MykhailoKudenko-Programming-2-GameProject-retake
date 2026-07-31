@@ -25,8 +25,8 @@
 
 #include "Drop.h"
 
-
-class EntityManager 
+ 
+class EntityManager final
 {
 public:
     EntityManager();

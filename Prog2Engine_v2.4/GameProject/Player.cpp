@@ -142,15 +142,15 @@ void Player::Update(float elapsedSec,const std::vector<std::vector<Vector2f>>& v
 	UpdateTimers(elapsedSec);
 
 	//movemnt control + states reset
-	UpdateMovmentVertical(vertices, playerOnlyVertices, platfroms, elapsedSec);
-	UpdateMovmentHorisontal(vertices, playerOnlyVertices, elapsedSec);
+	UpdateMovementVertical(vertices, playerOnlyVertices, platfroms, elapsedSec);
+	UpdateMovementHorizontal(vertices, playerOnlyVertices, elapsedSec);
 	
 }
 
 
 Vector2f Player::GetCenterPosition() const
 {
-	return(Vector2f{ m_Collider.left + m_Collider.width / 2, m_Collider.bottom + m_Collider.height/2 });
+	return Vector2f{ m_Collider.left + m_Collider.width / 2, m_Collider.bottom + m_Collider.height/2 };
 }
 
 
@@ -418,7 +418,7 @@ void Player::UpdateTimers(float elapsedSec)
 	}
 }
 
-void Player::UpdateMovmentHorisontal(
+void Player::UpdateMovementHorizontal(
 	const std::vector<std::vector<Vector2f>>& vertices,
 	const std::vector<std::vector<Vector2f>>& playerOnlyVertices,
 	float elapsedSec)
@@ -468,25 +468,25 @@ void Player::UpdateMovmentHorisontal(
 		utils::HitInfo playerTopHit{};
 		utils::HitInfo playerBottomHit{};
 
-		bool hitWorldTop = utils::LoopOverVertecies(
+		bool hitWorldTop = utils::LoopOverVertices(
 			vertices,
 			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height - 1.f },
 			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
 			worldTopHit);
 
-		bool hitWorldBottom = utils::LoopOverVertecies(
+		bool hitWorldBottom = utils::LoopOverVertices(
 			vertices,
 			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1.f },
 			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + 1.f },
 			worldBottomHit);
 
-		bool hitPlayerTop = utils::LoopOverVertecies(
+		bool hitPlayerTop = utils::LoopOverVertices(
 			playerOnlyVertices,
 			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height - 1.f },
 			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
 			playerTopHit);
 
-		bool hitPlayerBottom = utils::LoopOverVertecies(
+		bool hitPlayerBottom = utils::LoopOverVertices(
 			playerOnlyVertices,
 			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1.f },
 			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + 1.f },
@@ -501,25 +501,25 @@ void Player::UpdateMovmentHorisontal(
 		utils::HitInfo playerTopHit{};
 		utils::HitInfo playerBottomHit{};
 
-		bool hitWorldTop = utils::LoopOverVertecies(
+		bool hitWorldTop = utils::LoopOverVertices(
 			vertices,
 			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height - 1.f },
 			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
 			worldTopHit);
 
-		bool hitWorldBottom = utils::LoopOverVertecies(
+		bool hitWorldBottom = utils::LoopOverVertices(
 			vertices,
 			Vector2f{ m_Collider.left, m_Collider.bottom + 1.f },
 			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + 1.f },
 			worldBottomHit);
 
-		bool hitPlayerTop = utils::LoopOverVertecies(
+		bool hitPlayerTop = utils::LoopOverVertices(
 			playerOnlyVertices,
 			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height - 1.f },
 			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
 			playerTopHit);
 
-		bool hitPlayerBottom = utils::LoopOverVertecies(
+		bool hitPlayerBottom = utils::LoopOverVertices(
 			playerOnlyVertices,
 			Vector2f{ m_Collider.left, m_Collider.bottom + 1.f },
 			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + 1.f },
@@ -540,7 +540,7 @@ void Player::UpdateMovmentHorisontal(
 	}
 }
 
-void Player::UpdateMovmentVertical(
+void Player::UpdateMovementVertical(
 	const std::vector<std::vector<Vector2f>>& vertices,
 	const std::vector<std::vector<Vector2f>>& playerOnlyVertices,
 	const std::vector<std::vector<Vector2f>>& platforms,
@@ -594,16 +594,16 @@ void Player::UpdateMovmentVertical(
 		Vector2f rightRayStart{ m_Collider.left + m_Collider.width - 1.f, m_Collider.bottom + m_Collider.height };
 		Vector2f rightRayEnd{ m_Collider.left + m_Collider.width - 1.f, m_Collider.bottom + ySpeed };
 
-		hitWorldLeft = utils::LoopOverVertecies(vertices, leftRayStart, leftRayEnd, worldLeftHit);
-		hitWorldRight = utils::LoopOverVertecies(vertices, rightRayStart, rightRayEnd, worldRightHit);
+		hitWorldLeft = utils::LoopOverVertices(vertices, leftRayStart, leftRayEnd, worldLeftHit);
+		hitWorldRight = utils::LoopOverVertices(vertices, rightRayStart, rightRayEnd, worldRightHit);
 
-		hitPlayerLeft = utils::LoopOverVertecies(playerOnlyVertices, leftRayStart, leftRayEnd, playerLeftHit);
-		hitPlayerRight = utils::LoopOverVertecies(playerOnlyVertices, rightRayStart, rightRayEnd, playerRightHit);
+		hitPlayerLeft = utils::LoopOverVertices(playerOnlyVertices, leftRayStart, leftRayEnd, playerLeftHit);
+		hitPlayerRight = utils::LoopOverVertices(playerOnlyVertices, rightRayStart, rightRayEnd, playerRightHit);
 
 		if (!(hitWorldLeft || hitWorldRight || hitPlayerLeft || hitPlayerRight))
 		{
-			hitPlatformLeft = utils::LoopOverVertecies(platforms, leftRayStart, leftRayEnd, platformLeftHit);
-			hitPlatformRight = utils::LoopOverVertecies(platforms, rightRayStart, rightRayEnd, platformRightHit);
+			hitPlatformLeft = utils::LoopOverVertices(platforms, leftRayStart, leftRayEnd, platformLeftHit);
+			hitPlatformRight = utils::LoopOverVertices(platforms, rightRayStart, rightRayEnd, platformRightHit);
 		}
 	}
 

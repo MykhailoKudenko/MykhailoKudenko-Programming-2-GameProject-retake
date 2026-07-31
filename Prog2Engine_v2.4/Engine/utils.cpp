@@ -684,7 +684,7 @@ bool utils::IntersectRectLine(const Rectf& r, const Vector2f& p1, const Vector2f
 }
 //MY OWN STUFF
 // same as raycast but for a few vectors 
-bool utils::LoopOverVertecies(const std::vector<std::vector<Vector2f>>& vertices, const Vector2f& rayP1, const Vector2f& rayP2, utils::HitInfo& myInfo)
+bool utils::LoopOverVertices(const std::vector<std::vector<Vector2f>>& vertices, const Vector2f& rayP1, const Vector2f& rayP2, utils::HitInfo& myInfo)
 {
 	bool didHit = false;
 	float closestLambda = 1.f;

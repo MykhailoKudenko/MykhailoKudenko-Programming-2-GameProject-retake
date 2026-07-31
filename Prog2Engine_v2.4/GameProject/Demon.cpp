@@ -72,7 +72,7 @@ void Demon::Update(float elapsedSec)
 		break;
 	case DemonState::MoveToTopRight:
 		
-		if (MoveToThePoint(elapsedSec, m_pEntityManager->GetPlayerPosition() + m_TopRightModificatior))
+		if (MoveToThePoint(elapsedSec, m_pEntityManager->GetPlayerPosition() + m_TopRightModifier))
 		{
 			m_MyState = DemonState::Shooting;
 			m_AnimTime = 0.f;
@@ -118,7 +118,7 @@ void Demon::Update(float elapsedSec)
 		}
 		break;
 	case DemonState::MovingUp:
-		if (MoveToThePoint(elapsedSec, Vector2f{ m_Collider.left, m_pEntityManager->GetPlayerPosition().y + m_TopRightModificatior.y }))
+		if (MoveToThePoint(elapsedSec, Vector2f{ m_Collider.left, m_pEntityManager->GetPlayerPosition().y + m_TopRightModifier.y }))
 		{
 			m_MyState = DemonState::Shooting;
 			m_AnimTime = 0.f;
@@ -300,8 +300,8 @@ bool Demon::UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bo
 	Vector2f lockedPlayerPos = m_ParabolaLockedPlayerPos;
 	//Bounds
 
-	float leftX = lockedPlayerPos.x - m_TopRightModificatior.x;
-	float rightX = lockedPlayerPos.x + m_TopRightModificatior.x;
+	float leftX = lockedPlayerPos.x - m_TopRightModifier.x;
+	float rightX = lockedPlayerPos.x + m_TopRightModifier.x;
 
 	float moveDir;
 	if (movingRight)
@@ -342,7 +342,7 @@ bool Demon::UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bo
 		t = 1.f;
 
 	//top heigh
-	float topY = lockedPlayerPos.y + m_TopRightModificatior.y;
+	float topY = lockedPlayerPos.y + m_TopRightModifier.y;
 
 	// Height at the middle (when it should hit player)
 	float middleTargetY = lockedPlayerPos.y + -20.f;
@@ -373,13 +373,13 @@ bool Demon::UpdateShooting(float elapsedSec, const Vector2f& playerPos)
 
 	if (m_IsAtRightSide)
 	{
-		targetPoint = playerPos + m_TopRightModificatior;
+		targetPoint = playerPos + m_TopRightModifier;
 	}
 	else
 	{
 		targetPoint = Vector2f{
-			playerPos.x - m_TopRightModificatior.x,
-			playerPos.y + m_TopRightModificatior.y
+			playerPos.x - m_TopRightModifier.x,
+			playerPos.y + m_TopRightModifier.y
 		};
 	}
 

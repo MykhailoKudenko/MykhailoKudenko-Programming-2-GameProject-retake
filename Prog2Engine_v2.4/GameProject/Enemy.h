@@ -38,7 +38,6 @@ public:
 	void SetBag(bool DoesHaveBag);
 	bool HasBag() const;
 	void DrawBag() const;
-
 	Effect::EffectType GetEffectType() const;
 
 	bool IsFacingRight() const;

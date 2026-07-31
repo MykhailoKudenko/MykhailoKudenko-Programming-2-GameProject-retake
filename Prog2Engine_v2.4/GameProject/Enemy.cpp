@@ -15,7 +15,7 @@ Enemy::Enemy(Rectf startPos)
 
 Rectf Enemy::GetHitbox() const
 {
-	return (m_Collider);
+	return m_Collider;
 }
 
 
@@ -34,7 +34,7 @@ void Enemy::Kill()
 }
 bool Enemy::IsDead() const
 {
-	return(m_IsDead);
+	return m_IsDead;
 }
 Vector2f Enemy::GetCenterPosition() const
 {
@@ -97,3 +97,4 @@ bool Enemy::IsBoss() const
 {
 	return m_IsBoss;
 }
+

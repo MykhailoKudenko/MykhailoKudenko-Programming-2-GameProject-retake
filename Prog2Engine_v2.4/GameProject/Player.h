@@ -27,7 +27,7 @@ enum class PlayerWeapon
 };
 
 
-class Player
+class Player final
 {
 public:
 	Player(Vector2f startPos);
@@ -80,8 +80,8 @@ private:
 	void UpdateInput();
 	void UpdateTimers(float elapsedSec);
 
-	void UpdateMovmentHorisontal(const std::vector<std::vector<Vector2f>>& vertices,const std::vector<std::vector<Vector2f>>& playerOnlyVertices,float elapsedSec); 
-	void UpdateMovmentVertical(const std::vector<std::vector<Vector2f>>& vertices,
+	void UpdateMovementHorizontal(const std::vector<std::vector<Vector2f>>& vertices,const std::vector<std::vector<Vector2f>>& playerOnlyVertices,float elapsedSec); 
+	void UpdateMovementVertical(const std::vector<std::vector<Vector2f>>& vertices,
 		const std::vector<std::vector<Vector2f>>& playerOnlyVertices,
 		const std::vector<std::vector<Vector2f>>& platforms,
 		float elapsedSec);

@@ -1,7 +1,7 @@
 #pragma once
 #include "Player.h"
 
-class HUD
+class HUD final
 {
 public:
     HUD();

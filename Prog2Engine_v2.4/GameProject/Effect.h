@@ -1,7 +1,7 @@
 #pragma once
 #include "Animation.h"
 
-class Effect
+class Effect final
 {
 public:
     enum class EffectType

@@ -2,7 +2,7 @@
 #include <vector>
 #include "Texture.h"
 #include "Drop.h"
-class Level
+class Level final
 {
 public:
 

@@ -8,7 +8,7 @@ enum class ZombieState
 	Walking
 };
 
-class Zombie : public Enemy
+class Zombie final : public Enemy
 {
 
 public:

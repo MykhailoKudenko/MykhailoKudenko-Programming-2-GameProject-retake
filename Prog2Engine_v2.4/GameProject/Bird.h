@@ -8,7 +8,7 @@ enum class BirdState
 	Flying
 };
 
-class Bird : public Enemy
+class Bird final : public Enemy
 {
 public:
 	Bird(Vector2f startPos, bool facingRight);

@@ -678,7 +678,7 @@ Vector2f EntityManager::GetPlayerPosition() const
 
 bool EntityManager::RollBagDrop() const
 {
-    return (std::rand() % 10) == 0;
+    return std::rand() % 10 == 0;
 }
 
 PickupType EntityManager::GetRandomBagDrop() const

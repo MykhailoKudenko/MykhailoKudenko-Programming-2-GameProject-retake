@@ -288,13 +288,13 @@ void Troll::ApplyHorisontalMovement(float elapsedSec)
 
 	if (m_Velocity.x > 0)
 	{
-		bool hitTopSide = utils::LoopOverVertecies(
+		bool hitTopSide = utils::LoopOverVertices(
 			*m_pVertices,
 			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
 			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom + m_Collider.height },
 			myInfoTopSide);
 
-		bool hitBottomSide = utils::LoopOverVertecies(
+		bool hitBottomSide = utils::LoopOverVertices(
 			*m_pVertices,
 			Vector2f{ m_Collider.left, m_Collider.bottom + 1 },
 			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom + 1 },
@@ -325,13 +325,13 @@ void Troll::ApplyHorisontalMovement(float elapsedSec)
 	}
 	else if (m_Velocity.x < 0)
 	{
-		bool hitTopSide = utils::LoopOverVertecies(
+		bool hitTopSide = utils::LoopOverVertices(
 			*m_pVertices,
 			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
 			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom + m_Collider.height },
 			myInfoTopSide);
 
-		bool hitBottomSide = utils::LoopOverVertecies(
+		bool hitBottomSide = utils::LoopOverVertices(
 			*m_pVertices,
 			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1 },
 			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom + 1 },
@@ -373,13 +373,13 @@ void Troll::ApplyGravity(float elapsedSec)
 	utils::HitInfo hitInfoLeft{};
 	utils::HitInfo hitInfoRight{};
 
-	bool hitLeft = utils::LoopOverVertecies(
+	bool hitLeft = utils::LoopOverVertices(
 		*m_pVertices,
 		Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
 		Vector2f{ m_Collider.left, m_Collider.bottom + m_Velocity.y * elapsedSec },
 		hitInfoLeft);
 
-	bool hitRight = utils::LoopOverVertecies(
+	bool hitRight = utils::LoopOverVertices(
 		*m_pVertices,
 		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
 		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Velocity.y * elapsedSec },

@@ -2,7 +2,7 @@
 #include "Projectile.h"
 #include "Texture.h"
 
-class PlantProjectile : public Projectile
+class PlantProjectile final : public Projectile
 {
 public:
 	PlantProjectile(Vector2f pos, Vector2f direction);

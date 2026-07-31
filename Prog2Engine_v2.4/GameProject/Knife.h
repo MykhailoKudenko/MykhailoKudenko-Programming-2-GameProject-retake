@@ -2,7 +2,7 @@
 #include "Projectile.h"
 #include "Texture.h"
 
-class Knife : public Projectile
+class Knife final : public Projectile
 {
 public:
 	Knife(Vector2f pos, bool isRight);

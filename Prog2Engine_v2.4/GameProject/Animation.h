@@ -1,7 +1,7 @@
 #pragma once
 #include "Texture.h"
 
-class Animation
+class Animation final
 {
 public:
 	Animation(const std::string& texturePath, int nrFrames, float frameSec, bool loop = true);

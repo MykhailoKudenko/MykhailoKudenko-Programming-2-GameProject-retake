@@ -2,7 +2,7 @@
 #include "Projectile.h"
 #include "Texture.h"
 
-class DemonProjectile : public Projectile
+class DemonProjectile final: public Projectile
 {
 public:
 	DemonProjectile(Vector2f pos, Vector2f direction);

@@ -18,7 +18,7 @@ void Projectile::Update(float elapsedSec)
 
 Rectf Projectile::GetHitbox() const
 {
-	return( m_Collider );
+	return m_Collider;
 }
 
 void Projectile::Kill()
@@ -27,7 +27,7 @@ void Projectile::Kill()
 }
 bool Projectile::IsDead() const
 {
-	return(m_IsDead);
+	return m_IsDead;
 }
 
 Vector2f Projectile::GetCenterPosition() const
