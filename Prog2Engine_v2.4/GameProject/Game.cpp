@@ -79,7 +79,7 @@ void Game::Update(float elapsedSec)
 		// Always update player, so death animation/physics can continue
 		m_P1->Update(
 			elapsedSec,
-			m_level1->GetVertecies(),
+			m_level1->GetVertices(),
 			m_level1->GetPlayerOnlyVertices(),
 			m_level1->GetLadders(),
 			m_level1->GetPlatformTopEdges()

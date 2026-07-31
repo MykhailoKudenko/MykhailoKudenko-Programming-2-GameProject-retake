@@ -13,8 +13,8 @@ Level::Level(
 	std::vector<EnemySpawnPoint> enemySpawnPoints,
 	std::vector<EnemySpawnArea> enemySpawnAreas,
 	std::vector<DropSpawnPoint> dropSpawnPoints,
-	const std::string& PlatformTexturePath,
-	const std::string& LevelTexturePath)
+	const std::string& platformTexturePath,
+	const std::string& levelTexturePath)
 	: m_Vertices{ vertices }
 	, m_PlayerOnlyVertices{ playerOnlyVertices }
 	, m_Ladders{ ladders }
@@ -22,8 +22,8 @@ Level::Level(
 	, m_EnemySpawnPoints{ enemySpawnPoints }
 	, m_EnemySpawnAreas{ enemySpawnAreas }
 	, m_DropSpawnPoints{ dropSpawnPoints }
-	, m_Texture{ LevelTexturePath }
-	, m_PlatformTexture{ PlatformTexturePath }
+	, m_Texture{ levelTexturePath }
+	, m_PlatformTexture{ platformTexturePath }
 {
 }
 
@@ -35,16 +35,16 @@ Level::Level(const std::string& svgPath,
 	std::vector<EnemySpawnPoint> enemySpawnPoints,
 	std::vector<EnemySpawnArea> enemySpawnAreas,
 	std::vector<DropSpawnPoint> dropSpawnPoints,
-	const std::string& PlatformTexturePath,
-	const std::string& LevelTexturePath)
+	const std::string& platformTexturePath,
+	const std::string& levelTexturePath)
 	: m_PlayerOnlyVertices{ playerOnlyVertices }
 	, m_Ladders{ ladders }
 	, m_Platforms{ platforms }
 	, m_EnemySpawnPoints{ enemySpawnPoints }
 	, m_EnemySpawnAreas{ enemySpawnAreas }
 	, m_DropSpawnPoints{ dropSpawnPoints }
-	, m_Texture{ LevelTexturePath }
-	, m_PlatformTexture{ PlatformTexturePath }
+	, m_Texture{ levelTexturePath }
+	, m_PlatformTexture{ platformTexturePath }
 {
 	LoadFromSvg(svgPath);
 }
@@ -59,7 +59,7 @@ void Level::LoadFromSvg(const std::string& svgPath)
 	}
 }
 
-const std::vector<std::vector<Vector2f>>& Level::GetVertecies() const
+const std::vector<std::vector<Vector2f>>& Level::GetVertices() const
 {
 	return m_Vertices;
 }

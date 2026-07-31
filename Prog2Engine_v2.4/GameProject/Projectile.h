@@ -2,7 +2,7 @@
 class Projectile
 {
 public:
-	Projectile(Rectf Start);
+	Projectile(Rectf startPos);
 	virtual ~Projectile() = default;
 
 
@@ -14,7 +14,7 @@ public:
 	Vector2f GetCenterPosition() const;
 
 	void virtual Kill();
-	bool isDead() const;
+	bool IsDead() const;
 
 protected:
 	Vector2f m_Speed{ 0,0 };

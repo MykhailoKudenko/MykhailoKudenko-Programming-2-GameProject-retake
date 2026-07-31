@@ -125,7 +125,7 @@ void HUD::Draw(int score, PlayerWeapon weapon) const
         }
         break;
 
-    case PlayerWeapon::Tourch:
+    case PlayerWeapon::Torch:
         if (m_pTorchTexture)
         {
             float w = m_pTorchTexture->GetWidth();

@@ -49,7 +49,7 @@ Torch::~Torch()
 
 void Torch::Draw() const
 {
-	if (m_MyState == TourchStates::Burning)
+	if (m_MyState == TorchStates::Burning)
 	{
 		if (m_BurningGround != nullptr)
 		{
@@ -82,19 +82,19 @@ void Torch::Update(float elapsedSec)
 {
 	switch (m_MyState)
 	{
-	case TourchStates::FlyingUp:
+	case TorchStates::FlyingUp:
 		m_TimeFliyngUp -= elapsedSec;
 
 		if (m_TimeFliyngUp <= 0)
 		{
-			m_MyState = TourchStates::FlyingDown;
+			m_MyState = TorchStates::FlyingDown;
 		}
 
 		m_Collider.left += m_Speed.x * elapsedSec;
 		m_Collider.bottom += m_Speed.y * elapsedSec;
 		break;
 
-	case TourchStates::FlyingDown:
+	case TorchStates::FlyingDown:
 		if (CheckBottomCollision() == false)
 		{
 			m_Collider.left += m_Speed.x * elapsedSec;
@@ -102,12 +102,12 @@ void Torch::Update(float elapsedSec)
 		}
 		else
 		{
-			m_MyState = TourchStates::Burning;
+			m_MyState = TorchStates::Burning;
 			m_AnimTime = 0.f;
 		}
 		break;
 
-	case TourchStates::Burning:
+	case TorchStates::Burning:
 		m_AnimTime += elapsedSec;
 
 		if (m_BurningGround != nullptr && m_BurningGround->IsTimeFinished(m_AnimTime))
@@ -121,7 +121,7 @@ void Torch::Update(float elapsedSec)
 
 void Torch::Kill()
 {
-	if (m_MyState != TourchStates::Burning)
+	if (m_MyState != TorchStates::Burning)
 	{
 		m_IsDead = true;
 	}

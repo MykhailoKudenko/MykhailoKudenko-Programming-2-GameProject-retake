@@ -13,8 +13,8 @@ Animation* Troll::m_pSpawnAnimation{ nullptr };
 int Troll::m_InstanceCount{ 0 };
 
 
-Troll::Troll(Vector2f StartPos)
-	: Enemy(Rectf{ StartPos.x, StartPos.y, 43, 40 })
+Troll::Troll(Vector2f startPos)
+	: Enemy(Rectf{ startPos.x, startPos.y, 43, 40 })
 {
 	m_Speed = 30.f;
 	m_Health = 10;

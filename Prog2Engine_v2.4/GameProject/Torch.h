@@ -6,7 +6,7 @@
 #include "Animation.h"
 
 
-enum class TourchStates
+enum class TorchStates
 {
 	FlyingUp,
 	FlyingDown,
@@ -37,7 +37,7 @@ private:
 
 	float m_AnimTime{ 0.f };
 
-	TourchStates m_MyState = TourchStates::FlyingUp;
+	TorchStates m_MyState = TorchStates::FlyingUp;
 
 	float m_TimeFliyngUp = 0.5f;
 };

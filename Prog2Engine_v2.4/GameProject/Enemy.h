@@ -1,13 +1,20 @@
 #pragma once
 #include <vector>
 #include "Texture.h"
+#include "TextureManager.h"
+
 #include "Effect.h"
 class Enemy
 {
 public:
-	Enemy(Rectf Start);
-	virtual ~Enemy();
-	
+	Enemy(Rectf startPos);
+	virtual ~Enemy() = default;
+
+	Enemy(const Enemy&) = delete;
+	Enemy& operator=(const Enemy&) = delete;
+	Enemy(Enemy&&) = delete;
+	Enemy& operator=(Enemy&&) = delete;
+
 
 	virtual void Update(float elapsedSec) = 0;
 	virtual void Draw() const = 0;
@@ -15,11 +22,11 @@ public:
 	Rectf GetHitbox() const;
 
 	void Kill();
-	bool isDead() const;
+	bool IsDead() const;
 	void TakeDamage();
 	Vector2f GetCenterPosition() const;
 
-	virtual bool isSpawning() const;
+	virtual bool IsSpawning() const;
 
 	bool GetIsActive() const; 
 	void SetIsActive(bool isActive);
@@ -29,7 +36,7 @@ public:
 
 
 	void SetBag(bool DoesHaveBag);
-	bool GetBag() const;
+	bool HasBag() const;
 	void DrawBag() const;
 
 	Effect::EffectType GetEffectType() const;
@@ -52,7 +59,6 @@ protected:
 
 	Effect::EffectType m_EffectType{ Effect::EffectType::Blood };
 
-	static int m_EnemyInstanceCount;
-	static Texture* m_pBagTexture;
+
 };
 

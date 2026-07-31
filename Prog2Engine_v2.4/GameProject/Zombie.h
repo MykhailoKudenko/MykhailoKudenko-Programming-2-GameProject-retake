@@ -12,7 +12,7 @@ class Zombie : public Enemy
 {
 
 public:
-	Zombie(Vector2f StartPos, bool facingRight);
+	Zombie(Vector2f startPos, bool facingRight);
 	~Zombie() override;
 
 	void Update(float elapsedSec) override;
@@ -20,7 +20,7 @@ public:
 
 	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
 
-	bool isSpawning() const override;
+	bool IsSpawning() const override;
 
 private:
 	const std::vector<std::vector<Vector2f>>* m_pVertices{};

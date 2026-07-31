@@ -2,33 +2,16 @@
 #include "Enemy.h"
 #include "utils.h"
 
-Texture* Enemy::m_pBagTexture{ nullptr };
-int Enemy::m_EnemyInstanceCount{ 0 };
 
 
-Enemy::Enemy(Rectf Start)
-	: m_Collider{ Start }
+
+Enemy::Enemy(Rectf startPos)
+	: m_Collider{ startPos }
 {
-	++m_EnemyInstanceCount;
 
-	if (m_pBagTexture == nullptr)
-	{
-		m_pBagTexture = new Texture("Bag.png");
-	}
 }
 
-Enemy::~Enemy()
-{
-	--m_EnemyInstanceCount;
 
-	if (m_EnemyInstanceCount <= 0)
-	{
-		delete m_pBagTexture;
-		m_pBagTexture = nullptr;
-
-		m_EnemyInstanceCount = 0;
-	}
-}
 
 Rectf Enemy::GetHitbox() const
 {
@@ -41,7 +24,7 @@ void Enemy::TakeDamage()
 	m_Health--;
 	if (m_Health <= 0)
 	{
-		this->Kill();
+		Kill();
 	}
 }
 
@@ -49,7 +32,7 @@ void Enemy::Kill()
 {
 	m_IsDead = true;
 }
-bool Enemy::isDead() const
+bool Enemy::IsDead() const
 {
 	return(m_IsDead);
 }
@@ -59,7 +42,7 @@ Vector2f Enemy::GetCenterPosition() const
 }
 
 
-bool Enemy::isSpawning() const
+bool Enemy::IsSpawning() const
 {
 	return false;
 }
@@ -84,7 +67,7 @@ void Enemy::SetBag(bool DoesHaveBag)
 {
 	m_DoesHaveBag = DoesHaveBag;
 }
-bool Enemy::GetBag() const
+bool Enemy::HasBag() const
 {
 	return m_DoesHaveBag;
 }
@@ -92,8 +75,8 @@ void Enemy::DrawBag() const
 {
 	if (!m_DoesHaveBag)
 		return;
-
-	m_pBagTexture->Draw(
+	const Texture* bagTexture = TextureManager::GetInstance().GetTexture("Bag.png");
+	bagTexture->Draw(
 		Vector2f{ m_Collider.left, m_Collider.bottom },
 		m_IsFacingRight
 	);

@@ -13,8 +13,8 @@ int Demon::m_InstanceCount{ 0 };
 
 
 
-Demon::Demon(Vector2f StartPos)
-	: Enemy(Rectf{ StartPos.x, StartPos.y, 24, 26 })
+Demon::Demon(Vector2f startPos)
+	: Enemy(Rectf{ startPos.x, startPos.y, 24, 26 })
 {
 	m_Speed = 80.f;
 	m_Health = 5;

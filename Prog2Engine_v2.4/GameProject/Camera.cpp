@@ -8,7 +8,7 @@ Camera::Camera(float screenWidth, float screenHeight)
 {
 }
 
-void Camera::Aim(float levelWidth, float levelHeight, float XNegativeSpace, float YNegativeSpace, const Vector2f& trackCenter, float zoom) const
+void Camera::Aim(float levelWidth, float levelHeight, float xNegativeSpace, float yNegativeSpace, const Vector2f& trackCenter, float zoom) const
 {
 	float viewWidth = m_ScreenWidth / zoom;
 	float viewHeight = m_ScreenHeight / zoom;
@@ -16,9 +16,9 @@ void Camera::Aim(float levelWidth, float levelHeight, float XNegativeSpace, floa
 	float cameraLeft = trackCenter.x - viewWidth / 2.0f;
 	float cameraBottom = trackCenter.y - viewHeight / 2.0f;
 
-	if (cameraLeft < -XNegativeSpace)
+	if (cameraLeft < -xNegativeSpace)
 	{
-		cameraLeft = -XNegativeSpace;
+		cameraLeft = -xNegativeSpace;
 
 	}
 	if (cameraLeft > levelWidth - viewWidth)
@@ -26,9 +26,9 @@ void Camera::Aim(float levelWidth, float levelHeight, float XNegativeSpace, floa
 		cameraLeft = levelWidth - viewWidth;
 
 	}
-	if (cameraBottom < -YNegativeSpace)
+	if (cameraBottom < -yNegativeSpace)
 	{
-		cameraBottom = -YNegativeSpace;
+		cameraBottom = -yNegativeSpace;
 
 	}
 	if (cameraBottom > levelHeight - viewHeight)
@@ -38,12 +38,12 @@ void Camera::Aim(float levelWidth, float levelHeight, float XNegativeSpace, floa
 	}
 	if (levelWidth < viewWidth)
 	{
-		cameraLeft = -XNegativeSpace;
+		cameraLeft = -xNegativeSpace;
 
 	}
 	if (levelHeight < viewHeight)
 	{
-		cameraBottom = -YNegativeSpace;
+		cameraBottom = -yNegativeSpace;
 
 	}
 

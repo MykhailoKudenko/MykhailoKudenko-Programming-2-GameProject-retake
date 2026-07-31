@@ -46,9 +46,9 @@ public:
     void Update(float elapsedSec);
     void Draw(bool isDebug) const;
 
-    void AddZombie(const Vector2f& SpawnPos, bool startsFacingRight);
-    void AddBird(const Vector2f& SpawnPos, bool startsFacingRight);
-    void AddFlyingKnight(const Vector2f& SpawnPos, bool startsFacingRight);
+    void AddZombie(const Vector2f& spawnPos, bool startsFacingRight);
+    void AddBird(const Vector2f& spawnPos, bool startsFacingRight);
+    void AddFlyingKnight(const Vector2f& spawnPos, bool startsFacingRight);
     void AddGhost(const Vector2f& spawnPos, bool startsFacingRight);
     void AddPlant(const Vector2f& spawnPos);
 
@@ -57,7 +57,7 @@ public:
 
     void SpawnLance(const Vector2f& pos, bool isRight);
     void SpawnKnife(const Vector2f& pos, bool isRight);
-    void SpawnTourch(const Vector2f& pos, bool isRight);
+    void SpawnTorch(const Vector2f& pos, bool isRight);
 
     void SpawnPlantProjectile(const Vector2f& pos, const Vector2f& direction);
     void SpawnDemonProjectile(const Vector2f& pos, const Vector2f& direction);

@@ -23,14 +23,14 @@ enum class PlayerWeapon
 {
 	Lance,
 	Knife,
-	Tourch
+	Torch
 };
 
 
 class Player
 {
 public:
-	Player(Vector2f Pos);
+	Player(Vector2f startPos);
 	~Player() = default;
 	//rule of 5
 	Player(const Player&) = delete;
@@ -55,8 +55,8 @@ public:
 	void SetPlayerWeapon(PlayerWeapon weapon);
 
 	int GetPlayerScore() const;
-	void AddToPLayerScore(int Score);
-	void SetPlayerScore(int NewScore);
+	void AddToPLayerScore(int score);
+	void SetPlayerScore(int newScore);
 
 	bool IsDeathAnimationFinished() const;
 

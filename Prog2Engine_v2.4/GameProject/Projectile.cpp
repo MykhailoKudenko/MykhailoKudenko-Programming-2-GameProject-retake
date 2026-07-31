@@ -2,7 +2,7 @@
 #include "Projectile.h"
 #include "utils.h"
 
-Projectile::Projectile(Rectf Start) :m_Collider{ Start }
+Projectile::Projectile(Rectf startPos) :m_Collider{ startPos }
 {
 
 }
@@ -25,7 +25,7 @@ void Projectile::Kill()
 {
 	m_IsDead = true;
 }
-bool Projectile::isDead() const
+bool Projectile::IsDead() const
 {
 	return(m_IsDead);
 }

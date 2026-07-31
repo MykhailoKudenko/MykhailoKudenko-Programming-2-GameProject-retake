@@ -5,7 +5,7 @@ class Camera
 public:
 	Camera(float screenWidth, float screenHeight);
 
-	void Aim(float levelWidth, float levelHeight, float XNegativeSpace, float YNegativeSpace, const Vector2f& trackCenter, float zoom) const;
+	void Aim(float levelWidth, float levelHeight, float xNegativeSpace, float yNegativeSpace, const Vector2f& trackCenter, float zoom) const;
 	void Reset() const;
 
 private:

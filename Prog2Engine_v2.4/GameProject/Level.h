@@ -57,8 +57,8 @@ public:
 		std::vector<EnemySpawnPoint> enemySpawnPoints,
 		std::vector<EnemySpawnArea> enemySpawnAreas,
 		std::vector<DropSpawnPoint> dropSpawnPoints,
-		const std::string& PlatformTexturePath,
-		const std::string& LevelTexturePath);
+		const std::string& platformTexturePath,
+		const std::string& levelTexturePath);
 
 	Level(const std::string& svgPath,
 		std::vector<std::vector<Vector2f>> playerOnlyVertices,
@@ -67,8 +67,8 @@ public:
 		std::vector<EnemySpawnPoint> enemySpawnPoints,
 		std::vector<EnemySpawnArea> enemySpawnAreas,
 		std::vector<DropSpawnPoint> dropSpawnPoints,
-		const std::string& PlatformTexturePath,
-		const std::string& LevelTexturePath);
+		const std::string& platformTexturePath,
+		const std::string& levelTexturePath);
 
 	//rule of 5
 	~Level() = default;
@@ -77,7 +77,7 @@ public:
 	Level(Level&&) = delete;
 	Level& operator=(Level&&) = delete;
 
-	const std::vector<std::vector<Vector2f>>& GetVertecies() const;
+	const std::vector<std::vector<Vector2f>>& GetVertices() const;
 	const std::vector<std::vector<Vector2f>>& GetPlatformTopEdges() const;
 	const std::vector<Rectf>& GetLadders() const;
 

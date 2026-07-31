@@ -88,7 +88,7 @@ void EntityManager::Update(float elapsedSec)
 
             if (utils::IsOverlapping(enemy->GetHitbox(), m_pPlayer->GetHitbox()))
             {
-                if (!enemy->isSpawning())
+                if (!enemy->IsSpawning())
                 {
                     m_pPlayer->TakeDamage();
                 }
@@ -149,7 +149,7 @@ void EntityManager::Update(float elapsedSec)
                 m_pPlayer->SetPlayerWeapon(PlayerWeapon::Knife);
                 break;
             case PickupType::Torch:
-                m_pPlayer->SetPlayerWeapon(PlayerWeapon::Tourch);
+                m_pPlayer->SetPlayerWeapon(PlayerWeapon::Torch);
                 break;
             case PickupType::Doll:
                 m_pPlayer->AddToPLayerScore(200);
@@ -172,8 +172,8 @@ void EntityManager::Update(float elapsedSec)
         case PlayerWeapon::Knife:
             SpawnKnife(m_pPlayer->GetThrowPosition(), m_pPlayer->IsFacingRight());
             break;
-        case PlayerWeapon::Tourch:
-            SpawnTourch(m_pPlayer->GetThrowPosition(), m_pPlayer->IsFacingRight());
+        case PlayerWeapon::Torch:
+            SpawnTorch(m_pPlayer->GetThrowPosition(), m_pPlayer->IsFacingRight());
             break;
         }
     }
@@ -186,11 +186,11 @@ void EntityManager::Update(float elapsedSec)
             {
                 enemy->TakeDamage();
 
-                if (enemy->isDead())
+                if (enemy->IsDead())
                 {
                     m_pPlayer->AddToPLayerScore(enemy->GetScore());
 
-                    if (enemy->GetBag())
+                    if (enemy->HasBag())
                     {
                         AddDrop(enemy->GetCenterPosition(), GetRandomBagDrop());
                     }
@@ -227,7 +227,7 @@ void EntityManager::Draw(bool isDebug) const
     for (const Enemy* enemy : m_pEnemies)
     {
         enemy->Draw(); 
-        if (enemy->GetBag())
+        if (enemy->HasBag())
         {
             enemy->DrawBag();
         }
@@ -478,8 +478,8 @@ bool EntityManager::FindGroundBelow(const Vector2f& pos, float& outGroundY) cons
 
     utils::HitInfo hitInfo{};
 
-    bool hitGround = utils::LoopOverVertecies(
-        m_pLevel->GetVertecies(),
+    bool hitGround = utils::LoopOverVertices(
+        m_pLevel->GetVertices(),
         pos,
         Vector2f{ pos.x, pos.y - 1000.f },
         hitInfo);
@@ -493,28 +493,28 @@ bool EntityManager::FindGroundBelow(const Vector2f& pos, float& outGroundY) cons
     return true;
 }
 
-void EntityManager::AddZombie(const Vector2f& SpawnPos, bool startsFacingRight)
+void EntityManager::AddZombie(const Vector2f& spawnPos, bool startsFacingRight)
 {
-    Zombie* zombie = new Zombie(SpawnPos, startsFacingRight);
+    Zombie* zombie = new Zombie(spawnPos, startsFacingRight);
 
     if (m_pLevel != nullptr)
     {
-        zombie->SetWorld(&m_pLevel->GetVertecies());
+        zombie->SetWorld(&m_pLevel->GetVertices());
     }
 
     zombie->SetBag(RollBagDrop());
 
     m_pEnemies.push_back(zombie);
 }
-void EntityManager::AddBird(const Vector2f& SpawnPos, bool startsFacingRight)
+void EntityManager::AddBird(const Vector2f& spawnPos, bool startsFacingRight)
 {
-    Bird* bird = new Bird(SpawnPos, startsFacingRight);
+    Bird* bird = new Bird(spawnPos, startsFacingRight);
 
     m_pEnemies.push_back(bird);
 }
-void EntityManager::AddFlyingKnight(const Vector2f& SpawnPos, bool startsFacingRight)
+void EntityManager::AddFlyingKnight(const Vector2f& spawnPos, bool startsFacingRight)
 {
-    FlyingKnight* knight = new FlyingKnight(SpawnPos, startsFacingRight);
+    FlyingKnight* knight = new FlyingKnight(spawnPos, startsFacingRight);
 
     m_pEnemies.push_back(knight);
 }
@@ -527,9 +527,9 @@ void EntityManager::AddGhost(const Vector2f& SpawnPos, bool startsFacingRight)
 }
 void EntityManager::AddPlant(const Vector2f& spawnPos)
 {
-    Plant* palnt = new Plant(spawnPos);
-    palnt->SetEntityManager(this);
-    m_pEnemies.push_back(palnt);
+    Plant* plant = new Plant(spawnPos);
+    plant->SetEntityManager(this);
+    m_pEnemies.push_back(plant);
 }
 void EntityManager::AddDemon(const Vector2f& spawnPos)
 {
@@ -544,7 +544,7 @@ void EntityManager::AddTroll(const Vector2f& spawnPos)
     troll->SetEntityManager(this);
     if (m_pLevel != nullptr)
     {
-        troll->SetWorld(&m_pLevel->GetVertecies());
+        troll->SetWorld(&m_pLevel->GetVertices());
     }
     m_pEnemies.push_back(troll);
 }
@@ -561,13 +561,13 @@ void EntityManager::SpawnKnife(const Vector2f& pos, bool isRight)
     m_pPlayerProjectiles.push_back(knife);
 
 }
-void EntityManager::SpawnTourch(const Vector2f& pos, bool isRight)
+void EntityManager::SpawnTorch(const Vector2f& pos, bool isRight)
 {
     m_pSoundManager->PlayEffect(SFX::Throw);
     Torch* torch = new Torch(pos, isRight);
     if (m_pLevel != nullptr)
     {
-        torch->SetWorld(&m_pLevel->GetVertecies());
+        torch->SetWorld(&m_pLevel->GetVertices());
     }
     m_pPlayerProjectiles.push_back(torch);
 }
@@ -590,7 +590,7 @@ void EntityManager::AddDrop(const Vector2f& pos, PickupType type)
     Drop* drop = new Drop(pos, type);
     if (m_pLevel != nullptr)
     {
-        drop->SetWorld(&m_pLevel->GetVertecies());
+        drop->SetWorld(&m_pLevel->GetVertices());
     }
     m_pDrops.push_back(drop);
 }
@@ -603,7 +603,7 @@ void EntityManager::RemoveDeadEntities()
 {
     for (size_t i = 0; i < m_pEnemies.size(); ++i)
     {
-        if (m_pEnemies[i]->isDead())
+        if (m_pEnemies[i]->IsDead())
         {
             delete m_pEnemies[i];
             m_pEnemies.erase(m_pEnemies.begin() + i);
@@ -613,7 +613,7 @@ void EntityManager::RemoveDeadEntities()
 
     for (size_t i = 0; i < m_pPlayerProjectiles.size(); ++i)
     {
-        if (m_pPlayerProjectiles[i]->isDead())
+        if (m_pPlayerProjectiles[i]->IsDead())
         {
             delete m_pPlayerProjectiles[i];
             m_pPlayerProjectiles.erase(m_pPlayerProjectiles.begin() + i);
@@ -623,7 +623,7 @@ void EntityManager::RemoveDeadEntities()
 
     for (size_t i = 0; i < m_pEnemyProjectiles.size(); ++i)
     {
-        if (m_pEnemyProjectiles[i]->isDead())
+        if (m_pEnemyProjectiles[i]->IsDead())
         {
             delete m_pEnemyProjectiles[i];
             m_pEnemyProjectiles.erase(m_pEnemyProjectiles.begin() + i);

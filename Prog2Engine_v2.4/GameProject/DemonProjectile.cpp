@@ -5,11 +5,11 @@
 Texture* DemonProjectile::m_pTexture{ nullptr };
 int DemonProjectile::m_InstanceCount{ 0 };
 
-DemonProjectile::DemonProjectile(Vector2f pos, Vector2f Direction)
+DemonProjectile::DemonProjectile(Vector2f pos, Vector2f direction)
 	: Projectile(Rectf{ pos.x, pos.y, 9.f, 9.f })
 {
-	m_Speed.x = Direction.x * 60;
-	m_Speed.y = Direction.y * 60;
+	m_Speed.x = direction.x * 60;
+	m_Speed.y = direction.y * 60;
 
 	++m_InstanceCount;
 

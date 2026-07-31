@@ -6,8 +6,8 @@ Animation* Zombie::m_pWalkAnimation{ nullptr };
 Animation* Zombie::m_pSpawnAnimation{ nullptr };
 int Zombie::m_InstanceCount{ 0 };
 
-Zombie::Zombie(Vector2f StartPos, bool facingRight)
-	: Enemy(Rectf{ StartPos.x, StartPos.y, 19, 27 })
+Zombie::Zombie(Vector2f startPos, bool facingRight)
+	: Enemy(Rectf{ startPos.x, startPos.y, 19, 27 })
 {
 	m_IsFacingRight = facingRight;
 	m_Speed = 30.f;
@@ -227,7 +227,7 @@ void Zombie::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
 }
 
 
-bool Zombie::isSpawning() const
+bool Zombie::IsSpawning() const
 {
 	if (m_State == ZombieState::Spawning)
 	{

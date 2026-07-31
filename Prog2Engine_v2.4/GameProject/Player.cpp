@@ -5,7 +5,7 @@
 //temp
 #include <iostream>
 
-Player::Player(Vector2f Pos) : m_Collider{ Rectf{Pos.x, Pos.y, 16, 24} },
+Player::Player(Vector2f startPos) : m_Collider{ Rectf{startPos.x, startPos.y, 16, 24} },
 m_WalkingArmour{ "WalkKnight.png", 3,  0.10f, true },
 m_WalkingNaked{ "WalkKnightNaked.png", 3, 0.10f, true },
 
@@ -796,13 +796,13 @@ int Player::GetPlayerScore() const
 {
 	return m_Score;
 }
-void Player::AddToPLayerScore(int Score)
+void Player::AddToPLayerScore(int score)
 {
-	m_Score += Score;
+	m_Score += score;
 }
-void Player::SetPlayerScore(int NewScore)
+void Player::SetPlayerScore(int newScore)
 {
-	m_Score = NewScore;
+	m_Score = newScore;
 }
 
 void Player::Respawn(const Vector2f& pos)

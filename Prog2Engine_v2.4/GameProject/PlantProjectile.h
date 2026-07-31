@@ -5,7 +5,7 @@
 class PlantProjectile : public Projectile
 {
 public:
-	PlantProjectile(Vector2f pos, Vector2f Direction);
+	PlantProjectile(Vector2f pos, Vector2f direction);
 	~PlantProjectile() override;
 
 	void Draw() const override;

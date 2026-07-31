@@ -7,8 +7,8 @@
 Animation* Plant::m_pPlantAnimation{ nullptr };
 int Plant::m_InstanceCount{ 0 };
 
-Plant::Plant(Vector2f StartPos)
-	: Enemy(Rectf{ StartPos.x, StartPos.y, 16, 24 })
+Plant::Plant(Vector2f startPos)
+	: Enemy(Rectf{ startPos.x, startPos.y, 16, 24 })
 {
 	++m_InstanceCount;
 

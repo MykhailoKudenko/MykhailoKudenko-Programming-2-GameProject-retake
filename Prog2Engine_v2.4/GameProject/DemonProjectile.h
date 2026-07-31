@@ -5,7 +5,7 @@
 class DemonProjectile : public Projectile
 {
 public:
-	DemonProjectile(Vector2f pos, Vector2f Direction);
+	DemonProjectile(Vector2f pos, Vector2f direction);
 	~DemonProjectile() override;
 
 	void Draw() const override;
