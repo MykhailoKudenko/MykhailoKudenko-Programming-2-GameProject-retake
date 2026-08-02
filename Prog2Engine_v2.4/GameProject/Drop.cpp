@@ -10,7 +10,7 @@ Texture* Drop::m_pDollTexture{ nullptr };
 Texture* Drop::m_pMoneyBagTexture{ nullptr };
 int Drop::m_InstanceCount{ 0 };
 
-Drop::Drop(const Vector2f& pos, PickupType type)
+Drop::Drop(const Vector2f& pos, DropType type)
 	: m_Collider{ pos.x, pos.y, 10.f, 10.f }
 	, m_Type{ type }
 {
@@ -90,7 +90,7 @@ Rectf Drop::GetHitbox() const
 	return m_Collider;
 }
 
-PickupType Drop::GetType() const
+Drop::DropType Drop::GetType() const
 {
 	return m_Type;
 }
@@ -114,11 +114,11 @@ Texture* Drop::GetTexture() const
 {
 	switch (m_Type)
 	{
-	case PickupType::Lance: return m_pLanceTexture;
-	case PickupType::Knife: return m_pKnifeTexture;
-	case PickupType::Torch: return m_pTorchTexture;
-	case PickupType::Doll: return m_pDollTexture;
-	case PickupType::MoneyBag: return m_pMoneyBagTexture;
+	case DropType::Lance: return m_pLanceTexture;
+	case DropType::Knife: return m_pKnifeTexture;
+	case DropType::Torch: return m_pTorchTexture;
+	case DropType::Doll: return m_pDollTexture;
+	case DropType::MoneyBag: return m_pMoneyBagTexture;
 	default: return nullptr;
 	}
 }

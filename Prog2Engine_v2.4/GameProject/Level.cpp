@@ -23,13 +23,13 @@ namespace
 
 	
 
-	PickupType PickupTypeFromString(const std::string& s)
+	Drop::DropType PickupTypeFromString(const std::string& s)
 	{
-		if (s == "Lance") return PickupType::Lance;
-		if (s == "Knife") return PickupType::Knife;
-		if (s == "Torch") return PickupType::Torch;
-		if (s == "Doll") return PickupType::Doll;
-		if (s == "MoneyBag") return PickupType::MoneyBag;
+		if (s == "Lance") return  Drop::DropType::Lance;
+		if (s == "Knife") return  Drop::DropType::Knife;
+		if (s == "Torch") return  Drop::DropType::Torch;
+		if (s == "Doll") return  Drop::DropType::Doll;
+		if (s == "MoneyBag") return  Drop::DropType::MoneyBag;
 		throw std::runtime_error("wrong PickupType: ");
 	}
 }

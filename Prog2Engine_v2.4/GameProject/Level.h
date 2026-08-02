@@ -44,7 +44,7 @@ public:
 
 	struct DropSpawnPoint
 	{
-		PickupType type;
+		Drop::DropType type;
 		Vector2f position;
 		bool spawned{ false };
 	};

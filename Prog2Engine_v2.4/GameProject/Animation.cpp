@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "Animation.h"
-
+#include "TextureManager.h"
 
 
 Animation::Animation(const std::string& texturePath, int nrFrames, float frameSec, bool loop)
-	: m_Texture{ texturePath }
+	: m_Texture{ TextureManager::GetInstance().GetTexture(texturePath) }
 	, m_NrFrames{ nrFrames }
 	, m_CurrentFrame{ 0 }
 	, m_FrameSec{ frameSec }
@@ -46,15 +46,15 @@ void Animation::Update(float elapsedSec)
 	}
 }
 
-void Animation::Draw(const Rectf& destRect, bool isMirrored) const
+void Animation::Draw(const Rectf& destRect, bool isMirrored, bool stretchToFit) const
 {
 	if (m_NrFrames <= 0)
 	{
 		return;
 	}
 
-	const float frameWidth{ m_Texture.GetWidth() / m_NrFrames };
-	const float frameHeight{ m_Texture.GetHeight() };
+	const float frameWidth{ m_Texture->GetWidth() / m_NrFrames };
+	const float frameHeight{ m_Texture->GetHeight() };
 
 	const Rectf srcRect
 	{
@@ -64,25 +64,28 @@ void Animation::Draw(const Rectf& destRect, bool isMirrored) const
 		frameHeight
 	};
 
+	const float drawWidth{ stretchToFit ? destRect.width : frameWidth };
+	const float drawHeight{ stretchToFit ? destRect.height : frameHeight };
+
 	glPushMatrix();
 
 	glTranslatef(destRect.left, destRect.bottom, 0.f);
 
 	if (isMirrored)
 	{
-		glTranslatef(destRect.width, 0.f, 0.f);
+		glTranslatef(drawWidth, 0.f, 0.f);
 		glScalef(-1.f, 1.f, 1.f);
 	}
 
-	Rectf localDestRect
+	const Rectf localDestRect
 	{
 		0.f,
 		0.f,
-		destRect.width,
-		destRect.height
+		drawWidth,
+		drawHeight
 	};
 
-	m_Texture.Draw(localDestRect, srcRect);
+	m_Texture->Draw(localDestRect, srcRect);
 
 	glPopMatrix();
 }
@@ -104,8 +107,8 @@ void Animation::DrawFrame(const Rectf& destRect, int frame, bool isMirrored) con
 		frame = m_NrFrames - 1;
 	}
 
-	const float frameWidth{ m_Texture.GetWidth() / m_NrFrames };
-	const float frameHeight{ m_Texture.GetHeight() };
+	const float frameWidth{ m_Texture->GetWidth() / m_NrFrames };
+	const float frameHeight{ m_Texture->GetHeight() };
 
 	const Rectf srcRect
 	{
@@ -133,7 +136,7 @@ void Animation::DrawFrame(const Rectf& destRect, int frame, bool isMirrored) con
 		destRect.height
 	};
 
-	m_Texture.Draw(localDestRect, srcRect);
+	m_Texture->Draw(localDestRect, srcRect);
 
 	glPopMatrix();
 }
@@ -211,12 +214,12 @@ float Animation::GetFrameWidth() const
 		return 0.f;
 	}
 
-	return m_Texture.GetWidth() / m_NrFrames;
+	return m_Texture->GetWidth() / m_NrFrames;
 }
 
 float Animation::GetFrameHeight() const
 {
-	return m_Texture.GetHeight();
+	return m_Texture->GetHeight();
 }
 
 int Animation::GetFrameAtTime(float time) const

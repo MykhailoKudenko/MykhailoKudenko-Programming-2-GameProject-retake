@@ -155,17 +155,8 @@ void Demon::Fire(const Vector2f& playerPos)
 		playerPos.y - spawnPos.y
 	};
 
-	float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+	direction.Normalized();
 
-	if (length > 0.001f)
-	{
-		direction.x /= length;
-		direction.y /= length;
-	}
-	else
-	{
-		direction = Vector2f{ 1.f, 0.f };
-	}
 
 	m_pEntityManager->SpawnDemonProjectile(spawnPos, direction);
 }
@@ -262,21 +253,12 @@ bool Demon::MoveToThePoint(float elapsedSec, const Vector2f& targetPoint)
 		targetPoint.y - currentPos.y
 	};
 
-	float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+	direction.Normalized();
 
-	if (length <= 1.f)
-	{
-		m_Collider.left = targetPoint.x;
-		m_Collider.bottom = targetPoint.y;
-		return true;
-	}
-
-	direction.x /= length;
-	direction.y /= length;
 
 	float moveDistance = m_Speed * elapsedSec;
 
-	if (moveDistance >= length)
+	if (moveDistance >= direction.Length())
 	{
 		m_Collider.left = targetPoint.x;
 		m_Collider.bottom = targetPoint.y;

@@ -2,12 +2,12 @@
 #include "Zombie.h"
 #include "utils.h"
 
-Animation* Zombie::m_pWalkAnimation{ nullptr };
-Animation* Zombie::m_pSpawnAnimation{ nullptr };
-int Zombie::m_InstanceCount{ 0 };
+
 
 Zombie::Zombie(Vector2f startPos, bool facingRight)
-	: Enemy(Rectf{ startPos.x, startPos.y, 19, 27 })
+	: Enemy(Rectf{ startPos.x, startPos.y, 19, 27 }),
+	m_pWalkAnimation{ Animation("ZombieWalk.png", 2, 0.13f, true ) }, 
+	m_pSpawnAnimation{ Animation( "ZombieSpawn.png", 3, 0.39f, false ) }
 {
 	m_IsFacingRight = facingRight;
 	m_Speed = 30.f;
@@ -15,35 +15,9 @@ Zombie::Zombie(Vector2f startPos, bool facingRight)
 	{
 		m_Speed *= -1.f;
 	}
-
-	++m_InstanceCount;
-
-	if (m_pWalkAnimation == nullptr)
-	{
-		m_pWalkAnimation = new Animation("ZombieWalk.png", 2, 0.13f, true);
-	}
-
-	if (m_pSpawnAnimation == nullptr)
-	{
-		m_pSpawnAnimation = new Animation("ZombieSpawn.png", 3, 0.39f, false);
-	}
+	
 }
 
-Zombie::~Zombie()
-{
-	--m_InstanceCount;
-
-	if (m_InstanceCount <= 0)
-	{
-		delete m_pWalkAnimation;
-		m_pWalkAnimation = nullptr;
-
-		delete m_pSpawnAnimation;
-		m_pSpawnAnimation = nullptr;
-
-		m_InstanceCount = 0;
-	}
-}
 
 void Zombie::Update(float elapsedSec)
 {
@@ -51,24 +25,26 @@ void Zombie::Update(float elapsedSec)
 	{
 		return;
 	}
+	m_pSpawnAnimation.Update(elapsedSec);
 
-	m_AnimTime += elapsedSec;
+	m_pWalkAnimation.Update(elapsedSec);
 
-	if (m_State == ZombieState::Spawning)
+
+	switch (m_State)
 	{
-		if (m_pSpawnAnimation != nullptr && m_pSpawnAnimation->IsTimeFinished(m_AnimTime))
+	case ZombieState::Spawning:
+		m_pSpawnAnimation.Update(elapsedSec);
+		if (m_pSpawnAnimation.IsFinished())
 		{
 			m_State = ZombieState::Walking;
-			m_AnimTime = 0.f;
 		}
-		return;
+		break;
 	}
 
 
 	m_Velocity.x = m_Speed * elapsedSec;
 	m_Velocity.y = m_Gravity * elapsedSec;
 
-	// collisions right/left
 	utils::HitInfo myInfoTopSide{};
 	utils::HitInfo myInfoBottomSide{};
 
@@ -123,22 +99,17 @@ void Zombie::Update(float elapsedSec)
 
 void Zombie::Draw() const
 {
-	if (m_State == ZombieState::Spawning)
+	switch (m_State)
 	{
-		if (m_pSpawnAnimation != nullptr)
-		{
-			m_pSpawnAnimation->DrawAtTime(Rectf{ m_Collider.left, m_Collider.bottom, m_pSpawnAnimation->GetFrameWidth(), m_pSpawnAnimation->GetFrameHeight() }, m_AnimTime, m_IsFacingRight);
-		}
+	case ZombieState::Spawning:
+		m_pSpawnAnimation.Draw(m_Collider, m_IsFacingRight, false);
+		break;
+	case ZombieState::Walking:
+		m_pWalkAnimation.Draw(m_Collider, m_IsFacingRight);
+		break;
 	}
-	else if (m_State == ZombieState::Walking)
-	{
-		if (m_pWalkAnimation != nullptr)
-		{
-			m_pWalkAnimation->DrawAtTime(Rectf{ m_Collider.left, m_Collider.bottom, m_pWalkAnimation->GetFrameWidth(), m_pWalkAnimation->GetFrameHeight()}, m_AnimTime, m_IsFacingRight);
-		}
-	}
-
 }
+
 void Zombie::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
 {
 	m_pVertices = vertices;
@@ -147,12 +118,5 @@ void Zombie::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
 
 bool Zombie::IsSpawning() const
 {
-	if (m_State == ZombieState::Spawning)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return m_State == ZombieState::Spawning;
 }

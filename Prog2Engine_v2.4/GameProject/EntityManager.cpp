@@ -142,19 +142,19 @@ void EntityManager::Update(float elapsedSec)
             m_pSoundManager->PlayEffect(SoundManager::SFX::PickUp);
             switch (drop->GetType())
             {
-            case PickupType::Lance:
+            case Drop::DropType::Lance:
                 m_pPlayer->SetPlayerWeapon(Player::PlayerWeapon::Lance);
                 break;
-            case PickupType::Knife:
+            case Drop::DropType::Knife:
                 m_pPlayer->SetPlayerWeapon(Player::PlayerWeapon::Knife);
                 break;
-            case PickupType::Torch:
+            case Drop::DropType::Torch:
                 m_pPlayer->SetPlayerWeapon(Player::PlayerWeapon::Torch);
                 break;
-            case PickupType::Doll:
+            case Drop::DropType::Doll:
                 m_pPlayer->AddToPLayerScore(200);
                 break;
-            case PickupType::MoneyBag:
+            case Drop::DropType::MoneyBag:
                 m_pPlayer->AddToPLayerScore(500);
                 break;
             }
@@ -585,7 +585,7 @@ void EntityManager::SpawnDemonProjectile(const Vector2f& pos, const Vector2f& di
 
     m_pEnemyProjectiles.push_back(proj);
 }
-void EntityManager::AddDrop(const Vector2f& pos, PickupType type)
+void EntityManager::AddDrop(const Vector2f& pos, Drop::DropType type)
 {
     Drop* drop = new Drop(pos, type);
     if (m_pLevel != nullptr)
@@ -681,18 +681,18 @@ bool EntityManager::RollBagDrop() const
     return std::rand() % 10 == 0;
 }
 
-PickupType EntityManager::GetRandomBagDrop() const
+Drop::DropType EntityManager::GetRandomBagDrop() const
 {
     int randomIndex = std::rand() % 5;
 
     switch (randomIndex)
     {
-    case 0: return PickupType::Lance;
-    case 1: return PickupType::Knife;
-    case 2: return PickupType::Torch;
-    case 3: return PickupType::Doll;
-    case 4: return PickupType::MoneyBag;
-    default: return PickupType::Doll;
+    case 0: return  Drop::DropType::Lance;
+    case 1: return  Drop::DropType::Knife;
+    case 2: return  Drop::DropType::Torch;
+    case 3: return  Drop::DropType::Doll;
+    case 4: return  Drop::DropType::MoneyBag;
+    default: return  Drop::DropType::Doll;
     }
 }
 

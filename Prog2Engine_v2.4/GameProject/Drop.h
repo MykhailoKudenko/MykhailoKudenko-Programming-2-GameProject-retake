@@ -3,28 +3,30 @@
 #include "utils.h"
 #include "Texture.h"
 
-enum class PickupType
-{
-	Lance,
-	Knife,
-	Torch,
-	Doll,
-	MoneyBag
-};
-
 
 
 class Drop final
 {
 public:
-	Drop(const Vector2f& pos, PickupType type);
+
+	enum class DropType
+	{
+		Lance,
+		Knife,
+		Torch,
+		Doll,
+		MoneyBag
+	};
+
+
+	Drop(const Vector2f& pos, DropType type);
 	~Drop();
 
 	void Update(float elapsedSec);
 	void Draw() const;
 
 	Rectf GetHitbox() const;
-	PickupType GetType() const;
+	DropType GetType() const;
 	bool IsDead() const;
 	void Kill();
 
@@ -40,7 +42,7 @@ private:
 	const std::vector<std::vector<Vector2f>>* m_pVertices{ nullptr };
 
 	Rectf m_Collider;
-	PickupType m_Type;
+	DropType m_Type;
 	bool m_IsDead{ false };
 
 	// static textures

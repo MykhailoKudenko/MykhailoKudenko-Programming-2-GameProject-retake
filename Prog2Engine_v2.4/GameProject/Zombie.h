@@ -9,7 +9,6 @@ class Zombie final : public Enemy
 
 public:
 	Zombie(Vector2f startPos, bool facingRight);
-	~Zombie() override;
 
 	void Update(float elapsedSec) override;
 	void Draw() const override;
@@ -30,9 +29,7 @@ private:
 
 
 	ZombieState m_State{ ZombieState::Spawning };
-	float m_AnimTime{ 0.f };
 
-	static Animation* m_pWalkAnimation;
-	static Animation* m_pSpawnAnimation;
-	static int m_InstanceCount;
+	Animation m_pWalkAnimation;
+	Animation m_pSpawnAnimation;
 };

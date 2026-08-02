@@ -63,7 +63,7 @@ public:
     void SpawnDemonProjectile(const Vector2f& pos, const Vector2f& direction);
 
 
-    void AddDrop(const Vector2f& pos, PickupType type);
+    void AddDrop(const Vector2f& pos, Drop::DropType type);
 
     void SpawnPointEnemies();
     void SpawnPointDrops();
@@ -82,7 +82,7 @@ private:
     void DebugSpawnDraw() const;
 
     bool RollBagDrop() const;
-    PickupType GetRandomBagDrop() const;
+    Drop::DropType GetRandomBagDrop() const;
 
     Player* m_pPlayer{ nullptr };
     Level* m_pLevel{ nullptr };

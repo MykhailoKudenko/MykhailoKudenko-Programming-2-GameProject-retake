@@ -540,7 +540,6 @@ void Player::UpdateMovementVertical(
 			hitGround = true;
 		}
 	}
-	std::cout << hitGround << std::endl;
 	if (!hitGround || ySpeed > 0.f || m_Mystate == PlayerState::Climbing || m_Mystate == PlayerState::ClimbingStill)
 	{
 		m_Collider.bottom += ySpeed;

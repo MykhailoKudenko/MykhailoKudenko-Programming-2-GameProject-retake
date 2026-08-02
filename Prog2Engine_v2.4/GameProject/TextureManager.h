@@ -1,5 +1,6 @@
 #pragma once
 #include "Texture.h"
+#include "Animation.h"
 #include <vector>
 
 class TextureManager final
@@ -15,6 +16,7 @@ public:
 	TextureManager& operator=(TextureManager&&) = delete;
 
 	const Texture* GetTexture(const std::string& path);
+	const Texture* GetTextTexture(const std::string& text, const std::string& fontPath, int ptSize, const Color4f& textColor);
 
 private:
 
@@ -23,10 +25,12 @@ private:
 		std::string path;
 		Texture* pTexture;
 	};
-	
-	TextureManager() = default;
+
+	TextureManager();
 	~TextureManager();
 
 	std::vector<TextureEntry*> m_Textures;
+	std::vector<TextureEntry*> m_TextTextures;
+
 };
 

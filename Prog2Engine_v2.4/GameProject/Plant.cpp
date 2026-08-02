@@ -63,17 +63,7 @@ void Plant::Fire(const Vector2f& playerPos)
 		playerPos.y - spawnPos.y
 	};
 
-	float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-
-	if (length > 0.001f)
-	{
-		direction.x /= length;
-		direction.y /= length;
-	}
-	else
-	{
-		direction = Vector2f{ 1.f, 0.f };
-	}
+	direction.Normalized();
 
 	m_pEntityManager->SpawnPlantProjectile(spawnPos, direction);
 }

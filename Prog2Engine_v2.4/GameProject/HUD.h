@@ -5,10 +5,7 @@ class HUD final
 {
 public:
     HUD();
-    ~HUD();
     
-
-
     void Update(float elapsedSec);
     void Draw(int score, Player::PlayerWeapon weapon) const;
 
@@ -19,9 +16,11 @@ private:
 
     float m_TimeLeft{ 180.f };
 
-    static Texture* m_pLanceTexture;
-    static Texture* m_pKnifeTexture;
-    static Texture* m_pTorchTexture;
-    static int m_InstanceCount;
+    const Texture* m_pLanceTexture;
+    const Texture* m_pKnifeTexture;
+    const Texture* m_pTorchTexture;
+
+    const Texture* m_pVpLabel;
+    const Texture* m_pTimeLabel;
 
 };
