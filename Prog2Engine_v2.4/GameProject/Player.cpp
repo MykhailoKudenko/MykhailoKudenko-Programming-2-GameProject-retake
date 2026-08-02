@@ -142,6 +142,7 @@ void Player::Update(float elapsedSec,const std::vector<std::vector<Vector2f>>& v
 	UpdateTimers(elapsedSec);
 
 	//movemnt control + states reset
+
 	UpdateMovementVertical(vertices, playerOnlyVertices, platfroms, elapsedSec);
 	UpdateMovementHorizontal(vertices, playerOnlyVertices, elapsedSec);
 	
@@ -463,7 +464,7 @@ void Player::UpdateMovementHorizontal(
 
 	if (xSpeed > 0.f)
 	{
-		Rectf insetCollider{ m_Collider.left, m_Collider.bottom + 1.f, m_Collider.width, m_Collider.height - 2.f };
+		Rectf insetCollider{ m_Collider.left+1, m_Collider.bottom + 1.f, m_Collider.width, m_Collider.height - 1.f };
 
 		bool hitWorld = utils::CheckSideCollision(vertices, insetCollider, utils::Side::right, xSpeed);
 		bool hitPlayer = utils::CheckSideCollision(playerOnlyVertices, insetCollider, utils::Side::right, xSpeed);
@@ -472,7 +473,7 @@ void Player::UpdateMovementHorizontal(
 	}
 	else if (xSpeed < 0.f)
 	{
-		Rectf insetCollider{ m_Collider.left, m_Collider.bottom + 1.f, m_Collider.width, m_Collider.height - 2.f };
+		Rectf insetCollider{ m_Collider.left-1, m_Collider.bottom + 1.f, m_Collider.width, m_Collider.height - 1.f };
 
 		bool hitWorld = utils::CheckSideCollision(vertices, insetCollider, utils::Side::left, -xSpeed);
 		bool hitPlayer = utils::CheckSideCollision(playerOnlyVertices, insetCollider, utils::Side::left, -xSpeed);
