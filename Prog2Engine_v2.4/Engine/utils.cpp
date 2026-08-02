@@ -707,7 +707,74 @@ bool utils::LoopOverVertices(const std::vector<std::vector<Vector2f>>& vertices,
 	return(didHit);
 }
 
-
+bool utils::CheckSideCollision(const std::vector<std::vector<Vector2f>>& vertices, const Rectf& collider, Side side, float sweepDistance, HitInfo* outHitInfo)
+{
+	const float left{ collider.left };
+	const float right{ collider.left + collider.width };
+	const float bottom{ collider.bottom };
+	const float top{ collider.bottom + collider.height };
+	Vector2f ray1Start{}, ray1End{};
+	Vector2f ray2Start{}, ray2End{};
+	switch (side)
+	{
+	case Side::bottom:
+		ray1Start = Vector2f{ left,  top };    ray1End = Vector2f{ left,  bottom - sweepDistance };
+		ray2Start = Vector2f{ right, top };    ray2End = Vector2f{ right, bottom - sweepDistance };
+		break;
+	case Side::top:
+		ray1Start = Vector2f{ left,  bottom }; ray1End = Vector2f{ left,  top + sweepDistance };
+		ray2Start = Vector2f{ right, bottom }; ray2End = Vector2f{ right, top + sweepDistance };
+		break;
+	case Side::left:
+		ray1Start = Vector2f{ right, top };    ray1End = Vector2f{ left - sweepDistance,  top };
+		ray2Start = Vector2f{ right, bottom }; ray2End = Vector2f{ left - sweepDistance,  bottom };
+		break;
+	case Side::right:
+		ray1Start = Vector2f{ left, top };     ray1End = Vector2f{ right + sweepDistance, top };
+		ray2Start = Vector2f{ left, bottom };  ray2End = Vector2f{ right + sweepDistance, bottom };
+		break;
+	}
+	utils::HitInfo info1{};
+	utils::HitInfo info2{};
+	bool hit1 = utils::LoopOverVertices(vertices, ray1Start, ray1End, info1);
+	bool hit2 = utils::LoopOverVertices(vertices, ray2Start, ray2End, info2);
+	
+	if (!(hit1 || hit2))
+	{
+		return false;
+	}
+	if (outHitInfo != nullptr)
+	{
+		if (hit1 && hit2)
+		{
+			switch (side)
+			{
+			case Side::bottom:
+				if (info1.intersectPoint.y > info2.intersectPoint.y) { *outHitInfo = info1; }
+				else { *outHitInfo = info2; }
+				break;
+			case Side::top:
+				if (info1.intersectPoint.y < info2.intersectPoint.y) { *outHitInfo = info1; }
+				else { *outHitInfo = info2; }
+				break;
+			case Side::left:
+				if (info1.intersectPoint.x > info2.intersectPoint.x) { *outHitInfo = info1; }
+				else { *outHitInfo = info2; }
+				break;
+			case Side::right:
+				if (info1.intersectPoint.x < info2.intersectPoint.x) { *outHitInfo = info1; }
+				else { *outHitInfo = info2; }
+				break;
+			}
+		}
+		else
+		{
+			if (hit1) { *outHitInfo = info1; }
+			else { *outHitInfo = info2; }
+		}
+	}
+	return true;
+}
 
 #pragma endregion CollisionFunctionality
 

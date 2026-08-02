@@ -463,69 +463,21 @@ void Player::UpdateMovementHorizontal(
 
 	if (xSpeed > 0.f)
 	{
-		utils::HitInfo worldTopHit{};
-		utils::HitInfo worldBottomHit{};
-		utils::HitInfo playerTopHit{};
-		utils::HitInfo playerBottomHit{};
+		Rectf insetCollider{ m_Collider.left, m_Collider.bottom + 1.f, m_Collider.width, m_Collider.height - 2.f };
 
-		bool hitWorldTop = utils::LoopOverVertices(
-			vertices,
-			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height - 1.f },
-			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
-			worldTopHit);
+		bool hitWorld = utils::CheckSideCollision(vertices, insetCollider, utils::Side::right, xSpeed);
+		bool hitPlayer = utils::CheckSideCollision(playerOnlyVertices, insetCollider, utils::Side::right, xSpeed);
 
-		bool hitWorldBottom = utils::LoopOverVertices(
-			vertices,
-			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1.f },
-			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + 1.f },
-			worldBottomHit);
-
-		bool hitPlayerTop = utils::LoopOverVertices(
-			playerOnlyVertices,
-			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height - 1.f },
-			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
-			playerTopHit);
-
-		bool hitPlayerBottom = utils::LoopOverVertices(
-			playerOnlyVertices,
-			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1.f },
-			Vector2f{ m_Collider.left + m_Collider.width + xSpeed, m_Collider.bottom + 1.f },
-			playerBottomHit);
-
-		hitWallOnX = hitWorldTop || hitWorldBottom || hitPlayerTop || hitPlayerBottom;
+		hitWallOnX = hitWorld || hitPlayer;
 	}
 	else if (xSpeed < 0.f)
 	{
-		utils::HitInfo worldTopHit{};
-		utils::HitInfo worldBottomHit{};
-		utils::HitInfo playerTopHit{};
-		utils::HitInfo playerBottomHit{};
+		Rectf insetCollider{ m_Collider.left, m_Collider.bottom + 1.f, m_Collider.width, m_Collider.height - 2.f };
 
-		bool hitWorldTop = utils::LoopOverVertices(
-			vertices,
-			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height - 1.f },
-			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
-			worldTopHit);
+		bool hitWorld = utils::CheckSideCollision(vertices, insetCollider, utils::Side::left, -xSpeed);
+		bool hitPlayer = utils::CheckSideCollision(playerOnlyVertices, insetCollider, utils::Side::left, -xSpeed);
 
-		bool hitWorldBottom = utils::LoopOverVertices(
-			vertices,
-			Vector2f{ m_Collider.left, m_Collider.bottom + 1.f },
-			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + 1.f },
-			worldBottomHit);
-
-		bool hitPlayerTop = utils::LoopOverVertices(
-			playerOnlyVertices,
-			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height - 1.f },
-			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + m_Collider.height - 1.f },
-			playerTopHit);
-
-		bool hitPlayerBottom = utils::LoopOverVertices(
-			playerOnlyVertices,
-			Vector2f{ m_Collider.left, m_Collider.bottom + 1.f },
-			Vector2f{ m_Collider.left + xSpeed, m_Collider.bottom + 1.f },
-			playerBottomHit);
-
-		hitWallOnX = hitWorldTop || hitWorldBottom || hitPlayerTop || hitPlayerBottom;
+		hitWallOnX = hitWorld || hitPlayer;
 	}
 
 	if (!hitWallOnX)
@@ -572,46 +524,23 @@ void Player::UpdateMovementVertical(
 		ySpeed = m_Gravity * elapsedSec;
 	}
 
-	utils::HitInfo worldLeftHit{};
-	utils::HitInfo worldRightHit{};
-	utils::HitInfo playerLeftHit{};
-	utils::HitInfo playerRightHit{};
-	utils::HitInfo platformLeftHit{};
-	utils::HitInfo platformRightHit{};
+	
+	Rectf insetCollider{ m_Collider.left + 1.f, m_Collider.bottom, m_Collider.width - 2.f, m_Collider.height };
 
-	bool hitWorldLeft{ false };
-	bool hitWorldRight{ false };
-	bool hitPlayerLeft{ false };
-	bool hitPlayerRight{ false };
-	bool hitPlatformLeft{ false };
-	bool hitPlatformRight{ false };
+	bool hitGround = false;
+	utils::HitInfo BottomHitInfo{};
 
 	if (ySpeed <= 0.f)
 	{
-		Vector2f leftRayStart{ m_Collider.left + 1.f, m_Collider.bottom + m_Collider.height };
-		Vector2f leftRayEnd{ m_Collider.left + 1.f, m_Collider.bottom + ySpeed };
-
-		Vector2f rightRayStart{ m_Collider.left + m_Collider.width - 1.f, m_Collider.bottom + m_Collider.height };
-		Vector2f rightRayEnd{ m_Collider.left + m_Collider.width - 1.f, m_Collider.bottom + ySpeed };
-
-		hitWorldLeft = utils::LoopOverVertices(vertices, leftRayStart, leftRayEnd, worldLeftHit);
-		hitWorldRight = utils::LoopOverVertices(vertices, rightRayStart, rightRayEnd, worldRightHit);
-
-		hitPlayerLeft = utils::LoopOverVertices(playerOnlyVertices, leftRayStart, leftRayEnd, playerLeftHit);
-		hitPlayerRight = utils::LoopOverVertices(playerOnlyVertices, rightRayStart, rightRayEnd, playerRightHit);
-
-		if (!(hitWorldLeft || hitWorldRight || hitPlayerLeft || hitPlayerRight))
+		float sweepDist{ -ySpeed };
+		if (utils::CheckSideCollision(vertices, insetCollider, utils::Side::bottom, sweepDist, &BottomHitInfo) ||
+			utils::CheckSideCollision(playerOnlyVertices, insetCollider, utils::Side::bottom, sweepDist, &BottomHitInfo) ||
+			utils::CheckSideCollision(platforms, insetCollider, utils::Side::bottom, sweepDist, &BottomHitInfo))
 		{
-			hitPlatformLeft = utils::LoopOverVertices(platforms, leftRayStart, leftRayEnd, platformLeftHit);
-			hitPlatformRight = utils::LoopOverVertices(platforms, rightRayStart, rightRayEnd, platformRightHit);
+			hitGround = true;
 		}
 	}
-
-	bool hitGround =
-		hitWorldLeft || hitWorldRight ||
-		hitPlayerLeft || hitPlayerRight ||
-		hitPlatformLeft || hitPlatformRight;
-
+	std::cout << hitGround << std::endl;
 	if (!hitGround || ySpeed > 0.f || m_Mystate == PlayerState::Climbing || m_Mystate == PlayerState::ClimbingStill)
 	{
 		m_Collider.bottom += ySpeed;
@@ -619,15 +548,7 @@ void Player::UpdateMovementVertical(
 	}
 	else
 	{
-		float groundY = -100000.f;
-
-		if (hitWorldLeft)    groundY = std::max(groundY, worldLeftHit.intersectPoint.y);
-		if (hitWorldRight)   groundY = std::max(groundY, worldRightHit.intersectPoint.y);
-		if (hitPlayerLeft)   groundY = std::max(groundY, playerLeftHit.intersectPoint.y);
-		if (hitPlayerRight)  groundY = std::max(groundY, playerRightHit.intersectPoint.y);
-		if (hitPlatformLeft) groundY = std::max(groundY, platformLeftHit.intersectPoint.y);
-		if (hitPlatformRight)groundY = std::max(groundY, platformRightHit.intersectPoint.y);
-
+		
 		if (m_Mystate == PlayerState::Jumping)
 		{
 			m_Mystate = PlayerState::Standing;
@@ -640,8 +561,7 @@ void Player::UpdateMovementVertical(
 		{
 			m_Mystate = PlayerState::Dead;
 		}
-
-		m_Collider.bottom = groundY;
+		m_Collider.bottom = BottomHitInfo.intersectPoint.y;
 		m_IsOnTheGround = true;
 	}
 

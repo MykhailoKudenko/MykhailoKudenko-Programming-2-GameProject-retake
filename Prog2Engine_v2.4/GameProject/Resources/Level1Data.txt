@@ -1,0 +1,128 @@
+# Level1.txt
+texture Level1.png
+platformTexture Platform.png
+svg Level1.svg
+
+# --- player only vertices (polygons) ---
+polygon
+46 49
+46 64
+61 64
+61 49
+endpolygon
+
+polygon
+238 49
+238 64
+253 64
+253 49
+endpolygon
+
+polygon
+414 49
+414 64
+429 64
+429 49
+endpolygon
+
+polygon
+526 49
+526 64
+541 64
+541 49
+endpolygon
+
+polygon
+750 49
+750 64
+765 64
+765 49
+endpolygon
+
+polygon
+958 49
+958 64
+973 64
+973 49
+endpolygon
+
+polygon
+1102 49
+1102 64
+1117 64
+1117 49
+endpolygon
+
+polygon
+1262 49
+1262 64
+1277 64
+1277 49
+endpolygon
+
+polygon
+1518 49
+1518 64
+1533 64
+1533 49
+endpolygon
+
+polygon
+766 127
+766 142
+781 142
+781 127
+endpolygon
+
+polygon
+862 127
+862 142
+877 142
+877 127
+endpolygon
+
+polygon
+958 127
+958 142
+973 142
+973 127
+endpolygon
+
+# --- ladders (left bottom width height) ---
+ladder 719 50 16 80
+ladder 911 50 16 80
+ladder 1066 50 16 80
+
+# --- moving platforms (left bottom width height speedX minX maxX) ---
+platform 1664 24 32 13 20 1664 1789
+
+# --- enemy spawn points (type x y) ---
+enemy Plant 798 128
+enemy Plant 1102 128
+enemy Plant 2351 49
+enemy Plant 2777 49
+enemy Bird 752 64
+enemy Bird 1103 64
+enemy Bird 1268 62
+enemy Bird 1520 64
+enemy Demon 1500 49
+enemy FlyingKnight 2050 81
+enemy FlyingKnight 2080 111
+enemy FlyingKnight 2110 81
+enemy FlyingKnight 2200 81
+enemy FlyingKnight 2230 111
+enemy FlyingKnight 2260 81
+enemy Troll 3424 49
+
+# --- enemy spawn areas (type left bottom width height groundFlag timerMax) ---
+spawnarea Zombie 0 49 1200 150 1 2.0
+spawnarea Ghost 2670 54 300 80 0 4.0
+
+# --- drop spawn points (type x y) ---
+drop MoneyBag 304 49
+drop MoneyBag 609 49
+drop MoneyBag 921 128
+drop MoneyBag 1466 49
+drop MoneyBag 2382 49
+drop MoneyBag 2436 49
+drop MoneyBag 2940 49

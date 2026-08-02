@@ -76,19 +76,10 @@ void Zombie::Update(float elapsedSec)
 
 	if (m_Velocity.x > 0)
 	{
-		bool hitTopSide = utils::LoopOverVertices(
-			*m_pVertices,
-			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
-			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom + m_Collider.height },
-			myInfoTopSide);
 
-		bool hitBottomSide = utils::LoopOverVertices(
-			*m_pVertices,
-			Vector2f{ m_Collider.left, m_Collider.bottom + 1 },
-			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom + 1 },
-			myInfoBottomSide);
+		hitWallOnX = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::right, m_Velocity.x);
 
-		hitWallOnX = hitTopSide || hitBottomSide;
+
 
 		if (!hitWallOnX)
 		{
@@ -98,36 +89,12 @@ void Zombie::Update(float elapsedSec)
 		{
 			m_Speed *= -1;
 			m_IsFacingRight = (m_Speed > 0);
-
-			if (hitTopSide && hitBottomSide)
-			{
-				m_Collider.left = std::min(myInfoTopSide.intersectPoint.x, myInfoBottomSide.intersectPoint.x) - m_Collider.width;
-			}
-			else if (hitTopSide)
-			{
-				m_Collider.left = myInfoTopSide.intersectPoint.x - m_Collider.width;
-			}
-			else
-			{
-				m_Collider.left = myInfoBottomSide.intersectPoint.x - m_Collider.width;
-			}
 		}
 	}
 	else if (m_Velocity.x < 0)
 	{
-		bool hitTopSide = utils::LoopOverVertices(
-			*m_pVertices,
-			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
-			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom + m_Collider.height },
-			myInfoTopSide);
+		bool hitWallOnX = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::left, -m_Velocity.x);
 
-		bool hitBottomSide = utils::LoopOverVertices(
-			*m_pVertices,
-			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1 },
-			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom + 1 },
-			myInfoBottomSide);
-
-		hitWallOnX = hitTopSide || hitBottomSide;
 
 		if (!hitWallOnX)
 		{
@@ -138,66 +105,17 @@ void Zombie::Update(float elapsedSec)
 			m_Speed *= -1;
 			m_IsFacingRight = (m_Speed > 0);
 
-			if (hitTopSide && hitBottomSide)
-			{
-				m_Collider.left = std::max(myInfoTopSide.intersectPoint.x, myInfoBottomSide.intersectPoint.x);
-			}
-			else if (hitTopSide)
-			{
-				m_Collider.left = myInfoTopSide.intersectPoint.x;
-			}
-			else
-			{
-				m_Collider.left = myInfoBottomSide.intersectPoint.x;
-			}
 		}
 	}
-	// collisions gravity
-	utils::HitInfo myInfoLeft{};
-	utils::HitInfo myInfoRight{};
-
-	bool hitLeft = utils::LoopOverVertices(
-		*m_pVertices,
-		Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
-		Vector2f{ m_Collider.left, m_Collider.bottom - 1.f },
-		myInfoLeft);
-
-	bool hitRight = utils::LoopOverVertices(
-		*m_pVertices,
-		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
-		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom - 1.f },
-		myInfoRight);
-
-	if (!(hitLeft || hitRight))
+	utils::HitInfo gravityHit{};
+	if (!utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom, 2.f, &gravityHit))
 	{
 		m_Collider.bottom += m_Velocity.y;
 	}
 	else
 	{
-		bool validLeftHit = hitLeft && myInfoLeft.intersectPoint.y <= m_Collider.bottom - 1.f + 2.f;
-		bool validRightHit = hitRight && myInfoRight.intersectPoint.y <= m_Collider.bottom - 1.f + 2.f;
-
-		if (!(validLeftHit || validRightHit))
-		{
-			m_Collider.bottom += m_Velocity.y;
-		}
-		else
-		{
-			m_Velocity.y = 0;
-
-			if (validLeftHit && validRightHit)
-			{
-				m_Collider.bottom = std::max(myInfoLeft.intersectPoint.y, myInfoRight.intersectPoint.y);
-			}
-			else if (validLeftHit)
-			{
-				m_Collider.bottom = myInfoLeft.intersectPoint.y;
-			}
-			else
-			{
-				m_Collider.bottom = myInfoRight.intersectPoint.y;
-			}
-		}
+		m_Velocity.y = 0;
+		m_Collider.bottom = gravityHit.intersectPoint.y;
 	}
 }
 

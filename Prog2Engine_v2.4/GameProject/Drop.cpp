@@ -65,7 +65,7 @@ Drop::~Drop()
 
 void Drop::Update(float elapsedSec)
 {
-	if (m_Mystate == State::Falling && !CheckBottomCollision())
+	if (m_Mystate == State::Falling && !utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom))
 	{
 		m_Collider.bottom += m_Gravity * elapsedSec;
 	}
@@ -108,43 +108,6 @@ void Drop::Kill()
 void Drop::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
 {
 	m_pVertices = vertices;
-}
-
-bool Drop::CheckBottomCollision() const
-{
-	utils::HitInfo myInfoLeft{};
-	utils::HitInfo myInfoRight{};
-
-	bool hitLeft = utils::LoopOverVertices(
-		*m_pVertices,
-		Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
-		Vector2f{ m_Collider.left, m_Collider.bottom - 1.f },
-		myInfoLeft);
-
-	bool hitRight = utils::LoopOverVertices(
-		*m_pVertices,
-		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
-		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom - 1.f },
-		myInfoRight);
-
-	if (!(hitLeft || hitRight))
-	{
-		return false;
-	}
-	else
-	{
-		bool validLeftHit = hitLeft && myInfoLeft.intersectPoint.y <= m_Collider.bottom - 1.f + 2.f;
-		bool validRightHit = hitRight && myInfoRight.intersectPoint.y <= m_Collider.bottom - 1.f + 2.f;
-
-		if (!(validLeftHit || validRightHit))
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
 }
 
 Texture* Drop::GetTexture() const

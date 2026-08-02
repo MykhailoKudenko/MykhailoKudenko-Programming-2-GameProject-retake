@@ -12,11 +12,7 @@ enum class PickupType
 	MoneyBag
 };
 
-enum class State
-{
-	Falling,
-	NotFalling
-};
+
 
 class Drop final
 {
@@ -35,7 +31,11 @@ public:
 	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
 
 private:
-	bool CheckBottomCollision() const;
+	enum class State
+	{
+		Falling,
+		NotFalling
+	};
 
 	const std::vector<std::vector<Vector2f>>* m_pVertices{ nullptr };
 

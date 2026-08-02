@@ -49,33 +49,7 @@ public:
 		bool spawned{ false };
 	};
 
-	Level(
-		std::vector<std::vector<Vector2f>> vertices,
-		std::vector<std::vector<Vector2f>> playerOnlyVertices,
-		std::vector<Rectf> ladders,
-		std::vector<MovingPlatform> platforms,
-		std::vector<EnemySpawnPoint> enemySpawnPoints,
-		std::vector<EnemySpawnArea> enemySpawnAreas,
-		std::vector<DropSpawnPoint> dropSpawnPoints,
-		const std::string& platformTexturePath,
-		const std::string& levelTexturePath);
-
-	Level(const std::string& svgPath,
-		std::vector<std::vector<Vector2f>> playerOnlyVertices,
-		std::vector<Rectf> ladders,
-		std::vector<MovingPlatform> platforms,
-		std::vector<EnemySpawnPoint> enemySpawnPoints,
-		std::vector<EnemySpawnArea> enemySpawnAreas,
-		std::vector<DropSpawnPoint> dropSpawnPoints,
-		const std::string& platformTexturePath,
-		const std::string& levelTexturePath);
-
-	//rule of 5
-	~Level() = default;
-	Level(const Level&) = delete;
-	Level& operator=(const Level&) = delete;
-	Level(Level&&) = delete;
-	Level& operator=(Level&&) = delete;
+	Level(const std::string& txtPath);
 
 	const std::vector<std::vector<Vector2f>>& GetVertices() const;
 	const std::vector<std::vector<Vector2f>>& GetPlatformTopEdges() const;
@@ -110,7 +84,7 @@ private:
 
 	std::vector<DropSpawnPoint> m_DropSpawnPoints;
 
-	Texture m_Texture;
-	Texture m_PlatformTexture;
+	const Texture* m_Texture;
+	const Texture* m_PlatformTexture;
 	const float m_PlatfromSpeedX{ 20 };
 };

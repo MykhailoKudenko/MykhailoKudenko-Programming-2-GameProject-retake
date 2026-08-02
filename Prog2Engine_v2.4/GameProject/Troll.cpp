@@ -281,26 +281,12 @@ bool Troll::UpdateShooting(float elapsedSec, const Vector2f& playerPos)
 
 void Troll::ApplyHorisontalMovement(float elapsedSec)
 {
-	utils::HitInfo myInfoTopSide{};
-	utils::HitInfo myInfoBottomSide{};
-
+	utils::HitInfo hitInfo{};
 	bool hitWallOnX = false;
 
 	if (m_Velocity.x > 0)
 	{
-		bool hitTopSide = utils::LoopOverVertices(
-			*m_pVertices,
-			Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
-			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom + m_Collider.height },
-			myInfoTopSide);
-
-		bool hitBottomSide = utils::LoopOverVertices(
-			*m_pVertices,
-			Vector2f{ m_Collider.left, m_Collider.bottom + 1 },
-			Vector2f{ m_Collider.left + m_Collider.width + m_Velocity.x, m_Collider.bottom + 1 },
-			myInfoBottomSide);
-
-		hitWallOnX = hitTopSide || hitBottomSide;
+		hitWallOnX = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::right, m_Velocity.x, &hitInfo);
 
 		if (!hitWallOnX)
 		{
@@ -308,36 +294,12 @@ void Troll::ApplyHorisontalMovement(float elapsedSec)
 		}
 		else
 		{
-			
-			if (hitTopSide && hitBottomSide)
-			{
-				m_Collider.left = std::min(myInfoTopSide.intersectPoint.x, myInfoBottomSide.intersectPoint.x) - m_Collider.width;
-			}
-			else if (hitTopSide)
-			{
-				m_Collider.left = myInfoTopSide.intersectPoint.x - m_Collider.width;
-			}
-			else
-			{
-				m_Collider.left = myInfoBottomSide.intersectPoint.x - m_Collider.width;
-			}
+			m_Collider.left = hitInfo.intersectPoint.x - m_Collider.width;
 		}
 	}
 	else if (m_Velocity.x < 0)
 	{
-		bool hitTopSide = utils::LoopOverVertices(
-			*m_pVertices,
-			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
-			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom + m_Collider.height },
-			myInfoTopSide);
-
-		bool hitBottomSide = utils::LoopOverVertices(
-			*m_pVertices,
-			Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + 1 },
-			Vector2f{ m_Collider.left + m_Velocity.x, m_Collider.bottom + 1 },
-			myInfoBottomSide);
-
-		hitWallOnX = hitTopSide || hitBottomSide;
+		hitWallOnX = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::left, -m_Velocity.x, &hitInfo);
 
 		if (!hitWallOnX)
 		{
@@ -345,18 +307,7 @@ void Troll::ApplyHorisontalMovement(float elapsedSec)
 		}
 		else
 		{
-			if (hitTopSide && hitBottomSide)
-			{
-				m_Collider.left = std::max(myInfoTopSide.intersectPoint.x, myInfoBottomSide.intersectPoint.x);
-			}
-			else if (hitTopSide)
-			{
-				m_Collider.left = myInfoTopSide.intersectPoint.x;
-			}
-			else
-			{
-				m_Collider.left = myInfoBottomSide.intersectPoint.x;
-			}
+			m_Collider.left = hitInfo.intersectPoint.x;
 		}
 	}
 }
@@ -370,48 +321,25 @@ void Troll::ApplyGravity(float elapsedSec)
 
 	m_Velocity.y += m_Gravity * elapsedSec;
 
-	utils::HitInfo hitInfoLeft{};
-	utils::HitInfo hitInfoRight{};
-
-	bool hitLeft = utils::LoopOverVertices(
-		*m_pVertices,
-		Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
-		Vector2f{ m_Collider.left, m_Collider.bottom + m_Velocity.y * elapsedSec },
-		hitInfoLeft);
-
-	bool hitRight = utils::LoopOverVertices(
-		*m_pVertices,
-		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
-		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Velocity.y * elapsedSec },
-		hitInfoRight);
-
-	if (!(hitLeft || hitRight))
+	if (m_Velocity.y <= 0.f)
 	{
-		m_Collider.bottom += m_Velocity.y * elapsedSec;
-	}
-	else
-	{
-		if (m_Velocity.y <= 0.f)
-		{
-			if (hitLeft && hitRight)
-			{
-				m_Collider.bottom = std::max(hitInfoLeft.intersectPoint.y, hitInfoRight.intersectPoint.y);
-			}
-			else if (hitLeft)
-			{
-				m_Collider.bottom = hitInfoLeft.intersectPoint.y;
-			}
-			else
-			{
-				m_Collider.bottom = hitInfoRight.intersectPoint.y;
-			}
+		float sweepDist{ -(m_Velocity.y * elapsedSec) };
+		utils::HitInfo hitInfo{};
+		bool hitGround = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom, sweepDist, &hitInfo);
 
-			m_Velocity.y = 0.f;
-		}
-		else
+		if (!hitGround)
 		{
 			m_Collider.bottom += m_Velocity.y * elapsedSec;
 		}
+		else
+		{
+			m_Collider.bottom = hitInfo.intersectPoint.y;
+			m_Velocity.y = 0.f;
+		}
+	}
+	else
+	{
+		m_Collider.bottom += m_Velocity.y * elapsedSec;
 	}
 }
 

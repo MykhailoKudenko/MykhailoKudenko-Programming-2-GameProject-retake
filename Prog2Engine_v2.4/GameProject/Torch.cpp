@@ -95,7 +95,7 @@ void Torch::Update(float elapsedSec)
 		break;
 
 	case TorchStates::FlyingDown:
-		if (CheckBottomCollision() == false)
+		if (utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom) == false)
 		{
 			m_Collider.left += m_Speed.x * elapsedSec;
 			m_Collider.bottom -= m_Speed.y * elapsedSec;
@@ -124,44 +124,6 @@ void Torch::Kill()
 	if (m_MyState != TorchStates::Burning)
 	{
 		m_IsDead = true;
-	}
-}
-
-
-bool Torch::CheckBottomCollision() const
-{
-	utils::HitInfo myInfoLeft{};
-	utils::HitInfo myInfoRight{};
-
-	bool hitLeft = utils::LoopOverVertices(
-		*m_pVertices,
-		Vector2f{ m_Collider.left, m_Collider.bottom + m_Collider.height },
-		Vector2f{ m_Collider.left, m_Collider.bottom - 1.f },
-		myInfoLeft);
-
-	bool hitRight = utils::LoopOverVertices(
-		*m_pVertices,
-		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom + m_Collider.height },
-		Vector2f{ m_Collider.left + m_Collider.width, m_Collider.bottom - 1.f },
-		myInfoRight);
-
-	if (!(hitLeft || hitRight))
-	{
-		return false;
-	}
-	else
-	{
-		bool validLeftHit = hitLeft && myInfoLeft.intersectPoint.y <= m_Collider.bottom - 1.f + 2.f;
-		bool validRightHit = hitRight && myInfoRight.intersectPoint.y <= m_Collider.bottom - 1.f + 2.f;
-
-		if (!(validLeftHit || validRightHit))
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
 	}
 }
 
