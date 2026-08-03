@@ -12,7 +12,6 @@ public:
     };
 
     Effect(const Vector2f& pos, EffectType type, bool isMirrored = false);
-    ~Effect();
 
     void Update(float elapsedSec);
     void Draw() const;
@@ -21,12 +20,8 @@ public:
 private:
     Vector2f m_Position;
     EffectType m_Type;
-    float m_AnimTime{ 0.f };
     bool m_IsMirrored{ false };
 
-    static Animation* m_pBloodAnimation;
-    static Animation* m_pFireAnimation;
-    static Animation* m_pBlinkAnimation;
-    static int m_InstanceCount;
+    Animation* m_pMyAnimation;
 
 };

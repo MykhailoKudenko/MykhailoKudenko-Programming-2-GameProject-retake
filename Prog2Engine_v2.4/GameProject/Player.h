@@ -128,21 +128,21 @@ private:
 	Animation m_ThrowArmour;
 	Animation m_DuckThrowArmour;
 
-	Texture m_JumpingArmour;
-	Texture m_DuckArmour;
+	const Texture* m_JumpingArmour;
+	const Texture* m_DuckArmour;
 
 	Animation m_WalkingNaked;
 	Animation m_ClimbingNaked;
 	Animation m_ThrowNaked;
 	Animation m_DuckThrowNaked;
 
-	Texture m_JumpingNaked;
-	Texture m_DuckNaked;
+	const Texture* m_JumpingNaked;
+	const Texture* m_DuckNaked;
 
-	Texture m_Hit;
+	const Texture* m_Hit;
 
-	Texture m_DeathKnockBack;
-	Texture m_Death;
+	const Texture* m_DeathKnockBack;
+	const Texture* m_Death;
 
 	//State machine
 	bool m_IsWearingArmour = true;

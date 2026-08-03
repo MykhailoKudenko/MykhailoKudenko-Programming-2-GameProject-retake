@@ -2,13 +2,10 @@
 #include "FlyingKnight.h"
 #include "utils.h"
 #include <cmath>
-
-Texture* FlyingKnight::m_pTexture{ nullptr };
-int FlyingKnight::m_InstanceCount{ 0 };
+#include "TextureManager.h"
 
 FlyingKnight::FlyingKnight(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 15.f, 24.f })
-	, m_State{ FlyingKnightState::Spawning }
 	, m_StartY{ startPos.y }
 {
 
@@ -21,49 +18,18 @@ FlyingKnight::FlyingKnight(Vector2f startPos, bool facingRight)
 		m_Speed *= -1.f;
 	}
 
-	++m_InstanceCount;
-	if (m_pTexture == nullptr)
-	{
-		m_pTexture = new Texture("FlyingKnight.png");
-	}
-
+	m_pTexture = TextureManager::GetInstance().GetTexture("FlyingKnight.png");
 	m_EffectType = Effect::EffectType::Fire;
-}
-FlyingKnight::~FlyingKnight()
-{
-	--m_InstanceCount;
-
-	if (m_InstanceCount <= 0)
-	{
-		delete m_pTexture;
-		m_pTexture = nullptr;
-
-		m_InstanceCount = 0;
-	}
 }
 
 void FlyingKnight::Update(float elapsedSec)
 {
-	m_StateTime += elapsedSec;
+	
+	m_FlyTime += elapsedSec;
 
-	if (m_State == FlyingKnightState::Spawning)
-	{
-		if (m_StateTime >= m_SpawnDuration)
-		{
-			m_State = FlyingKnightState::Flying;
-			m_StateTime = 0.f;
-			m_FlyTime = 0.f;
-		}
-		return;
-	}
-
-	if (m_State == FlyingKnightState::Flying)
-	{
-		m_FlyTime += elapsedSec;
-
-		m_Collider.left += m_Speed * elapsedSec;
-		m_Collider.bottom = m_StartY + std::sin(m_FlyTime * m_Frequency) * m_Amplitude;
-	}
+	m_Collider.left += m_Speed * elapsedSec;
+	m_Collider.bottom = m_StartY + std::sin(m_FlyTime * m_Frequency) * m_Amplitude;
+	
 }
 
 void FlyingKnight::Draw() const

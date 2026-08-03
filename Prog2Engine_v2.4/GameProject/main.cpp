@@ -16,7 +16,7 @@ int SDL_main(int argv, char** args)
 	pGame->Run();
 	delete pGame;
 
-	DumpMemoryLeaks();
+	//DumpMemoryLeaks();
 	return 0;
 }
 

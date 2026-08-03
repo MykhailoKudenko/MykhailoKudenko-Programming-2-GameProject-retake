@@ -8,7 +8,7 @@
 Enemy::Enemy(Rectf startPos)
 	: m_Collider{ startPos }
 {
-
+	m_bagTexture = TextureManager::GetInstance().GetTexture("Bag.png");
 }
 
 
@@ -75,8 +75,7 @@ void Enemy::DrawBag() const
 {
 	if (!m_DoesHaveBag)
 		return;
-	const Texture* bagTexture = TextureManager::GetInstance().GetTexture("Bag.png");
-	bagTexture->Draw(
+	m_bagTexture->Draw(
 		Vector2f{ m_Collider.left, m_Collider.bottom },
 		m_IsFacingRight
 	);

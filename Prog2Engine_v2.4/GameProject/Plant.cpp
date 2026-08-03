@@ -4,46 +4,24 @@
 #include "EntityManager.h"
 #include <cmath>
 
-Animation* Plant::m_pPlantAnimation{ nullptr };
-int Plant::m_InstanceCount{ 0 };
 
 Plant::Plant(Vector2f startPos)
-	: Enemy(Rectf{ startPos.x, startPos.y, 16, 24 })
-{
-	++m_InstanceCount;
+	: Enemy(Rectf{ startPos.x, startPos.y, 16, 24 }),
+	m_pPlantAnimation{ Animation("Plant.png", 2, 1.06f, false) }
 
+{
 	m_Speed = 0.f;
 
-	if (m_pPlantAnimation == nullptr)
-	{
-		m_pPlantAnimation = new Animation("Plant.png", 2, 1.06f, false);
-	}
 	m_EffectType = Effect::EffectType::Fire;
-
-}
-
-Plant::~Plant()
-{
-	--m_InstanceCount;
-
-	if (m_InstanceCount <= 0)
-	{
-		delete m_pPlantAnimation;
-		m_pPlantAnimation = nullptr;
-
-		m_InstanceCount = 0;
-	}
 }
 
 void Plant::Update(float elapsedSec)
 {
-	m_AnimTime += elapsedSec;
-
-	if (m_pPlantAnimation != nullptr && m_pPlantAnimation->IsTimeFinished(m_AnimTime))
+	m_pPlantAnimation.Update(elapsedSec);
+	if (m_pPlantAnimation.IsFinished())
 	{
 		Fire(m_pEntityManager->GetPlayerPosition());
-
-		m_AnimTime = 0.f;
+		m_pPlantAnimation.Reset();
 	}
 }
 void Plant::Fire(const Vector2f& playerPos)
@@ -66,25 +44,9 @@ void Plant::Fire(const Vector2f& playerPos)
 	m_pEntityManager->SpawnPlantProjectile(spawnPos, direction.Normalized());
 }
 
-
-
-
 void Plant::Draw() const
 {
-
-	if (m_pPlantAnimation != nullptr)
-	{
-		m_pPlantAnimation->DrawAtTime(
-			Rectf{
-				m_Collider.left,
-				m_Collider.bottom,
-				m_pPlantAnimation->GetFrameWidth(),
-				m_pPlantAnimation->GetFrameHeight()
-			},
-			m_AnimTime,
-			true
-		);
-	}
+	m_pPlantAnimation.Draw(m_Collider, m_IsFacingRight);
 }
 
 void Plant::SetEntityManager(EntityManager* pEntityManager)

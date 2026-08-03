@@ -57,7 +57,7 @@ protected:
 	bool m_IsFacingRight{ true };
 
 	Effect::EffectType m_EffectType{ Effect::EffectType::Blood };
-
+	const Texture* m_bagTexture;
 
 };
 

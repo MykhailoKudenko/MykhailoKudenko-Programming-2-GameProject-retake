@@ -25,10 +25,6 @@ void Zombie::Update(float elapsedSec)
 	{
 		return;
 	}
-	m_pSpawnAnimation.Update(elapsedSec);
-
-	m_pWalkAnimation.Update(elapsedSec);
-
 
 	switch (m_State)
 	{
@@ -40,6 +36,7 @@ void Zombie::Update(float elapsedSec)
 		}
 		break;
 	case ZombieState::Walking:
+		m_pWalkAnimation.Update(elapsedSec);
 
 		m_Velocity.x = m_Speed * elapsedSec;
 		m_Velocity.y = m_Gravity * elapsedSec;

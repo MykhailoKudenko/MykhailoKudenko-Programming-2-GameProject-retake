@@ -10,14 +10,11 @@ class Demon final : public Enemy
 {
 public:
 	Demon(Vector2f startPos);
-	~Demon() override;
 
 	void SetEntityManager(EntityManager* manager);
 
 	void Update(float elapsedSec) override;
 	void Draw() const override;
-
-	
 
 private:
 
@@ -33,7 +30,7 @@ private:
 	};
 
 
-	bool SpawnUpdate(float elapsedSec);
+	bool SpawnUpdate();
 	bool MoveToThePoint(float elapsedSec, const Vector2f& TargetPoint);
 	bool UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bool movingRight);
 	bool UpdateShooting(float elapsedSec, const Vector2f& playerPos);
@@ -44,13 +41,9 @@ private:
 
 	Vector2f m_TopRightModifier{ 100, 80 };
 
-
-	static Animation* m_pFlyAnimation;
-	static Animation* m_pShootAnimation;
-	static Animation* m_pSpawnAnimation;
-	static int m_InstanceCount;
-
-	float m_AnimTime{ 0.f };
+	Animation m_pFlyAnimation;
+	Animation m_pShootAnimation;
+	Animation m_pSpawnAnimation;
 
 	float m_ParabolaProgress{ 0.f };
 	float m_ParabolaHorizontalSpeed{ 60.f };

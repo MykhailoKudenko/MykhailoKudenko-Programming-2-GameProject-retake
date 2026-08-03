@@ -9,7 +9,6 @@ class Plant final : public Enemy
 {
 public:
 	Plant(Vector2f startPos);
-	~Plant() override;
 
 	void SetEntityManager(EntityManager* manager);
 
@@ -21,10 +20,6 @@ private:
 
 	EntityManager* m_pEntityManager{ nullptr };
 
-	static Animation* m_pPlantAnimation;
-	static int m_InstanceCount;
-
-
-	float m_AnimTime{ 0.f };
+	Animation m_pPlantAnimation;
 };
 

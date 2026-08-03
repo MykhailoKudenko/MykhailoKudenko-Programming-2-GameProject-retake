@@ -6,13 +6,10 @@ class Lance final : public Projectile
 {
 public:
 	Lance(Vector2f pos, bool isRight);
-	~Lance() override;
-
 
 	void Draw() const override;
 
 private:
-	static Texture* m_pTexture;
-	static int m_InstanceCount;
+	const Texture* m_pTexture;
 
 };

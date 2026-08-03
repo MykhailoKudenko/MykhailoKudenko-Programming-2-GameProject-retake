@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "EntityManager.h"
 #include "SoundManager.h"
+#include "TextureManager.h"
 
 #include "HUD.h"
 class Game : public BaseGame 
@@ -64,8 +65,8 @@ private:
 	const int m_PlayerLivesMax = 3;
 	int m_PLayerLivesCurrent = 3;
 
-	Texture* m_MainMenu;
-	Texture* m_DeathMenu;
+	const Texture* m_MainMenu;
+	const Texture* m_DeathMenu;
 
 	bool m_DebugShowColliders = false;
 	int m_CameraScale = 4;

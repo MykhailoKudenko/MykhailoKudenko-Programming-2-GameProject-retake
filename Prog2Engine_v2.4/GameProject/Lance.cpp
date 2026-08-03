@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "Lance.h"
 #include "utils.h"
-
-Texture* Lance::m_pTexture{ nullptr };
-int Lance::m_InstanceCount{ 0 };
+#include "TextureManager.h"
 
 Lance::Lance(Vector2f pos, bool isRight)
 	: Projectile(Rectf{ pos.x, pos.y, 24.f, 5.f })
@@ -16,26 +14,9 @@ Lance::Lance(Vector2f pos, bool isRight)
 	{
 		m_Speed.x = -100.f;
 	}
-
-	++m_InstanceCount;
-
-	if (m_pTexture == nullptr)
-	{
-		m_pTexture = new Texture{ "Lance.png" };
-	}
+	m_pTexture = TextureManager::GetInstance().GetTexture("Lance.png");
 }
-Lance::~Lance()
-{
-	--m_InstanceCount;
 
-	if (m_InstanceCount <= 0)
-	{
-		delete m_pTexture;
-		m_pTexture = nullptr;
-
-		m_InstanceCount = 0;
-	}
-}
 void Lance::Draw() const
 {
 	if (m_pTexture == nullptr)

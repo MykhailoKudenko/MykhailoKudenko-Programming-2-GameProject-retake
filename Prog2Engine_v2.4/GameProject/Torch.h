@@ -12,7 +12,6 @@ class Torch final : public Projectile
 {
 public:
 	Torch(Vector2f pos, bool isRight);
-	~Torch() override;
 
 	void Update(float elapsedSec) override;
 
@@ -30,11 +29,8 @@ private:
 	};
 	const std::vector<std::vector<Vector2f>>* m_pVertices{};
 
-	static Texture* m_pTexture;
-	static Animation* m_BurningGround;
-	static int m_InstanceCount;
-
-	float m_AnimTime{ 0.f };
+	const Texture* m_pTexture;
+	Animation m_BurningGround;
 
 	TorchStates m_MyState = TorchStates::FlyingUp;
 

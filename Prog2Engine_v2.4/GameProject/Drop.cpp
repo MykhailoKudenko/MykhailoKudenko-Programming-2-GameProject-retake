@@ -1,66 +1,30 @@
 #include "pch.h"
 #include "Drop.h"
 #include "utils.h"
-
+#include "TextureManager.h"
 // static textures
-Texture* Drop::m_pLanceTexture{ nullptr };
-Texture* Drop::m_pKnifeTexture{ nullptr };
-Texture* Drop::m_pTorchTexture{ nullptr };
-Texture* Drop::m_pDollTexture{ nullptr };
-Texture* Drop::m_pMoneyBagTexture{ nullptr };
-int Drop::m_InstanceCount{ 0 };
 
 Drop::Drop(const Vector2f& pos, DropType type)
 	: m_Collider{ pos.x, pos.y, 10.f, 10.f }
 	, m_Type{ type }
 {
-	Texture* pTexture = GetTexture();
+	
+
+	m_pLanceTexture = TextureManager::GetInstance().GetTexture("Lance.png");
+	m_pKnifeTexture = TextureManager::GetInstance().GetTexture("Knife.png");
+	m_pTorchTexture = TextureManager::GetInstance().GetTexture("Torch.png");
+	m_pDollTexture = TextureManager::GetInstance().GetTexture("Doll.png");
+	m_pMoneyBagTexture = TextureManager::GetInstance().GetTexture("MoneyBag.png");
+
+	const Texture* pTexture = GetTexture();
 
 	if (pTexture != nullptr)
 	{
 		m_Collider.width = pTexture->GetWidth();
 		m_Collider.height = pTexture->GetHeight();
 	}
-
-	++m_InstanceCount;
-
-	if (m_pLanceTexture == nullptr)
-		m_pLanceTexture = new Texture("Lance.png");
-
-	if (m_pKnifeTexture == nullptr)
-		m_pKnifeTexture = new Texture("Knife.png");
-
-	if (m_pTorchTexture == nullptr)
-		m_pTorchTexture = new Texture("Torch.png");
-
-	if (m_pDollTexture == nullptr)
-		m_pDollTexture = new Texture("Doll.png");
-
-	if (m_pMoneyBagTexture == nullptr)
-		m_pMoneyBagTexture = new Texture("MoneyBag.png");
-
 }
-Drop::~Drop()
-{
-	--m_InstanceCount;
 
-	if (m_InstanceCount <= 0)
-	{
-		delete m_pLanceTexture;
-		delete m_pKnifeTexture;
-		delete m_pTorchTexture;
-		delete m_pDollTexture;
-		delete m_pMoneyBagTexture;
-
-		m_pLanceTexture = nullptr;
-		m_pKnifeTexture = nullptr;
-		m_pTorchTexture = nullptr;
-		m_pDollTexture = nullptr;
-		m_pMoneyBagTexture = nullptr;
-
-		m_InstanceCount = 0;
-	}
-}
 
 
 void Drop::Update(float elapsedSec)
@@ -77,7 +41,7 @@ void Drop::Update(float elapsedSec)
 
 void Drop::Draw() const
 {
-	Texture* tex = GetTexture();
+	const Texture* tex = GetTexture();
 
 	if (tex != nullptr)
 	{
@@ -110,7 +74,7 @@ void Drop::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
 	m_pVertices = vertices;
 }
 
-Texture* Drop::GetTexture() const
+const Texture* Drop::GetTexture() const
 {
 	switch (m_Type)
 	{

@@ -6,13 +6,11 @@ class DemonProjectile final: public Projectile
 {
 public:
 	DemonProjectile(Vector2f pos, Vector2f direction);
-	~DemonProjectile() override;
 
 	void Draw() const override;
 
 private:
-	static Texture* m_pTexture;
-	static int m_InstanceCount;
+	const Texture* m_pTexture;
 
 };
 

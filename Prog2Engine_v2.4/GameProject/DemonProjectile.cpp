@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "DemonProjectile.h"
 #include "utils.h"
-
-Texture* DemonProjectile::m_pTexture{ nullptr };
-int DemonProjectile::m_InstanceCount{ 0 };
+#include "TextureManager.h"
 
 DemonProjectile::DemonProjectile(Vector2f pos, Vector2f direction)
 	: Projectile(Rectf{ pos.x, pos.y, 9.f, 9.f })
@@ -11,25 +9,7 @@ DemonProjectile::DemonProjectile(Vector2f pos, Vector2f direction)
 	m_Speed.x = direction.x * 60;
 	m_Speed.y = direction.y * 60;
 
-	++m_InstanceCount;
-
-	if (m_pTexture == nullptr)
-	{
-		m_pTexture = new Texture{ "DemonBullet.png" };
-	}
-}
-
-DemonProjectile::~DemonProjectile()
-{
-	--m_InstanceCount;
-
-	if (m_InstanceCount <= 0)
-	{
-		delete m_pTexture;
-		m_pTexture = nullptr;
-
-		m_InstanceCount = 0;
-	}
+	m_pTexture = TextureManager::GetInstance().GetTexture("DemonBullet.png");
 }
 
 void DemonProjectile::Draw() const

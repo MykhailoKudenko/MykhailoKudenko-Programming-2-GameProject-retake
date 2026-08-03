@@ -6,80 +6,44 @@
 #include <iostream>
 #include <ctime>
 
-Animation* Demon::m_pFlyAnimation{ nullptr };
-Animation* Demon::m_pShootAnimation{ nullptr };
-Animation* Demon::m_pSpawnAnimation{ nullptr };
-int Demon::m_InstanceCount{ 0 };
-
-
-
 Demon::Demon(Vector2f startPos)
-	: Enemy(Rectf{ startPos.x, startPos.y, 24, 26 })
+	: Enemy(Rectf{ startPos.x, startPos.y, 24, 26 }),
+	m_pFlyAnimation{ Animation("DemonFly.png", 2, 0.13f, true) },
+	m_pShootAnimation{ Animation("DemonShoot.png", 1, 0.52f, false) },
+	m_pSpawnAnimation{ Animation("DemonSpawn.png", 3, 0.26f, false) }
 {
 	m_Speed = 80.f;
 	m_Health = 5;
 	m_IsBoss = true;
 
-	++m_InstanceCount;
-
-	if (m_pFlyAnimation == nullptr)
-	{
-		m_pFlyAnimation = new Animation("DemonFly.png", 2, 0.13f, true);
-	}
-	if (m_pShootAnimation == nullptr)
-	{
-		m_pShootAnimation = new Animation("DemonShoot.png", 1, 0.52f, false);
-	}
-	if (m_pSpawnAnimation == nullptr)
-	{
-		m_pSpawnAnimation = new Animation("DemonSpawn.png", 3, 0.26f, false);
-	}
-
 	m_EffectType = Effect::EffectType::Fire;
 
 }
 
-Demon::~Demon()
-{
-	--m_InstanceCount;
-
-	if (m_InstanceCount <= 0)
-	{
-		delete m_pFlyAnimation;
-		m_pFlyAnimation = nullptr;
-
-		delete m_pShootAnimation;
-		m_pShootAnimation = nullptr;
-
-		delete m_pSpawnAnimation;
-		m_pSpawnAnimation = nullptr;
-
-		m_InstanceCount = 0;
-	}
-}
-
 void Demon::Update(float elapsedSec)
 {
-	m_AnimTime += elapsedSec;
 
 	switch (m_MyState)
 	{
 	case DemonState::Spawning:
-		if (SpawnUpdate(elapsedSec))
+		m_pSpawnAnimation.Update(elapsedSec);
+		if (SpawnUpdate())
 		{
 			m_MyState = DemonState::MoveToTopRight;
 		}
 		break;
 	case DemonState::MoveToTopRight:
-		
+		m_pFlyAnimation.Update(elapsedSec);
+
 		if (MoveToThePoint(elapsedSec, m_pEntityManager->GetPlayerPosition() + m_TopRightModifier))
 		{
 			m_MyState = DemonState::Shooting;
-			m_AnimTime = 0.f;
 			m_HasFiredThisShot = false;
 		}
 		break;
 	case DemonState::Shooting:
+		m_pShootAnimation.Update(elapsedSec);
+
 		if (UpdateShooting(elapsedSec, m_pEntityManager->GetPlayerPosition()))
 		{
 			int choice = std::rand() % 2;
@@ -100,32 +64,37 @@ void Demon::Update(float elapsedSec)
 		}
 		break;
 	case DemonState::MovingToTheRight:
+		m_pFlyAnimation.Update(elapsedSec);
+
 		if (UpdateParabolaAttack(elapsedSec, m_pEntityManager->GetPlayerPosition(), true))
 		{
 			m_IsAtRightSide = true;
 			m_MyState = DemonState::Shooting;
-			m_AnimTime = 0.f;
 			m_HasFiredThisShot = false;
 		}
 		break;
 	case DemonState::MovingToTheLeft:
+		m_pFlyAnimation.Update(elapsedSec);
+
 		if (UpdateParabolaAttack(elapsedSec, m_pEntityManager->GetPlayerPosition(), false))
 		{
 			m_IsAtRightSide = false;
 			m_MyState = DemonState::Shooting;
-			m_AnimTime = 0.f;
 			m_HasFiredThisShot = false;
 		}
 		break;
 	case DemonState::MovingUp:
+		m_pFlyAnimation.Update(elapsedSec);
+
 		if (MoveToThePoint(elapsedSec, Vector2f{ m_Collider.left, m_pEntityManager->GetPlayerPosition().y + m_TopRightModifier.y }))
 		{
 			m_MyState = DemonState::Shooting;
-			m_AnimTime = 0.f;
 			m_HasFiredThisShot = false;
 		}
 		break;
 	case DemonState::MovingDown:
+		m_pFlyAnimation.Update(elapsedSec);
+
 		if (MoveToThePoint(elapsedSec, Vector2f{ m_Collider.left, m_pEntityManager->GetPlayerPosition().y }))
 		{
 			m_MyState = DemonState::MovingUp;
@@ -168,35 +137,11 @@ void Demon::Draw() const
 	switch (m_MyState)
 	{
 	case DemonState::Spawning:
-		if (m_pSpawnAnimation != nullptr)
-		{
-			m_pSpawnAnimation->DrawAtTime(
-				Rectf{
-					m_Collider.left,
-					m_Collider.bottom,
-					m_pSpawnAnimation->GetFrameWidth(),
-					m_pSpawnAnimation->GetFrameHeight()
-				},
-				m_AnimTime,
-				false
-			);
-		}
+		m_pSpawnAnimation.Draw(m_Collider, false, false);
 		break;
 
 	case DemonState::Shooting:
-		if (m_pShootAnimation != nullptr)
-		{
-			m_pShootAnimation->DrawAtTime(
-				Rectf{
-					m_Collider.left,
-					m_Collider.bottom,
-					m_pShootAnimation->GetFrameWidth(),
-					m_pShootAnimation->GetFrameHeight()
-				},
-				m_AnimTime,
-				false
-			);
-		}
+		m_pShootAnimation.Draw(m_Collider, m_IsFacingRight);
 		break;
 
 	case DemonState::MoveToTopRight:
@@ -204,19 +149,7 @@ void Demon::Draw() const
 	case DemonState::MovingToTheLeft:
 	case DemonState::MovingUp:
 	case DemonState::MovingDown:
-		if (m_pFlyAnimation != nullptr)
-		{
-			m_pFlyAnimation->DrawAtTime(
-				Rectf{
-					m_Collider.left,
-					m_Collider.bottom,
-					m_pFlyAnimation->GetFrameWidth(),
-					m_pFlyAnimation->GetFrameHeight()
-				},
-				m_AnimTime,
-				false
-			);
-		}
+		m_pFlyAnimation.Draw(m_Collider, m_IsFacingRight);
 		break;
 
 	default:
@@ -232,14 +165,9 @@ void Demon::SetEntityManager(EntityManager* manager)
 	m_pEntityManager = manager;
 }
 
-bool Demon::SpawnUpdate(float elapsedSec)
+bool Demon::SpawnUpdate()
 {
-	if (m_pSpawnAnimation != nullptr && m_pSpawnAnimation->IsTimeFinished(m_AnimTime))
-	{
-		m_AnimTime = 0.f;
-		return true;
-	}
-	return false;
+	return m_pSpawnAnimation.IsFinished();
 }
 
 bool Demon::MoveToThePoint(float elapsedSec, const Vector2f& targetPoint)
@@ -371,13 +299,9 @@ bool Demon::UpdateShooting(float elapsedSec, const Vector2f& playerPos)
 		m_HasFiredThisShot = true;
 	}
 
-	bool animationFinished =
-		m_pShootAnimation != nullptr &&
-		m_pShootAnimation->IsTimeFinished(m_AnimTime);
-
-	if (animationFinished && isAtShootPoint)
+	
+	if (m_pShootAnimation.IsFinished() && isAtShootPoint)
 	{
-		m_AnimTime = 0.f;
 		m_HasFiredThisShot = false;
 		return true;
 	}

@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "PlantProjectile.h"
 #include "utils.h"
-
-Texture* PlantProjectile::m_pTexture{ nullptr };
-int PlantProjectile::m_InstanceCount{ 0 };
+#include "TextureManager.h"
 
 PlantProjectile::PlantProjectile(Vector2f pos, Vector2f direction)
 	: Projectile(Rectf{ pos.x, pos.y, 9.f, 9.f })
@@ -11,25 +9,8 @@ PlantProjectile::PlantProjectile(Vector2f pos, Vector2f direction)
 	m_Speed.x = direction.x * 60;
 	m_Speed.y = direction.y * 60;
 
-	++m_InstanceCount;
+	m_pTexture = TextureManager::GetInstance().GetTexture("PlantBullet.png");
 
-	if (m_pTexture == nullptr)
-	{
-		m_pTexture = new Texture{ "PlantBullet.png" };
-	}
-}
-
-PlantProjectile::~PlantProjectile()
-{
-	--m_InstanceCount;
-
-	if (m_InstanceCount <= 0)
-	{
-		delete m_pTexture;
-		m_pTexture = nullptr;
-
-		m_InstanceCount = 0;
-	}
 }
 
 void PlantProjectile::Draw() const

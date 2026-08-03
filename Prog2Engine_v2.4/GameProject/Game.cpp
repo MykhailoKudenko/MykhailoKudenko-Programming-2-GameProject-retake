@@ -16,7 +16,6 @@ Game::~Game( )
 
 void Game::Initialize()
 {
-
 	m_P1 = new Player(Vector2f{ 50.f, 38.f });
 	m_pEntityManager = new EntityManager();
 	m_SoundManager = new SoundManager();
@@ -24,8 +23,8 @@ void Game::Initialize()
 	m_hud = new HUD();
 	m_pCamera = new Camera(1024.f, 960.f);
 
-	m_MainMenu = new Texture("StartScreen.png");
-	m_DeathMenu = new Texture("DeathMenu.png");
+	m_MainMenu = TextureManager::GetInstance().GetTexture("StartScreen.png");
+	m_DeathMenu = TextureManager::GetInstance().GetTexture("DeathMenu.png");
 
 	m_level1 = nullptr;
 
@@ -38,13 +37,6 @@ void Game::Initialize()
 
 void Game::Cleanup()
 {
-
-	delete m_MainMenu;
-	m_MainMenu = nullptr;
-
-	delete m_DeathMenu;
-	m_DeathMenu = nullptr;
-
 	delete m_hud;
 	m_hud = nullptr;
 

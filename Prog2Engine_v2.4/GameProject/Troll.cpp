@@ -6,85 +6,43 @@
 
 #include <iostream>
 
-Animation* Troll::m_pJumpAnimation{ nullptr };
-Animation* Troll::m_pShootAnimation{ nullptr };
-Animation* Troll::m_pWalkAnimation{ nullptr };
-Animation* Troll::m_pSpawnAnimation{ nullptr };
-int Troll::m_InstanceCount{ 0 };
-
-
 Troll::Troll(Vector2f startPos)
-	: Enemy(Rectf{ startPos.x, startPos.y, 43, 40 })
+	: Enemy(Rectf{ startPos.x, startPos.y, 43, 40 }),
+	m_pJumpAnimation{ Animation("TrollJump.png", 1, 0.13f, true) },
+	m_pShootAnimation{ Animation("TrollShoot.png", 1, 0.52f, false) },
+	m_pWalkAnimation{ Animation("TrollWalking.png", 2, 0.13f, true) },
+	m_pSpawnAnimation{ Animation("TrollStand.png", 1, 0.52f, false) }
 {
 	m_Speed = 30.f;
 	m_Health = 10;
 	m_IsBoss = true;
 
-	++m_InstanceCount;
-
-	if (m_pJumpAnimation == nullptr)
-	{
-		m_pJumpAnimation = new Animation("TrollJump.png", 1, 0.13f, true);
-	}
-
-	if (m_pShootAnimation == nullptr)
-	{
-		m_pShootAnimation = new Animation("TrollShoot.png", 1, 0.52f, false);
-	}
-	if (m_pWalkAnimation == nullptr)
-	{
-		m_pWalkAnimation = new Animation("TrollWalking.png", 2, 0.13f, true);
-	}
-
-	if (m_pSpawnAnimation == nullptr)
-	{
-		m_pSpawnAnimation = new Animation("TrollStand.png", 1, 0.52f, false);
-	}
 
 	m_EffectType = Effect::EffectType::Fire;
 
 
 }
-Troll::~Troll()
-{
-	--m_InstanceCount;
-
-	if (m_InstanceCount <= 0)
-	{
-		delete m_pJumpAnimation;
-		m_pJumpAnimation = nullptr;
-
-		delete m_pShootAnimation;
-		m_pShootAnimation = nullptr;
-
-		delete m_pWalkAnimation;
-		m_pWalkAnimation = nullptr;
-
-		delete m_pSpawnAnimation;
-		m_pSpawnAnimation = nullptr;
-
-		m_InstanceCount = 0;
-	}
-}
 
 void Troll::Update(float elapsedSec)
 {
-	m_AnimTime += elapsedSec;
 
 	m_Velocity.x = 0.f;
 
 	switch (m_MyState)
 	{
 	case TrollState::Spawning:
-		if (SpawnUpdate(elapsedSec))
+		m_pSpawnAnimation.Update(elapsedSec);
+
+		if (SpawnUpdate())
 		{
 			m_MyState = TrollState::Shooting;
-			m_AnimTime = 0.f;
 			m_HasFiredThisShot = false;
 		}
 		break;
 
 	case TrollState::Shooting:
+		m_pShootAnimation.Update(elapsedSec);
+
 		if (UpdateShooting(elapsedSec, m_pEntityManager->GetPlayerPosition()))
 		{
 			if (m_DoJumpNext)
@@ -95,7 +53,6 @@ void Troll::Update(float elapsedSec)
 			else
 			{
 				m_MyState = TrollState::Walking;
-				m_AnimTime = 0.f;
 				m_WalkTimer = 0.f;
 				m_DoJumpNext = true;
 			}
@@ -103,27 +60,29 @@ void Troll::Update(float elapsedSec)
 		break;
 
 	case TrollState::Walking:
+		m_pWalkAnimation.Update(elapsedSec);
 		if (UpdateWalking(elapsedSec, m_pEntityManager->GetPlayerPosition()))
 		{
 			m_MyState = TrollState::Shooting;
-			m_AnimTime = 0.f;
 			m_HasFiredThisShot = false;
 		}
 		break;
 
 	case TrollState::Jumping:
+		m_pJumpAnimation.Update(elapsedSec);
+
 		if (UpdateJumping())
 		{
 			m_MyState = TrollState::Falling;
-			m_AnimTime = 0.f;
 		}
 		break;
 
 	case TrollState::Falling:
+		m_pJumpAnimation.Update(elapsedSec);
+
 		if (UpdateFalling())
 		{
 			m_MyState = TrollState::Shooting;
-			m_AnimTime = 0.f;
 			m_HasFiredThisShot = false;
 		}
 		break;
@@ -139,65 +98,17 @@ void Troll::Draw() const
 	switch (m_MyState)
 	{
 	case TrollState::Spawning:
-		if (m_pSpawnAnimation != nullptr)
-		{
-			m_pSpawnAnimation->DrawAtTime(
-				Rectf{
-					m_Collider.left,
-					m_Collider.bottom,
-					m_pSpawnAnimation->GetFrameWidth(),
-					m_pSpawnAnimation->GetFrameHeight()
-				},
-				m_AnimTime,
-				true
-			);
-		}
+		m_pSpawnAnimation.Draw(m_Collider, false, false);
 		break;
 	case TrollState::Shooting:
-		if (m_pShootAnimation != nullptr)
-		{
-			m_pShootAnimation->DrawAtTime(
-				Rectf{
-					m_Collider.left,
-					m_Collider.bottom,
-					m_pShootAnimation->GetFrameWidth(),
-					m_pShootAnimation->GetFrameHeight()
-				},
-				m_AnimTime,
-				m_IsFacingRight
-			);
-		}
+		m_pShootAnimation.Draw(m_Collider, m_IsFacingRight);
 		break;
 	case TrollState::Walking:
-		if (m_pWalkAnimation != nullptr)
-		{
-			m_pWalkAnimation->DrawAtTime(
-				Rectf{
-					m_Collider.left,
-					m_Collider.bottom,
-					m_pWalkAnimation->GetFrameWidth(),
-					m_pWalkAnimation->GetFrameHeight()
-				},
-				m_AnimTime,
-				m_IsFacingRight
-			);
-		}
+		m_pWalkAnimation.Draw(m_Collider, m_IsFacingRight);
 		break;
 	case TrollState::Jumping:
 	case TrollState::Falling:
-		if (m_pJumpAnimation != nullptr)
-		{
-			m_pJumpAnimation->DrawAtTime(
-				Rectf{
-					m_Collider.left,
-					m_Collider.bottom,
-					m_pJumpAnimation->GetFrameWidth(),
-					m_pJumpAnimation->GetFrameHeight()
-				},
-				m_AnimTime,
-				m_IsFacingRight
-			);
-		}
+		m_pJumpAnimation.Draw(m_Collider, m_IsFacingRight);
 		break;
 	}
 }
@@ -230,7 +141,6 @@ bool Troll::UpdateWalking(float elapsedSec, const Vector2f& playerPos)
 void Troll::StartJump()
 {
 	m_MyState = TrollState::Jumping;
-	m_AnimTime = 0.f;
 	m_Velocity.y = m_JumpSpeed;
 }
 bool Troll::UpdateJumping()
@@ -251,27 +161,21 @@ bool Troll::UpdateFalling()
 
 	return false;
 }
-bool Troll::SpawnUpdate(float elapsedSec)
+bool Troll::SpawnUpdate()
 {
-	if (m_pSpawnAnimation != nullptr && m_pSpawnAnimation->IsTimeFinished(m_AnimTime))
-	{
-		m_AnimTime = 0.f;
-		return true;
-	}
-	return false;
+	return m_pSpawnAnimation.IsFinished();
 }
 bool Troll::UpdateShooting(float elapsedSec, const Vector2f& playerPos)
 {
-	if (!m_HasFiredThisShot && m_AnimTime >= 0.2f)
+	if (!m_HasFiredThisShot)
 	{
 		Fire(playerPos);
 
 		m_HasFiredThisShot = true;
 	}
 
-	if (m_pShootAnimation != nullptr && m_pShootAnimation->IsTimeFinished(m_AnimTime))
+	if (m_pShootAnimation.IsFinished())
 	{
-		m_AnimTime = 0.f;
 		m_HasFiredThisShot = false;
 		return true;
 	}

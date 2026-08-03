@@ -2,9 +2,7 @@
 #include "pch.h"
 #include "Knife.h"
 #include "utils.h"
-
-Texture* Knife::m_pTexture{ nullptr };
-int Knife::m_InstanceCount{ 0 };
+#include "TextureManager.h"
 
 Knife::Knife(Vector2f pos, bool isRight)
 	: Projectile(Rectf{ pos.x, pos.y, 12.f, 7.f })
@@ -18,25 +16,10 @@ Knife::Knife(Vector2f pos, bool isRight)
 		m_Speed.x = -120.f;
 	}
 
-	++m_InstanceCount;
+	m_pTexture = TextureManager::GetInstance().GetTexture("Knife.png");
 
-	if (m_pTexture == nullptr)
-	{
-		m_pTexture = new Texture{ "Knife.png" };
-	}
 }
-Knife::~Knife()
-{
-	--m_InstanceCount;
 
-	if (m_InstanceCount <= 0)
-	{
-		delete m_pTexture;
-		m_pTexture = nullptr;
-
-		m_InstanceCount = 0;
-	}
-}
 void Knife::Draw() const
 {
 	if (m_pTexture == nullptr)

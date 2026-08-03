@@ -4,6 +4,7 @@
 
 //temp
 #include <iostream>
+#include "TextureManager.h"
 
 Player::Player(Vector2f startPos) : m_Collider{ Rectf{startPos.x, startPos.y, 16, 24} },
 m_WalkingArmour{ "WalkKnight.png", 3,  0.10f, true },
@@ -18,15 +19,15 @@ m_ThrowNaked{ "ThrowKnightNaked.png", 2,  0.10f, false },
 m_DuckThrowArmour{ "DuckThrowKnight.png", 2,  0.10f, false },
 m_DuckThrowNaked{ "DuckThrowKnightNaked.png", 2,  0.10f, false },
 
-m_DuckArmour{ "DuckKnight.png" },
-m_DuckNaked{ "DuckKnightNaked.png" },
+m_DuckArmour{ TextureManager::GetInstance().GetTexture("DuckKnight.png" )},
+m_DuckNaked{ TextureManager::GetInstance().GetTexture("DuckKnightNaked.png") },
 
-m_JumpingArmour{ "JumpKnight.png" },
-m_JumpingNaked{ "JumpKnightNaked.png" },
+m_JumpingArmour{ TextureManager::GetInstance().GetTexture("JumpKnight.png") },
+m_JumpingNaked{ TextureManager::GetInstance().GetTexture("JumpKnightNaked.png") },
 
-m_Hit{ "HitKnight.png" },
-m_DeathKnockBack{ "DeadKnockBack.png" },
-m_Death{ "DeadGround.png" }
+m_Hit{ TextureManager::GetInstance().GetTexture("HitKnight.png") },
+m_DeathKnockBack{ TextureManager::GetInstance().GetTexture("DeadKnockBack.png") },
+m_Death{ TextureManager::GetInstance().GetTexture("DeadGround.png") }
 {
 }
 
@@ -80,25 +81,25 @@ void Player::Draw() const
 	case PlayerState::Ducking:
 		if (m_IsWearingArmour)
 		{
-			m_DuckArmour.Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_DuckArmour.GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+			m_DuckArmour->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_DuckArmour->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		}
 		else
 		{
-			m_DuckNaked.Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_DuckNaked.GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+			m_DuckNaked->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_DuckNaked->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		}
 		break;
 	case PlayerState::Jumping:
 		if (m_IsWearingArmour)
 		{
-		m_JumpingArmour.Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_JumpingArmour.GetWidth() + m_Collider.width , m_Collider.bottom}, !m_IsFacingRight);
+		m_JumpingArmour->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_JumpingArmour->GetWidth() + m_Collider.width , m_Collider.bottom}, !m_IsFacingRight);
 		}
 		else
 		{
-			m_JumpingNaked.Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_JumpingNaked.GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+			m_JumpingNaked->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_JumpingNaked->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		}
 		break;
 	case PlayerState::Knockback:
-		m_Hit.Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_Hit.GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+		m_Hit->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_Hit->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		break;
 	case PlayerState::Throwing:
 		if (m_IsWearingArmour)
@@ -121,10 +122,10 @@ void Player::Draw() const
 		}
 		break;
 	case PlayerState::Dead:
-		m_Death.Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_Death.GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+		m_Death->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_Death->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		break;
 	case PlayerState::KnockbackDead:
-		m_DeathKnockBack.Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_Hit.GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+		m_DeathKnockBack->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_Hit->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		break;
 	}
 }

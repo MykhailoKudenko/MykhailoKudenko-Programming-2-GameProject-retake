@@ -10,7 +10,6 @@ class Troll final : public Enemy
 {
 public:
 	Troll(Vector2f startPos);
-	~Troll() override;
 
 	void Update(float elapsedSec) override;
 	void Draw() const override;
@@ -32,7 +31,7 @@ private:
 		Falling
 	};
 
-	bool SpawnUpdate(float elapsedSec);
+	bool SpawnUpdate();
 	bool UpdateShooting(float elapsedSec, const Vector2f& playerPos);
 	bool UpdateWalking(float elapsedSec, const Vector2f& playerPos);
 	void Fire(const Vector2f& playerPos);
@@ -44,11 +43,10 @@ private:
 	bool UpdateJumping( );
 	bool UpdateFalling( );
 
-	static Animation* m_pJumpAnimation;
-	static Animation* m_pShootAnimation;
-	static Animation* m_pWalkAnimation;
-	static Animation* m_pSpawnAnimation;
-	static int m_InstanceCount;
+	Animation m_pJumpAnimation;
+	Animation m_pShootAnimation;
+	Animation m_pWalkAnimation;
+	Animation m_pSpawnAnimation;
 
 	EntityManager* m_pEntityManager{ nullptr };
 	const std::vector<std::vector<Vector2f>>* m_pVertices{ nullptr };
@@ -57,7 +55,6 @@ private:
 
 	bool m_HasFiredThisShot{ false };
 
-	float m_AnimTime{ 0.f };
 	float m_WalkTimer{ 0.f };
 
 	const float m_Gravity{ -250.f }; 

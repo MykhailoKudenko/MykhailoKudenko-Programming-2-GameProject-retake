@@ -20,7 +20,6 @@ public:
 
 
 	Drop(const Vector2f& pos, DropType type);
-	~Drop();
 
 	void Update(float elapsedSec);
 	void Draw() const;
@@ -46,14 +45,13 @@ private:
 	bool m_IsDead{ false };
 
 	// static textures
-	static Texture* m_pLanceTexture;
-	static Texture* m_pKnifeTexture;
-	static Texture* m_pTorchTexture;
-	static Texture* m_pDollTexture;
-	static Texture* m_pMoneyBagTexture;
-	static int m_InstanceCount;
+	const Texture* m_pLanceTexture;
+	const Texture* m_pKnifeTexture;
+	const Texture* m_pTorchTexture;
+	const Texture* m_pDollTexture;
+	const Texture* m_pMoneyBagTexture;
 
-	Texture* GetTexture() const;
+	const Texture* GetTexture() const;
 
 	static constexpr float m_Gravity{ -60.f };
 	State m_Mystate = State::Falling;
