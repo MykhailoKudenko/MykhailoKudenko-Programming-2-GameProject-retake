@@ -155,10 +155,9 @@ void Demon::Fire(const Vector2f& playerPos)
 		playerPos.y - spawnPos.y
 	};
 
-	direction.Normalized();
 
 
-	m_pEntityManager->SpawnDemonProjectile(spawnPos, direction);
+	m_pEntityManager->SpawnDemonProjectile(spawnPos, direction.Normalized());
 }
 
 
@@ -253,7 +252,6 @@ bool Demon::MoveToThePoint(float elapsedSec, const Vector2f& targetPoint)
 		targetPoint.y - currentPos.y
 	};
 
-	direction.Normalized();
 
 
 	float moveDistance = m_Speed * elapsedSec;
@@ -265,8 +263,8 @@ bool Demon::MoveToThePoint(float elapsedSec, const Vector2f& targetPoint)
 		return true;
 	}
 
-	m_Collider.left += direction.x * moveDistance;
-	m_Collider.bottom += direction.y * moveDistance;
+	m_Collider.left += direction.Normalized().x * moveDistance;
+	m_Collider.bottom += direction.Normalized().y * moveDistance;
 
 	return false;
 }

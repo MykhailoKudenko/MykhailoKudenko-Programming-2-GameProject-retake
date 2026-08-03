@@ -63,9 +63,7 @@ void Plant::Fire(const Vector2f& playerPos)
 		playerPos.y - spawnPos.y
 	};
 
-	direction.Normalized();
-
-	m_pEntityManager->SpawnPlantProjectile(spawnPos, direction);
+	m_pEntityManager->SpawnPlantProjectile(spawnPos, direction.Normalized());
 }
 
 

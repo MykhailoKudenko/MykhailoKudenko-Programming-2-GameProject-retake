@@ -39,60 +39,64 @@ void Zombie::Update(float elapsedSec)
 			m_State = ZombieState::Walking;
 		}
 		break;
-	}
+	case ZombieState::Walking:
 
+		m_Velocity.x = m_Speed * elapsedSec;
+		m_Velocity.y = m_Gravity * elapsedSec;
 
-	m_Velocity.x = m_Speed * elapsedSec;
-	m_Velocity.y = m_Gravity * elapsedSec;
+		utils::HitInfo myInfoTopSide{};
+		utils::HitInfo myInfoBottomSide{};
 
-	utils::HitInfo myInfoTopSide{};
-	utils::HitInfo myInfoBottomSide{};
+		bool hitWallOnX = false;
 
-	bool hitWallOnX = false;
-
-	if (m_Velocity.x > 0)
-	{
-
-		hitWallOnX = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::right, m_Velocity.x);
-
-
-
-		if (!hitWallOnX)
+		if (m_Velocity.x > 0)
 		{
-			m_Collider.left += m_Velocity.x;
+
+			hitWallOnX = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::right, m_Velocity.x);
+
+
+
+			if (!hitWallOnX)
+			{
+				m_Collider.left += m_Velocity.x;
+			}
+			else
+			{
+				m_Speed *= -1;
+				m_IsFacingRight = (m_Speed > 0);
+			}
+		}
+		else if (m_Velocity.x < 0)
+		{
+			bool hitWallOnX = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::left, -m_Velocity.x);
+
+
+			if (!hitWallOnX)
+			{
+				m_Collider.left += m_Velocity.x;
+			}
+			else
+			{
+				m_Speed *= -1;
+				m_IsFacingRight = (m_Speed > 0);
+
+			}
+		}
+		utils::HitInfo gravityHit{};
+		if (!utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom, 2.f, &gravityHit))
+		{
+			m_Collider.bottom += m_Velocity.y;
 		}
 		else
 		{
-			m_Speed *= -1;
-			m_IsFacingRight = (m_Speed > 0);
+			m_Velocity.y = 0;
+			m_Collider.bottom = gravityHit.intersectPoint.y;
 		}
+		break;
 	}
-	else if (m_Velocity.x < 0)
-	{
-		bool hitWallOnX = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::left, -m_Velocity.x);
 
 
-		if (!hitWallOnX)
-		{
-			m_Collider.left += m_Velocity.x;
-		}
-		else
-		{
-			m_Speed *= -1;
-			m_IsFacingRight = (m_Speed > 0);
-
-		}
-	}
-	utils::HitInfo gravityHit{};
-	if (!utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom, 2.f, &gravityHit))
-	{
-		m_Collider.bottom += m_Velocity.y;
-	}
-	else
-	{
-		m_Velocity.y = 0;
-		m_Collider.bottom = gravityHit.intersectPoint.y;
-	}
+	
 }
 
 
