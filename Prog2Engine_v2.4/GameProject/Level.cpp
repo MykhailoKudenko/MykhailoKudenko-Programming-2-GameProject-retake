@@ -9,28 +9,28 @@
 
 namespace
 {
-	Level::EnemyType EnemyTypeFromString(const std::string& s)
+	Level::EnemyType EnemyTypeFromString(const std::string& string)
 	{
-		if (s == "Zombie")       return Level::EnemyType::Zombie;
-		if (s == "Bird")         return Level::EnemyType::Bird;
-		if (s == "FlyingKnight") return Level::EnemyType::FlyingKnight;
-		if (s == "Ghost")        return Level::EnemyType::Ghost;
-		if (s == "Plant")        return Level::EnemyType::Plant;
-		if (s == "Demon")        return Level::EnemyType::Demon;
-		if (s == "Troll")        return Level::EnemyType::Troll;
-		throw std::runtime_error("wrong Enemytype: ");
+		if (string == "Zombie")       return Level::EnemyType::Zombie;
+		if (string == "Bird")         return Level::EnemyType::Bird;
+		if (string == "FlyingKnight") return Level::EnemyType::FlyingKnight;
+		if (string == "Ghost")        return Level::EnemyType::Ghost;
+		if (string == "Plant")        return Level::EnemyType::Plant;
+		if (string == "Demon")        return Level::EnemyType::Demon;
+		if (string == "Troll")        return Level::EnemyType::Troll;
+		throw std::runtime_error("wrong Enemytype: " + string);
 	}
 
 	
 
-	Drop::DropType PickupTypeFromString(const std::string& s)
+	Drop::DropType PickupTypeFromString(const std::string& string)
 	{
-		if (s == "Lance") return  Drop::DropType::Lance;
-		if (s == "Knife") return  Drop::DropType::Knife;
-		if (s == "Torch") return  Drop::DropType::Torch;
-		if (s == "Doll") return  Drop::DropType::Doll;
-		if (s == "MoneyBag") return  Drop::DropType::MoneyBag;
-		throw std::runtime_error("wrong PickupType: ");
+		if (string == "Lance") return  Drop::DropType::Lance;
+		if (string == "Knife") return  Drop::DropType::Knife;
+		if (string == "Torch") return  Drop::DropType::Torch;
+		if (string == "Doll") return  Drop::DropType::Doll;
+		if (string == "MoneyBag") return  Drop::DropType::MoneyBag;
+		throw std::runtime_error("wrong PickupType: " + string);
 	}
 }
 
@@ -130,6 +130,13 @@ Level::Level(const std::string& txtPath) : m_Texture{ nullptr }
 	}
 	m_Texture = TextureManager::GetInstance().GetTexture(levelTexturePath);
 	m_PlatformTexture = TextureManager::GetInstance().GetTexture(platformTexturePath);
+
+	m_PlatformTopEdges.assign(m_Platforms.size(), std::vector<Vector2f>(2));
+
+	for (size_t i = 0; i < m_Platforms.size(); ++i)
+	{
+		m_Platforms[i].Init(m_PlatformTopEdges[i]);
+	}
 
 	LoadFromSvg(svgPath);
 }
@@ -254,28 +261,33 @@ void Level::Update(float elapsedSec)
 {
 	for (MovingPlatform& platform : m_Platforms)
 	{
-		platform.rect.left += platform.speedX * elapsedSec;
-
-		if (platform.rect.left <= platform.minX)
-		{
-			platform.rect.left = platform.minX;
-			platform.speedX = abs(platform.speedX);
-		}
-		else if (platform.rect.left + platform.rect.width >= platform.maxX)
-		{
-			platform.rect.left = platform.maxX - platform.rect.width;
-			platform.speedX = -abs(platform.speedX);
-		}
-	}
-
-	m_PlatformTopEdges.clear();
-
-	for (const MovingPlatform& platform : m_Platforms)
-	{
-		m_PlatformTopEdges.push_back({
-			Vector2f{ platform.rect.left, platform.rect.bottom + platform.rect.height },
-			Vector2f{ platform.rect.left + platform.rect.width, platform.rect.bottom + platform.rect.height }
-			});
+		platform.Update(elapsedSec);
 	}
 }
+
+void Level::MovingPlatform::Update(float elapsedSec)
+{
+	rect.left += speedX * elapsedSec;
+	if (rect.left <= minX)
+	{
+		rect.left = minX;
+		speedX = std::abs(speedX);
+	}
+	else if (rect.left + rect.width >= maxX)
+	{
+		rect.left = maxX - rect.width;
+		speedX = -std::abs(speedX);
+	}
+
+	*TopLeftEdge = Vector2f{ rect.left, rect.bottom + rect.height };
+	*TopRightEdge = Vector2f{ rect.left+rect.width, rect.bottom + rect.height };
+
+}
+
+void Level::MovingPlatform::Init(std::vector<Vector2f>& vertices)
+{
+	TopLeftEdge = &vertices[0];
+	TopRightEdge = &vertices[1];
+}
+
 

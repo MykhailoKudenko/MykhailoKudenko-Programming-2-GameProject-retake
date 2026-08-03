@@ -14,8 +14,11 @@ public:
 private:
     std::string GetTimerText() const;
 
-    float m_TimeLeft{ 180.f };
+    float DrawNumber(int number, Vector2f location) const;
+    void IntitNumbersAndSymbols();
 
+    float m_TimeLeft;
+    const float m_StartingTime;
     const Texture* m_pLanceTexture;
     const Texture* m_pKnifeTexture;
     const Texture* m_pTorchTexture;

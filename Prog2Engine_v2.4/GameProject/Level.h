@@ -12,6 +12,12 @@ public:
 		float speedX;
 		float minX;
 		float maxX;
+
+		Vector2f* TopLeftEdge = nullptr;
+		Vector2f* TopRightEdge = nullptr;
+
+		void Update(float elapsedSec);
+		void Init(std::vector<Vector2f>& vertices);
 	};
 
 	enum class EnemyType

@@ -4,7 +4,8 @@
 
 
 HUD::HUD()
-    : m_TimeLeft{ 180.f }
+    : m_StartingTime{ 240.f },
+    m_TimeLeft{ 240.f }
 {
     m_pLanceTexture = TextureManager::GetInstance().GetTexture("Lance.png");
     m_pKnifeTexture = TextureManager::GetInstance().GetTexture("Knife.png");
@@ -13,6 +14,8 @@ HUD::HUD()
 
     m_pVpLabel = TextureManager::GetInstance().GetTextTexture("1   VP", "LowresPixel-Regular.otf", 60, Color4f{ 243.f / 255.f, 194.f / 255.f, 191.f / 255.f, 1.0f });
     m_pTimeLabel = TextureManager::GetInstance().GetTextTexture("TIME", "LowresPixel-Regular.otf", 60, Color4f{ 243.f / 255.f, 194.f / 255.f, 191.f / 255.f, 1.0f });
+
+    IntitNumbersAndSymbols();
 }
 
 void HUD::Update(float elapsedSec)
@@ -33,17 +36,23 @@ void HUD::Draw(int score, Player::PlayerWeapon weapon) const
 
     m_pTimeLabel->Draw(Vector2f{ 100.f, 775.f });
 
-    std::string scoreText = std::to_string(score);
-    const Texture* scoreTexture = TextureManager::GetInstance().GetTextTexture(scoreText, "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    scoreTexture->Draw(Vector2f{ 300.f, 830 });
+    DrawNumber(score, Vector2f{ 300.f, 830 });
 
-    std::string timerText = GetTimerText();
-    const Texture* timerTexture = TextureManager::GetInstance().GetTextTexture(timerText, "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    timerTexture->Draw(Vector2f{ 100.f, 720 });
+    int totalSeconds = static_cast<int>(m_TimeLeft);
+    int minutes = totalSeconds / 60;
+    int seconds = totalSeconds % 60;
+    int displacement = 0;
+
+    displacement += DrawNumber(minutes, Vector2f{ 100.f, 720 });
+        
+    const Texture* symbolTexture = TextureManager::GetInstance().GetTextTexture(":", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    symbolTexture->Draw(Vector2f{ 100.f + displacement, 720 });
+    displacement += symbolTexture->GetWidth();
+
+     DrawNumber(seconds, Vector2f{ 100.f+ displacement, 720 });
 
     //weapon placement
     const float screenWidth = 1024.f;
-    const float screenHeight = 960.f;
     const float centerX = screenWidth / 2.f;
     const float weaponY = 100.f;
     const float scale = 6.0f;
@@ -111,11 +120,46 @@ std::string HUD::GetTimerText() const
 
 void HUD::ResetTimer()
 {
-    m_TimeLeft = 240.f;
+    m_TimeLeft = m_StartingTime;
 }
 
 bool HUD::DidTimerFinish() const
 {
-    return m_TimeLeft < 0;
+    return m_TimeLeft <= 0.f;
     
+}
+
+float HUD::DrawNumber(int number, Vector2f location) const
+{
+    std::string numberString = std::to_string(number);
+
+    float displacement = 0;
+
+    for (char c : numberString)
+    {
+        std::string s{ c };
+        const Texture* CurrentNumberTexture = TextureManager::GetInstance().GetTextTexture(s, "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+        CurrentNumberTexture->Draw(Vector2f{location.x+ displacement, location.y});
+        displacement += CurrentNumberTexture->GetWidth();
+
+    }
+    return displacement;
+}
+
+void HUD::IntitNumbersAndSymbols()
+{
+    TextureManager::GetInstance().GetTextTexture("0", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    TextureManager::GetInstance().GetTextTexture("1", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    TextureManager::GetInstance().GetTextTexture("2", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    TextureManager::GetInstance().GetTextTexture("3", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    TextureManager::GetInstance().GetTextTexture("4", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    TextureManager::GetInstance().GetTextTexture("5", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    TextureManager::GetInstance().GetTextTexture("6", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    TextureManager::GetInstance().GetTextTexture("7", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    TextureManager::GetInstance().GetTextTexture("8", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    TextureManager::GetInstance().GetTextTexture("9", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+
+    TextureManager::GetInstance().GetTextTexture(":", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+
+
 }
