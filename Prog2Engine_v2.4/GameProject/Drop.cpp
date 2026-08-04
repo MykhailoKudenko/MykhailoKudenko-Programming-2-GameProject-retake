@@ -9,15 +9,24 @@ Drop::Drop(const Vector2f& pos, DropType type)
 	, m_Type{ type }
 {
 	
-
-	m_pLanceTexture = TextureManager::GetInstance().GetTexture("Lance.png");
-	m_pKnifeTexture = TextureManager::GetInstance().GetTexture("Knife.png");
-	m_pTorchTexture = TextureManager::GetInstance().GetTexture("Torch.png");
-	m_pDollTexture = TextureManager::GetInstance().GetTexture("Doll.png");
-	m_pMoneyBagTexture = TextureManager::GetInstance().GetTexture("MoneyBag.png");
-
-	const Texture* pTexture = GetTexture();
-
+	switch (m_Type)
+	{
+	case DropType::Lance: 
+		pTexture = TextureManager::GetInstance().GetTexture("Lance.png");
+		break;
+	case DropType::Knife:
+		pTexture = TextureManager::GetInstance().GetTexture("Knife.png");
+		break;
+	case DropType::Torch:
+		pTexture = TextureManager::GetInstance().GetTexture("Torch.png");
+		break;
+	case DropType::Doll:
+		pTexture = TextureManager::GetInstance().GetTexture("Doll.png");
+		break;
+	case DropType::MoneyBag:
+		pTexture = TextureManager::GetInstance().GetTexture("MoneyBag.png");
+		break;
+	}
 	if (pTexture != nullptr)
 	{
 		m_Collider.width = pTexture->GetWidth();
@@ -41,11 +50,9 @@ void Drop::Update(float elapsedSec)
 
 void Drop::Draw() const
 {
-	const Texture* tex = GetTexture();
-
-	if (tex != nullptr)
+	if (pTexture != nullptr)
 	{
-		tex->Draw(Vector2f{ m_Collider.left, m_Collider.bottom });
+		pTexture->Draw(Vector2f{ m_Collider.left, m_Collider.bottom });
 	}
 }
 
@@ -73,17 +80,3 @@ void Drop::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
 {
 	m_pVertices = vertices;
 }
-
-const Texture* Drop::GetTexture() const
-{
-	switch (m_Type)
-	{
-	case DropType::Lance: return m_pLanceTexture;
-	case DropType::Knife: return m_pKnifeTexture;
-	case DropType::Torch: return m_pTorchTexture;
-	case DropType::Doll: return m_pDollTexture;
-	case DropType::MoneyBag: return m_pMoneyBagTexture;
-	default: return nullptr;
-	}
-}
-

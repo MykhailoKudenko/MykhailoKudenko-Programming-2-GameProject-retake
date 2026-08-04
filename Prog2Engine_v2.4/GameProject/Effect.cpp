@@ -20,6 +20,11 @@ Effect::Effect(const Vector2f& pos, EffectType type, bool isMirrored)
         break;
     }
 }
+Effect::~Effect()
+{
+    delete m_pMyAnimation;
+    m_pMyAnimation = nullptr;
+}
 
 void Effect::Update(float elapsedSec)
 {

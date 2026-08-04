@@ -14,7 +14,18 @@ void Projectile::Update(float elapsedSec)
 	m_Collider.bottom += m_Speed.y * elapsedSec;
 }
 
+void Projectile::Draw() const
+{
+	if (m_pTexture == nullptr)
+	{
+		return;
+	}
 
+	m_pTexture->Draw(
+		Vector2f{ m_Collider.left, m_Collider.bottom },
+		m_Speed.x <= 0
+	);
+}
 
 Rectf Projectile::GetHitbox() const
 {

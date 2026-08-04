@@ -13,6 +13,8 @@ Ghost::Ghost(Vector2f startPos, bool facingRight)
 	m_IsFacingRight = facingRight;
 	m_Speed = 40.f;
 
+	m_SoundType = SoundManager::SFX::Ghost;
+
 	if (!facingRight)
 	{
 		m_Speed *= -1.f;

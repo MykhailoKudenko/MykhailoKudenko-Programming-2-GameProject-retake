@@ -74,12 +74,12 @@ void EntityManager::Update(float elapsedSec)
 
         if (enemy->GetIsActive())
         {
-            if (dynamic_cast<Ghost*>(enemy) != nullptr)
+            if (enemy->GetsoundType() == SoundManager::SFX::Ghost)
             {
                 hasGhostInRange = true;
             }
 
-            if (dynamic_cast<FlyingKnight*>(enemy) != nullptr)
+            if (enemy->GetsoundType() == SoundManager::SFX::FlyingKnight)
             {
                 hasFlyingKnightInRange = true;
             }

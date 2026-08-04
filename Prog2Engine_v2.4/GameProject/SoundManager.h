@@ -10,6 +10,7 @@ public:
 
     enum class SFX
     {
+        None,
         Throw,
         PickUp,
         FireDead,

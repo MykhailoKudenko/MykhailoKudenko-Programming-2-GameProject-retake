@@ -33,7 +33,7 @@ public:
 	float GetTotalDuration() const;
 
 private:
-	const Texture* m_Texture;
+	const Texture* m_Texture{nullptr};
 
 	int m_NrFrames{};
 	int m_CurrentFrame{};

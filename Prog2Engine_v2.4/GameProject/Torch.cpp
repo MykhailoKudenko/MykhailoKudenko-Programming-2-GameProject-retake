@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Torch.h"
 #include "utils.h"
-#include "TextureManager.h"
 
 Torch::Torch(Vector2f pos, bool isRight)
 	: Projectile(Rectf{ pos.x, pos.y, 12.f, 8.f }),
@@ -18,9 +17,9 @@ Torch::Torch(Vector2f pos, bool isRight)
 	}
 	m_Speed.y = 50;
 
-	if (m_pTexture == nullptr)
+	if (m_pTourchTexture == nullptr)
 	{
-		m_pTexture = TextureManager::GetInstance().GetTexture("Torch.png");
+		m_pTourchTexture = TextureManager::GetInstance().GetTexture("Torch.png");
 	}
 
 }
@@ -33,7 +32,7 @@ void Torch::Draw() const
 	}
 	else
 	{
-		m_pTexture->Draw(Vector2f{ m_Collider.left, m_Collider.bottom }, m_Speed.x >= 0);
+		m_pTourchTexture->Draw(Vector2f{ m_Collider.left, m_Collider.bottom }, m_Speed.x >= 0);
 	}
 }
 

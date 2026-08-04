@@ -11,6 +11,7 @@ FlyingKnight::FlyingKnight(Vector2f startPos, bool facingRight)
 
 	m_IsFacingRight = facingRight;
 	m_Speed = 35.f;
+	m_SoundType = SoundManager::SFX::FlyingKnight;
 
 
 	if (!facingRight)

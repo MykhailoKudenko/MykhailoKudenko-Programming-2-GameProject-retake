@@ -29,7 +29,7 @@ private:
 	};
 	const std::vector<std::vector<Vector2f>>* m_pVertices{};
 
-	const Texture* m_pTexture;
+	const Texture* m_pTourchTexture;
 	Animation m_BurningGround;
 
 	TorchStates m_MyState = TorchStates::FlyingUp;

@@ -11,6 +11,9 @@ Zombie::Zombie(Vector2f startPos, bool facingRight)
 {
 	m_IsFacingRight = facingRight;
 	m_Speed = 30.f;
+
+
+
 	if (!facingRight)
 	{
 		m_Speed *= -1.f;

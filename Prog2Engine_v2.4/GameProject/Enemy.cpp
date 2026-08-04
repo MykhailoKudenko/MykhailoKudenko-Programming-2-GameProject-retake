@@ -85,6 +85,10 @@ Effect::EffectType Enemy::GetEffectType() const
 {
 	return m_EffectType;
 }
+SoundManager::SFX Enemy::GetsoundType() const
+{
+	return m_SoundType;
+}
 
 
 bool Enemy::IsFacingRight() const

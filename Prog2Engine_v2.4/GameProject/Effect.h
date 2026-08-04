@@ -13,6 +13,12 @@ public:
 
     Effect(const Vector2f& pos, EffectType type, bool isMirrored = false);
 
+    ~Effect();
+    Effect(const Effect& other) = delete;
+    Effect& operator=(const Effect& other) = delete;
+    Effect(Effect&& other) noexcept = delete;
+    Effect& operator=(Effect&& other) noexcept = delete;
+
     void Update(float elapsedSec);
     void Draw() const;
     bool IsFinished() const;

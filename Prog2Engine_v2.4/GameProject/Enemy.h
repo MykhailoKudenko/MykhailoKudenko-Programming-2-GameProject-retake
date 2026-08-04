@@ -2,6 +2,7 @@
 #include <vector>
 #include "Texture.h"
 #include "TextureManager.h"
+#include "SoundManager.h"
 
 #include "Effect.h"
 class Enemy
@@ -39,6 +40,7 @@ public:
 	bool HasBag() const;
 	void DrawBag() const;
 	Effect::EffectType GetEffectType() const;
+	SoundManager::SFX GetsoundType() const;
 
 	bool IsFacingRight() const;
 	bool IsBoss() const;
@@ -57,6 +59,8 @@ protected:
 	bool m_IsFacingRight{ true };
 
 	Effect::EffectType m_EffectType{ Effect::EffectType::Blood };
+	SoundManager::SFX m_SoundType{ SoundManager::SFX::None };
+
 	const Texture* m_bagTexture;
 
 };
