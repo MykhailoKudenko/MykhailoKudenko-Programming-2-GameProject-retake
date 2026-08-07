@@ -12,10 +12,9 @@ public:
     void ResetTimer();
     bool DidTimerFinish() const;
 private:
-    std::string GetTimerText() const;
 
     float DrawNumber(int number, Vector2f location) const;
-    void IntitNumbersAndSymbols();
+    void InitNumbersAndSymbols();
 
     float m_TimeLeft;
     const float m_StartingTime;

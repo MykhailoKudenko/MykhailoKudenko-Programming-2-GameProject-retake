@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Level.h"
 #include "utils.h"
-#include <algorithm>
 #include "SvgParser.h"
 #include <iostream>
 #include <fstream>

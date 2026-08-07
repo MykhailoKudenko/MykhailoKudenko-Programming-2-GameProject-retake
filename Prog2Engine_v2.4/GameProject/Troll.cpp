@@ -185,6 +185,11 @@ bool Troll::UpdateShooting(float elapsedSec, const Vector2f& playerPos)
 
 void Troll::ApplyHorisontalMovement(float elapsedSec)
 {
+	if (m_pVertices == nullptr)
+	{
+		return;
+	}
+
 	utils::HitInfo hitInfo{};
 	bool hitWallOnX = false;
 

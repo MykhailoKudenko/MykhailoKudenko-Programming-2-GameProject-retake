@@ -4,50 +4,52 @@
 
 Effect::Effect(const Vector2f& pos, EffectType type, bool isMirrored)
     : m_Position{ pos }
-    , m_Type{ type }
-    , m_IsMirrored{ isMirrored }
+    , m_IsMirrored{ isMirrored },
+    m_MyAnimation{GetAnimation(type)}
 {
-    switch (m_Type)
-    {
-    case EffectType::Blood:
-        m_pMyAnimation = new Animation("BloodDeath.png", 3, 0.13f, false);
-        break;
-    case EffectType::Fire:
-        m_pMyAnimation = new Animation("FireDeath.png", 3, 0.13f, false);
-        break;
-    case EffectType::Blink:
-        m_pMyAnimation = new Animation("SparklingHit.png", 2, 0.13f, false);
-        break;
-    }
+   
 }
-Effect::~Effect()
-{
-    delete m_pMyAnimation;
-    m_pMyAnimation = nullptr;
-}
+
 
 void Effect::Update(float elapsedSec)
 {
-    m_pMyAnimation->Update(elapsedSec);
+    m_MyAnimation.Update(elapsedSec);
 }
 
 void Effect::Draw() const
 {
 
-    float width = m_pMyAnimation->GetFrameWidth();
-    float height = m_pMyAnimation->GetFrameHeight();
+    float width = m_MyAnimation.GetFrameWidth();
+    float height = m_MyAnimation.GetFrameHeight();
 
     Vector2f drawPos
     {
         m_Position.x - width / 2.f,
         m_Position.y - height / 2.f
     };
-    m_pMyAnimation->Draw(Rectf{ drawPos.x, drawPos.y, width, height }, m_IsMirrored);
+    m_MyAnimation.Draw(Rectf{ drawPos.x, drawPos.y, width, height }, m_IsMirrored);
 }
 
 bool Effect::IsFinished() const
 {
-    return m_pMyAnimation->IsFinished();
+    return m_MyAnimation.IsFinished();
+}
+
+
+Animation Effect::GetAnimation(EffectType type)
+{
+    switch (type)
+    {
+    case EffectType::Blood:
+        return Animation("BloodDeath.png", 3, 0.13f, false);
+        break;
+    case EffectType::Fire:
+        return  Animation("FireDeath.png", 3, 0.13f, false);
+        break;
+    case EffectType::Blink:
+        return  Animation("SparklingHit.png", 2, 0.13f, false);
+        break;
+    }
 }
 
 

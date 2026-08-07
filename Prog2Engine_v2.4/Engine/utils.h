@@ -95,5 +95,4 @@ namespace utils
 
 	bool CheckSideCollision(const std::vector<std::vector<Vector2f>>& vertices, const Rectf& collider, Side side, float sweepDistance = 1.f, HitInfo* outHitInfo = nullptr);
 
-	bool AlmostEqual(float a, float b, float epsilon = 0.0001f);
 }

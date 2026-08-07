@@ -11,6 +11,9 @@ public:
 	void Update(float elapsedSec) override;
 	void Draw() const override;
 
+	bool IsSpawning() const;
+
+
 private:
 	enum class BirdState
 	{

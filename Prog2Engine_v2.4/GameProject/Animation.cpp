@@ -90,56 +90,7 @@ void Animation::Draw(const Rectf& destRect, bool isMirrored, bool stretchToFit) 
 	glPopMatrix();
 }
 
-void Animation::DrawFrame(const Rectf& destRect, int frame, bool isMirrored) const
-{
-	if (m_NrFrames <= 0)
-	{
-		return;
-	}
 
-	// clamp frame manually
-	if (frame < 0)
-	{
-		frame = 0;
-	}
-	else if (frame > m_NrFrames - 1)
-	{
-		frame = m_NrFrames - 1;
-	}
-
-	const float frameWidth{ m_Texture->GetWidth() / m_NrFrames };
-	const float frameHeight{ m_Texture->GetHeight() };
-
-	const Rectf srcRect
-	{
-		frameWidth * frame,
-		0.f,
-		frameWidth,
-		frameHeight
-	};
-
-	glPushMatrix();
-
-	glTranslatef(destRect.left, destRect.bottom, 0.f);
-
-	if (isMirrored)
-	{
-		glTranslatef(destRect.width, 0.f, 0.f);
-		glScalef(-1.f, 1.f, 1.f);
-	}
-
-	Rectf localDestRect
-	{
-		0.f,
-		0.f,
-		destRect.width,
-		destRect.height
-	};
-
-	m_Texture->Draw(localDestRect, srcRect);
-
-	glPopMatrix();
-}
 
 
 void Animation::Reset()
@@ -222,47 +173,5 @@ float Animation::GetFrameHeight() const
 	return m_Texture->GetHeight();
 }
 
-int Animation::GetFrameAtTime(float time) const
-{
-	if (m_NrFrames <= 0 || m_FrameSec <= 0.f)
-	{
-		return 0;
-	}
 
-	int frame = int(time / m_FrameSec);
 
-	if (m_IsLooping)
-	{
-		frame %= m_NrFrames;
-	}
-	else
-	{
-		if (frame >= m_NrFrames)
-		{
-			frame = m_NrFrames - 1;
-		}
-	}
-
-	return frame;
-}
-
-void Animation::DrawAtTime(const Rectf& destRect, float time, bool isMirrored) const
-{
-	int frame = GetFrameAtTime(time);
-	DrawFrame(destRect, frame, isMirrored);
-}
-
-float Animation::GetTotalDuration() const
-{
-	return m_NrFrames * m_FrameSec;
-}
-
-bool Animation::IsTimeFinished(float time) const
-{
-	if (m_IsLooping)
-	{
-		return false;
-	}
-
-	return time >= GetTotalDuration();
-}

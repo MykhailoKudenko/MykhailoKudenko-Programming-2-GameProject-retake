@@ -17,10 +17,9 @@ Torch::Torch(Vector2f pos, bool isRight)
 	}
 	m_Speed.y = 50;
 
-	if (m_pTourchTexture == nullptr)
-	{
-		m_pTourchTexture = TextureManager::GetInstance().GetTexture("Torch.png");
-	}
+	
+	m_pTourchTexture = TextureManager::GetInstance().GetTexture("Torch.png");
+	
 
 }
 
@@ -38,6 +37,11 @@ void Torch::Draw() const
 
 void Torch::Update(float elapsedSec)
 {
+	if (m_pVertices == nullptr)
+	{
+		return;
+	}
+
 	switch (m_MyState)
 	{
 	case TorchStates::FlyingUp:
@@ -53,6 +57,7 @@ void Torch::Update(float elapsedSec)
 		break;
 
 	case TorchStates::FlyingDown:
+
 		if (utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom) == false)
 		{
 			m_Collider.left += m_Speed.x * elapsedSec;
@@ -66,7 +71,7 @@ void Torch::Update(float elapsedSec)
 
 	case TorchStates::Burning:
 		m_BurningGround.Update(elapsedSec);
-		if (m_BurningGround.IsFinished());
+		if (m_BurningGround.IsFinished())
 		{
 			m_IsDead = true;
 		}

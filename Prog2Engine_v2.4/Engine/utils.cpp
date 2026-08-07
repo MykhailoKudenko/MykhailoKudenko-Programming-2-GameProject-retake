@@ -777,12 +777,3 @@ bool utils::CheckSideCollision(const std::vector<std::vector<Vector2f>>& vertice
 }
 
 #pragma endregion CollisionFunctionality
-
-bool AlmostEqual(float a, float b, float epsilon = 0.0001f)
-{
-	float diff = a - b;
-	if (diff < 0.0f)
-		diff = -diff;
-
-	return diff < epsilon;
-}

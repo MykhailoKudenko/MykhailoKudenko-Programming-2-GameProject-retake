@@ -40,11 +40,12 @@ void Player::Draw() const
 	case PlayerState::Standing:
 		if (m_IsWearingArmour)
 		{
-			m_WalkingArmour.DrawFrame(m_Collider, 0, !m_IsFacingRight);
+			
+			m_WalkingArmour.Draw(m_Collider, !m_IsFacingRight);
 		}
 		else
 		{
-		m_WalkingNaked.DrawFrame(m_Collider, 0, !m_IsFacingRight);
+		m_WalkingNaked.Draw(m_Collider, !m_IsFacingRight);
 		}
 		break;
 
@@ -61,11 +62,11 @@ void Player::Draw() const
 	case PlayerState::ClimbingStill:
 		if (m_IsWearingArmour)
 		{
-			m_ClimbingArmour.DrawFrame(m_Collider, 0, false);
+			m_ClimbingArmour.Draw(m_Collider, false);
 		}
 		else
 		{
-			m_ClimbingNaked.DrawFrame(m_Collider, 0, false);
+			m_ClimbingNaked.Draw(m_Collider, false);
 		}
 		break;
 	case PlayerState::Climbing:
@@ -383,12 +384,32 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 		else
 			m_WalkingNaked.Update(elapsedSec);
 		break;
+	case PlayerState::Standing:
+		if (m_IsWearingArmour)
+		{
 
+			m_WalkingArmour.Reset();
+		}
+		else
+		{
+			m_WalkingNaked.Reset();
+		}
+		break;
 	case PlayerState::Climbing:
 		if (m_IsWearingArmour)
 			m_ClimbingArmour.Update(elapsedSec);
 		else
 			m_ClimbingNaked.Update(elapsedSec);
+		break;
+	case PlayerState::ClimbingStill:
+		if (m_IsWearingArmour)
+		{
+			m_ClimbingArmour.Reset();
+		}
+		else
+		{
+			m_ClimbingNaked.Reset();
+		}
 		break;
 	default:
 		break;

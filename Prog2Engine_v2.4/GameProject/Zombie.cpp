@@ -44,9 +44,6 @@ void Zombie::Update(float elapsedSec)
 		m_Velocity.x = m_Speed * elapsedSec;
 		m_Velocity.y = m_Gravity * elapsedSec;
 
-		utils::HitInfo myInfoTopSide{};
-		utils::HitInfo myInfoBottomSide{};
-
 		bool hitWallOnX = false;
 
 		if (m_Velocity.x > 0)
@@ -68,7 +65,7 @@ void Zombie::Update(float elapsedSec)
 		}
 		else if (m_Velocity.x < 0)
 		{
-			bool hitWallOnX = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::left, -m_Velocity.x);
+			hitWallOnX = utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::left, -m_Velocity.x);
 
 
 			if (!hitWallOnX)

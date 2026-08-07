@@ -13,21 +13,16 @@ public:
 
     Effect(const Vector2f& pos, EffectType type, bool isMirrored = false);
 
-    ~Effect();
-    Effect(const Effect& other) = delete;
-    Effect& operator=(const Effect& other) = delete;
-    Effect(Effect&& other) noexcept = delete;
-    Effect& operator=(Effect&& other) noexcept = delete;
-
     void Update(float elapsedSec);
     void Draw() const;
     bool IsFinished() const;
 
 private:
+    Animation GetAnimation(EffectType type);
+
     Vector2f m_Position;
-    EffectType m_Type;
     bool m_IsMirrored{ false };
 
-    Animation* m_pMyAnimation;
+    Animation m_MyAnimation;
 
 };

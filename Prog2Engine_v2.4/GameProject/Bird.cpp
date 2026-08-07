@@ -57,5 +57,8 @@ void Bird::Draw() const
 	}
 }
 
-
+bool Bird::IsSpawning() const
+{
+	return m_State == BirdState::Spawning;
+}
 

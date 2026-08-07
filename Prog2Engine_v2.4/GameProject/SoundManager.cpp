@@ -45,35 +45,35 @@ void SoundManager::PlayEffect(SoundManager::SFX effect)
         break;
 
     case SFX::FireDead:
-        if (m_FireDead.IsLoaded()) m_FireDead.Play(0);
+        if (m_FireDead.IsLoaded())
         {
             m_FireDead.Play(0);
         }
         break;
 
     case SFX::FlyingKnight:
-        if (m_FlyingKnightSound.IsLoaded()) m_FlyingKnightSound.Play(0);
+        if (m_FlyingKnightSound.IsLoaded())
         {
             m_FlyingKnightSound.Play(0);
         }
         break;
 
     case SFX::Ghost:
-        if (m_GhostSound.IsLoaded()) m_GhostSound.Play(0);
+        if (m_GhostSound.IsLoaded())
         {
             m_GhostSound.Play(0);
         }
         break;
 
     case SFX::Death:
-        if (m_Death.IsLoaded()) m_Death.Play(0);
+        if (m_Death.IsLoaded())
         {
             m_Death.Play(0);
         }
         break;
 
     case SFX::LevelComplete:
-        if (m_LevelComplete.IsLoaded()) m_LevelComplete.Play(0);
+        if (m_LevelComplete.IsLoaded())
         {
             m_LevelComplete.Play(0);
         }

@@ -2,7 +2,6 @@
 #include "Drop.h"
 #include "utils.h"
 #include "TextureManager.h"
-// static textures
 
 Drop::Drop(const Vector2f& pos, DropType type)
 	: m_Collider{ pos.x, pos.y, 10.f, 10.f }
@@ -38,6 +37,10 @@ Drop::Drop(const Vector2f& pos, DropType type)
 
 void Drop::Update(float elapsedSec)
 {
+	if (m_pVertices == nullptr)
+	{
+		return;
+	}
 	if (m_Mystate == State::Falling && !utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom))
 	{
 		m_Collider.bottom += m_Gravity * elapsedSec;

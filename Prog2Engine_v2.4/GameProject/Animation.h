@@ -9,7 +9,6 @@ public:
 
 	void Update(float elapsedSec);
 	void Draw(const Rectf& destRect, bool isMirrored, bool stretchToFit = true) const;
-	void DrawFrame(const Rectf& destRect, int frame, bool isMirrored) const;
 
 	void Reset();
 	void Play();
@@ -25,12 +24,6 @@ public:
 
 	float GetFrameWidth() const;
 	float GetFrameHeight() const;
-
-	void DrawAtTime(const Rectf& destRect, float time, bool isMirrored) const;
-	int GetFrameAtTime(float time) const;
-
-	bool IsTimeFinished(float time) const;
-	float GetTotalDuration() const;
 
 private:
 	const Texture* m_Texture{nullptr};

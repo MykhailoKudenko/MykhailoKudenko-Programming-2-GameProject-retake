@@ -4,8 +4,8 @@
 
 
 HUD::HUD()
-    : m_StartingTime{ 240.f },
-    m_TimeLeft{ 240.f }
+    : m_TimeLeft{ 240.f },
+    m_StartingTime{ 240.f }
 {
     m_pLanceTexture = TextureManager::GetInstance().GetTexture("Lance.png");
     m_pKnifeTexture = TextureManager::GetInstance().GetTexture("Knife.png");
@@ -15,7 +15,7 @@ HUD::HUD()
     m_pVpLabel = TextureManager::GetInstance().GetTextTexture("1   VP", "LowresPixel-Regular.otf", 60, Color4f{ 243.f / 255.f, 194.f / 255.f, 191.f / 255.f, 1.0f });
     m_pTimeLabel = TextureManager::GetInstance().GetTextTexture("TIME", "LowresPixel-Regular.otf", 60, Color4f{ 243.f / 255.f, 194.f / 255.f, 191.f / 255.f, 1.0f });
 
-    IntitNumbersAndSymbols();
+    InitNumbersAndSymbols();
 }
 
 void HUD::Update(float elapsedSec)
@@ -41,7 +41,7 @@ void HUD::Draw(int score, Player::PlayerWeapon weapon) const
     int totalSeconds = static_cast<int>(m_TimeLeft);
     int minutes = totalSeconds / 60;
     int seconds = totalSeconds % 60;
-    int displacement = 0;
+    float displacement = 0;
 
     displacement += DrawNumber(minutes, Vector2f{ 100.f, 720 });
         
@@ -89,7 +89,6 @@ void HUD::Draw(int score, Player::PlayerWeapon weapon) const
         return;
     }
     float w = weaponToDraw->GetWidth();
-    float h = weaponToDraw->GetHeight();
 
     Vector2f pos{
         centerX - (w * scale) / 2.f,
@@ -103,19 +102,6 @@ void HUD::Draw(int score, Player::PlayerWeapon weapon) const
     weaponToDraw->Draw(Vector2f{ 0.f, 0.f });
 
     glPopMatrix();
-}
-
-std::string HUD::GetTimerText() const
-{
-    int totalSeconds = static_cast<int>(m_TimeLeft);
-    int minutes = totalSeconds / 60;
-    int seconds = totalSeconds % 60;
-
-    std::string secStr = (seconds < 10)
-        ? "0" + std::to_string(seconds)
-        : std::to_string(seconds);
-
-    return std::to_string(minutes) + ":" + secStr;
 }
 
 void HUD::ResetTimer()
@@ -146,7 +132,7 @@ float HUD::DrawNumber(int number, Vector2f location) const
     return displacement;
 }
 
-void HUD::IntitNumbersAndSymbols()
+void HUD::InitNumbersAndSymbols()
 {
     TextureManager::GetInstance().GetTextTexture("0", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
     TextureManager::GetInstance().GetTextTexture("1", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
