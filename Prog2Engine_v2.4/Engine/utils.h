@@ -90,6 +90,7 @@ namespace utils
 		top,
 		bottom
 	};
+	const float g_Gravity{ -60 };
 
 	bool LoopOverVertices(const std::vector<std::vector<Vector2f>>& vertices, const Vector2f& rayP1, const Vector2f& rayP2, utils::HitInfo& myInfo);// same as raycast but for a few vectors 
 

@@ -42,7 +42,7 @@ void Zombie::Update(float elapsedSec)
 		m_WalkAnimation.Update(elapsedSec);
 
 		m_Velocity.x = m_Speed * elapsedSec;
-		m_Velocity.y = m_Gravity * elapsedSec;
+		m_Velocity.y = utils::g_Gravity * elapsedSec;
 
 		bool hitWallOnX = false;
 

@@ -43,7 +43,7 @@ void Drop::Update(float elapsedSec)
 	}
 	if (m_Mystate == State::Falling && !utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom))
 	{
-		m_Collider.bottom += m_Gravity * elapsedSec;
+		m_Collider.bottom += utils::g_Gravity * elapsedSec;
 	}
 	else
 	{

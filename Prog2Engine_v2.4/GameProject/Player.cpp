@@ -565,7 +565,7 @@ void Player::UpdateMovementVertical(
 	}
 	else
 	{
-		ySpeed = m_Gravity * elapsedSec;
+		ySpeed = utils::g_Gravity * elapsedSec;
 	}
 
 

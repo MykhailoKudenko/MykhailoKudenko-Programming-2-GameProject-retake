@@ -228,7 +228,7 @@ void Troll::ApplyGravity(float elapsedSec)
 		return;
 	}
 
-	m_Velocity.y += m_Gravity * elapsedSec;
+	m_Velocity.y += utils::g_Gravity * elapsedSec;
 
 	if (m_Velocity.y <= 0.f)
 	{
