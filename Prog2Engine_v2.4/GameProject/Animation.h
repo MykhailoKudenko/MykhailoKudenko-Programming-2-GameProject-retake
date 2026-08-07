@@ -5,7 +5,7 @@ class Animation final
 {
 public:
 	Animation(const std::string& texturePath, int nrFrames, float frameSec, bool loop = true);
-	
+	Animation();
 
 	void Update(float elapsedSec);
 	void Draw(const Rectf& destRect, bool isMirrored, bool stretchToFit = true) const;

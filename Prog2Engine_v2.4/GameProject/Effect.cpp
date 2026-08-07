@@ -49,6 +49,8 @@ Animation Effect::GetAnimation(EffectType type)
     case EffectType::Blink:
         return  Animation("SparklingHit.png", 2, 0.13f, false);
         break;
+    default:
+        return Animation();
     }
 }
 

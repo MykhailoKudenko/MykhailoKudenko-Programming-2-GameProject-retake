@@ -211,15 +211,7 @@ bool Demon::UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bo
 	float leftX = lockedPlayerPos.x - m_TopRightModifier.x;
 	float rightX = lockedPlayerPos.x + m_TopRightModifier.x;
 
-	float moveDir;
-	if (movingRight)
-	{
-		moveDir = 1.f;
-	}
-	else
-	{
-		moveDir = -1.f;
-	}
+	const float moveDir{ movingRight ? 1.f : -1.f };
 
 	m_Collider.left += m_ParabolaHorizontalSpeed * elapsedSec * moveDir;
 

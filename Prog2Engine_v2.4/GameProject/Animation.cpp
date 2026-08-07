@@ -14,7 +14,17 @@ Animation::Animation(const std::string& texturePath, int nrFrames, float frameSe
 	, m_IsFinished{ false }
 {
 }
-
+Animation::Animation()
+	: m_Texture{ nullptr }
+	, m_NrFrames{ 0 }
+	, m_CurrentFrame{ 0 }
+	, m_FrameSec{ 0 }
+	, m_AccumulatedSec{ 0.f }
+	, m_IsLooping{ false }
+	, m_IsPlaying{ false }
+	, m_IsFinished{ false }
+{
+}
 void Animation::Update(float elapsedSec)
 {
 	if (!m_IsPlaying || m_IsFinished || m_NrFrames <= 0)

@@ -223,8 +223,6 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		if (m_CameraScale < 10)
 		{
 			m_CameraScale += 1;
-			if (m_CameraScale > 10)
-				m_CameraScale = 10;
 		}
 		std::cout << "DEBUG: CAMERA SCALE = " << m_CameraScale << " (NORMAL SCALE IS 4)" << std::endl;
 		break;
@@ -233,8 +231,6 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		if (m_CameraScale > 1)
 		{
 			m_CameraScale -= 1;
-			if (m_CameraScale < 1)
-				m_CameraScale = 1;
 		}
 		std::cout << "DEBUG: CAMERA SCALE = " << m_CameraScale << " (NORMAL SCALE IS 4)" << std::endl;
 		break;
