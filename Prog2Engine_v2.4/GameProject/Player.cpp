@@ -19,7 +19,7 @@ m_ThrowNaked{ "ThrowKnightNaked.png", 2,  0.10f, false },
 m_DuckThrowArmour{ "DuckThrowKnight.png", 2,  0.10f, false },
 m_DuckThrowNaked{ "DuckThrowKnightNaked.png", 2,  0.10f, false },
 
-m_DuckArmour{ TextureManager::GetInstance().GetTexture("DuckKnight.png" )},
+m_DuckArmour{ TextureManager::GetInstance().GetTexture("DuckKnight.png") },
 m_DuckNaked{ TextureManager::GetInstance().GetTexture("DuckKnightNaked.png") },
 
 m_JumpingArmour{ TextureManager::GetInstance().GetTexture("JumpKnight.png") },
@@ -34,18 +34,18 @@ m_Death{ TextureManager::GetInstance().GetTexture("DeadGround.png") }
 
 void Player::Draw() const
 {
-	
+
 	switch (m_Mystate)
 	{
 	case PlayerState::Standing:
 		if (m_IsWearingArmour)
 		{
-			
+
 			m_WalkingArmour.Draw(m_Collider, !m_IsFacingRight);
 		}
 		else
 		{
-		m_WalkingNaked.Draw(m_Collider, !m_IsFacingRight);
+			m_WalkingNaked.Draw(m_Collider, !m_IsFacingRight);
 		}
 		break;
 
@@ -92,7 +92,7 @@ void Player::Draw() const
 	case PlayerState::Jumping:
 		if (m_IsWearingArmour)
 		{
-		m_JumpingArmour->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_JumpingArmour->GetWidth() + m_Collider.width , m_Collider.bottom}, !m_IsFacingRight);
+			m_JumpingArmour->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_JumpingArmour->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		}
 		else
 		{
@@ -130,15 +130,15 @@ void Player::Draw() const
 		break;
 	}
 }
-void Player::Update(float elapsedSec,const std::vector<std::vector<Vector2f>>& vertices,const std::vector<std::vector<Vector2f>>& playerOnlyVertices,const std::vector<Rectf>& ladders, const std::vector<std::vector<Vector2f>>& platfroms)
+void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& vertices, const std::vector<std::vector<Vector2f>>& playerOnlyVertices, const std::vector<Rectf>& ladders, const std::vector<std::vector<Vector2f>>& platfroms)
 {
 	//input
-	
+
 	UpdateInput();
 
 	//states
 	UpdateStates(ladders, elapsedSec);
-	
+
 
 	//timers
 	UpdateTimers(elapsedSec);
@@ -147,13 +147,13 @@ void Player::Update(float elapsedSec,const std::vector<std::vector<Vector2f>>& v
 
 	UpdateMovementVertical(vertices, playerOnlyVertices, platfroms, elapsedSec);
 	UpdateMovementHorizontal(vertices, playerOnlyVertices, elapsedSec);
-	
+
 }
 
 
 Vector2f Player::GetCenterPosition() const
 {
-	return Vector2f{ m_Collider.left + m_Collider.width / 2, m_Collider.bottom + m_Collider.height/2 };
+	return Vector2f{ m_Collider.left + m_Collider.width / 2, m_Collider.bottom + m_Collider.height / 2 };
 }
 
 
@@ -184,7 +184,7 @@ void Player::UpdateInput()
 	{
 		m_InputDirectionX = -1;
 	}
-	
+
 	if (pStates[SDL_SCANCODE_UP] || pStates[SDL_SCANCODE_W] || pStates[SDL_SCANCODE_SPACE])
 	{
 		m_InputDirectionY = 1;
@@ -231,9 +231,13 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 			m_Mystate = PlayerState::Throwing;
 
 			if (m_IsWearingArmour)
+			{
 				m_ThrowArmour.Reset();
+			}
 			else
+			{
 				m_ThrowNaked.Reset();
+			}
 
 			return;
 		}
@@ -358,18 +362,27 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 			m_Mystate = PlayerState::DuckingThrow;
 
 			if (m_IsWearingArmour)
+			{
 				m_DuckThrowArmour.Reset();
+
+			}
 			else
+			{
 				m_DuckThrowNaked.Reset();
+			}
 		}
 		else if (m_Mystate != PlayerState::Climbing && m_Mystate != PlayerState::ClimbingStill)
 		{
 			m_Mystate = PlayerState::Throwing;
 
 			if (m_IsWearingArmour)
+			{
 				m_ThrowArmour.Reset();
+			}
 			else
+			{
 				m_ThrowNaked.Reset();
+			}
 		}
 
 		return;
@@ -380,14 +393,17 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 	{
 	case PlayerState::Walking:
 		if (m_IsWearingArmour)
+		{
 			m_WalkingArmour.Update(elapsedSec);
+		}
 		else
+		{
 			m_WalkingNaked.Update(elapsedSec);
+		}
 		break;
 	case PlayerState::Standing:
 		if (m_IsWearingArmour)
 		{
-
 			m_WalkingArmour.Reset();
 		}
 		else
@@ -397,9 +413,14 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 		break;
 	case PlayerState::Climbing:
 		if (m_IsWearingArmour)
+		{
 			m_ClimbingArmour.Update(elapsedSec);
+		}
 		else
+		{
 			m_ClimbingNaked.Update(elapsedSec);
+
+		}
 		break;
 	case PlayerState::ClimbingStill:
 		if (m_IsWearingArmour)
@@ -486,7 +507,7 @@ void Player::UpdateMovementHorizontal(
 
 	if (xSpeed > 0.f)
 	{
-		Rectf insetCollider{ m_Collider.left+1, m_Collider.bottom + 1.f, m_Collider.width, m_Collider.height - 1.f };
+		Rectf insetCollider{ m_Collider.left + 1, m_Collider.bottom + 1.f, m_Collider.width, m_Collider.height - 1.f };
 
 		bool hitWorld = utils::CheckSideCollision(vertices, insetCollider, utils::Side::right, xSpeed);
 		bool hitPlayer = utils::CheckSideCollision(playerOnlyVertices, insetCollider, utils::Side::right, xSpeed);
@@ -495,7 +516,7 @@ void Player::UpdateMovementHorizontal(
 	}
 	else if (xSpeed < 0.f)
 	{
-		Rectf insetCollider{ m_Collider.left-1, m_Collider.bottom + 1.f, m_Collider.width, m_Collider.height - 1.f };
+		Rectf insetCollider{ m_Collider.left - 1, m_Collider.bottom + 1.f, m_Collider.width, m_Collider.height - 1.f };
 
 		bool hitWorld = utils::CheckSideCollision(vertices, insetCollider, utils::Side::left, -xSpeed);
 		bool hitPlayer = utils::CheckSideCollision(playerOnlyVertices, insetCollider, utils::Side::left, -xSpeed);
@@ -547,7 +568,7 @@ void Player::UpdateMovementVertical(
 		ySpeed = m_Gravity * elapsedSec;
 	}
 
-	
+
 	Rectf insetCollider{ m_Collider.left + 1.f, m_Collider.bottom, m_Collider.width - 2.f, m_Collider.height };
 
 	bool hitGround = false;
@@ -570,7 +591,7 @@ void Player::UpdateMovementVertical(
 	}
 	else
 	{
-		
+
 		if (m_Mystate == PlayerState::Jumping)
 		{
 			m_Mystate = PlayerState::Standing;
@@ -598,7 +619,7 @@ Rectf Player::GetHitbox() const
 {
 	if (m_Mystate == PlayerState::Ducking)
 	{
-		return(Rectf{ m_Collider.left, m_Collider.bottom, m_Collider.width, m_Collider.height-16});
+		return(Rectf{ m_Collider.left, m_Collider.bottom, m_Collider.width, m_Collider.height - 16 });
 	}
 	else
 	{
@@ -609,9 +630,13 @@ Rectf Player::GetHitbox() const
 void Player::TakeDamage()
 {
 	if (m_Mystate == PlayerState::Dead)
+	{
 		return;
+	}
 	if (m_InvulnerableTimeCurrent > 0)
+	{
 		return;
+	}
 
 	m_Mystate = PlayerState::Knockback;
 	if (m_IsWearingArmour)
@@ -686,7 +711,10 @@ bool Player::IsDeathAnimationFinished() const
 
 bool Player::IsStillOnLadder() const
 {
-	if (!m_pCurrentLadder) return false;
+	if (!m_pCurrentLadder)
+	{
+		return false;
+	}
 
 	const Rectf& ladder = *m_pCurrentLadder;
 

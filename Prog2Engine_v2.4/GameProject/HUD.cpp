@@ -124,9 +124,9 @@ float HUD::DrawNumber(int number, Vector2f location) const
     for (char c : numberString)
     {
         std::string s{ c };
-        const Texture* CurrentNumberTexture = TextureManager::GetInstance().GetTextTexture(s, "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-        CurrentNumberTexture->Draw(Vector2f{location.x+ displacement, location.y});
-        displacement += CurrentNumberTexture->GetWidth();
+        const Texture* currentNumberTexture = TextureManager::GetInstance().GetTextTexture(s, "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+        currentNumberTexture->Draw(Vector2f{location.x+ displacement, location.y});
+        displacement += currentNumberTexture->GetWidth();
 
     }
     return displacement;

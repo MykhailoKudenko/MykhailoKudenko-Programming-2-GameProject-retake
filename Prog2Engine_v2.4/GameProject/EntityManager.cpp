@@ -69,7 +69,9 @@ void EntityManager::Update(float elapsedSec)
         else
         {
             if (enemy->IsBoss() == false)
+            {
                 enemy->SetIsActive(false);
+            }
         }
 
         if (enemy->GetIsActive())

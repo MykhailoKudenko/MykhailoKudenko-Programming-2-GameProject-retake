@@ -8,34 +8,32 @@
 
 namespace
 {
-	Level::EnemyType EnemyTypeFromString(const std::string& string)
+	Level::EnemyType EnemyTypeFromString(const std::string& type)
 	{
-		if (string == "Zombie")       return Level::EnemyType::Zombie;
-		if (string == "Bird")         return Level::EnemyType::Bird;
-		if (string == "FlyingKnight") return Level::EnemyType::FlyingKnight;
-		if (string == "Ghost")        return Level::EnemyType::Ghost;
-		if (string == "Plant")        return Level::EnemyType::Plant;
-		if (string == "Demon")        return Level::EnemyType::Demon;
-		if (string == "Troll")        return Level::EnemyType::Troll;
-		throw std::runtime_error("wrong Enemytype: " + string);
+		if (type == "Zombie") {return Level::EnemyType::Zombie;}
+		if (type == "Bird") {return Level::EnemyType::Bird;}
+		if (type == "FlyingKnight") {return Level::EnemyType::FlyingKnight;}
+		if (type == "Ghost") {return Level::EnemyType::Ghost;}
+		if (type == "Plant") {return Level::EnemyType::Plant;}
+		if (type == "Demon") {return Level::EnemyType::Demon;}
+		if (type == "Troll") {return Level::EnemyType::Troll;}
+		throw std::runtime_error("wrong Enemytype: " + type);
 	}
 
-	
-
-	Drop::DropType PickupTypeFromString(const std::string& string)
+	Drop::DropType PickupTypeFromString(const std::string& type)
 	{
-		if (string == "Lance") return  Drop::DropType::Lance;
-		if (string == "Knife") return  Drop::DropType::Knife;
-		if (string == "Torch") return  Drop::DropType::Torch;
-		if (string == "Doll") return  Drop::DropType::Doll;
-		if (string == "MoneyBag") return  Drop::DropType::MoneyBag;
-		throw std::runtime_error("wrong PickupType: " + string);
+		if (type == "Lance") {return  Drop::DropType::Lance;}
+		if (type == "Knife") {return  Drop::DropType::Knife;}
+		if (type == "Torch") {return  Drop::DropType::Torch;}
+		if (type == "Doll") {return  Drop::DropType::Doll;}
+		if (type == "MoneyBag") {return  Drop::DropType::MoneyBag;}
+		throw std::runtime_error("wrong PickupType: " + type);
 	}
 }
 
 
-Level::Level(const std::string& txtPath) : m_Texture{ nullptr }
-, m_PlatformTexture{ nullptr }
+Level::Level(const std::string& txtPath) : m_pTexture{ nullptr }
+, m_pPlatformTexture{ nullptr }
 {
 	std::ifstream file{ txtPath };
 	if (!file.is_open())
@@ -50,7 +48,7 @@ Level::Level(const std::string& txtPath) : m_Texture{ nullptr }
 	std::string line;
 	while (std::getline(file, line))
 	{
-		if (line.empty() || line[0] == '#') continue;
+		if (line.empty() || line[0] == '#') { continue; }
 
 		std::istringstream iss{ line };
 		std::string keyword;
@@ -127,8 +125,8 @@ Level::Level(const std::string& txtPath) : m_Texture{ nullptr }
 			std::cout << "wrong keyword:" << keyword << std::endl;
 		}
 	}
-	m_Texture = TextureManager::GetInstance().GetTexture(levelTexturePath);
-	m_PlatformTexture = TextureManager::GetInstance().GetTexture(platformTexturePath);
+	m_pTexture = TextureManager::GetInstance().GetTexture(levelTexturePath);
+	m_pPlatformTexture = TextureManager::GetInstance().GetTexture(platformTexturePath);
 
 	m_PlatformTopEdges.assign(m_Platforms.size(), std::vector<Vector2f>(2));
 
@@ -185,21 +183,21 @@ const std::vector<Rectf>& Level::GetLadders() const
 
 float Level::GetWidth() const
 {
-	return m_Texture->GetWidth();
+	return m_pTexture->GetWidth();
 }
 
 float Level::GetHeight() const
 {
-	return m_Texture->GetHeight();
+	return m_pTexture->GetHeight();
 }
 
 void Level::Draw(bool isDebug) const
 {
-	m_Texture->Draw();
+	m_pTexture->Draw();
 
 	for (const MovingPlatform& platform : m_Platforms)
 	{
-		m_PlatformTexture->Draw(platform.rect);
+		m_pPlatformTexture->Draw(platform.rect);
 	}
 
 	if (isDebug)
@@ -278,15 +276,15 @@ void Level::MovingPlatform::Update(float elapsedSec)
 		speedX = -std::abs(speedX);
 	}
 
-	*TopLeftEdge = Vector2f{ rect.left, rect.bottom + rect.height };
-	*TopRightEdge = Vector2f{ rect.left+rect.width, rect.bottom + rect.height };
+	*topLeftEdge = Vector2f{ rect.left, rect.bottom + rect.height };
+	*topRightEdge = Vector2f{ rect.left+rect.width, rect.bottom + rect.height };
 
 }
 
 void Level::MovingPlatform::Init(std::vector<Vector2f>& vertices)
 {
-	TopLeftEdge = &vertices[0];
-	TopRightEdge = &vertices[1];
+	topLeftEdge = &vertices[0];
+	topRightEdge = &vertices[1];
 }
 
 

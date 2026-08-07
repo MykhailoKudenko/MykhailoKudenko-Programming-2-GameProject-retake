@@ -44,7 +44,7 @@ private:
 	DropType m_Type;
 	bool m_IsDead{ false };
 
-	const Texture* pTexture{ nullptr };
+	const Texture* m_pTexture{ nullptr };
 
 	static constexpr float m_Gravity{ -60.f };
 	State m_Mystate = State::Falling;

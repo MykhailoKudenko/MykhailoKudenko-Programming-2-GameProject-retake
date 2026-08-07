@@ -8,9 +8,9 @@
 
 Demon::Demon(Vector2f startPos)
 	: Enemy(Rectf{ startPos.x, startPos.y, 24, 26 }),
-	m_pFlyAnimation{ Animation("DemonFly.png", 2, 0.13f, true) },
-	m_pShootAnimation{ Animation("DemonShoot.png", 1, 0.52f, false) },
-	m_pSpawnAnimation{ Animation("DemonSpawn.png", 3, 0.26f, false) }
+	m_FlyAnimation{ Animation("DemonFly.png", 2, 0.13f, true) },
+	m_ShootAnimation{ Animation("DemonShoot.png", 1, 0.52f, false) },
+	m_SpawnAnimation{ Animation("DemonSpawn.png", 3, 0.26f, false) }
 {
 	m_Speed = 80.f;
 	m_Health = 5;
@@ -26,14 +26,14 @@ void Demon::Update(float elapsedSec)
 	switch (m_MyState)
 	{
 	case DemonState::Spawning:
-		m_pSpawnAnimation.Update(elapsedSec);
+		m_SpawnAnimation.Update(elapsedSec);
 		if (SpawnUpdate())
 		{
 			m_MyState = DemonState::MoveToTopRight;
 		}
 		break;
 	case DemonState::MoveToTopRight:
-		m_pFlyAnimation.Update(elapsedSec);
+		m_FlyAnimation.Update(elapsedSec);
 
 		if (MoveToThePoint(elapsedSec, m_pEntityManager->GetPlayerPosition() + m_TopRightModifier))
 		{
@@ -42,7 +42,7 @@ void Demon::Update(float elapsedSec)
 		}
 		break;
 	case DemonState::Shooting:
-		m_pShootAnimation.Update(elapsedSec);
+		m_ShootAnimation.Update(elapsedSec);
 
 		if (UpdateShooting(elapsedSec, m_pEntityManager->GetPlayerPosition()))
 		{
@@ -53,9 +53,15 @@ void Demon::Update(float elapsedSec)
 			if (choice == 0)
 			{
 				if (m_IsAtRightSide)
+				{
 					m_MyState = DemonState::MovingToTheLeft;
+
+				}
 				else
+				{
 					m_MyState = DemonState::MovingToTheRight;
+
+				}
 			}
 			else
 			{
@@ -64,7 +70,7 @@ void Demon::Update(float elapsedSec)
 		}
 		break;
 	case DemonState::MovingToTheRight:
-		m_pFlyAnimation.Update(elapsedSec);
+		m_FlyAnimation.Update(elapsedSec);
 
 		if (UpdateParabolaAttack(elapsedSec, m_pEntityManager->GetPlayerPosition(), true))
 		{
@@ -74,7 +80,7 @@ void Demon::Update(float elapsedSec)
 		}
 		break;
 	case DemonState::MovingToTheLeft:
-		m_pFlyAnimation.Update(elapsedSec);
+		m_FlyAnimation.Update(elapsedSec);
 
 		if (UpdateParabolaAttack(elapsedSec, m_pEntityManager->GetPlayerPosition(), false))
 		{
@@ -84,7 +90,7 @@ void Demon::Update(float elapsedSec)
 		}
 		break;
 	case DemonState::MovingUp:
-		m_pFlyAnimation.Update(elapsedSec);
+		m_FlyAnimation.Update(elapsedSec);
 
 		if (MoveToThePoint(elapsedSec, Vector2f{ m_Collider.left, m_pEntityManager->GetPlayerPosition().y + m_TopRightModifier.y }))
 		{
@@ -93,7 +99,7 @@ void Demon::Update(float elapsedSec)
 		}
 		break;
 	case DemonState::MovingDown:
-		m_pFlyAnimation.Update(elapsedSec);
+		m_FlyAnimation.Update(elapsedSec);
 
 		if (MoveToThePoint(elapsedSec, Vector2f{ m_Collider.left, m_pEntityManager->GetPlayerPosition().y }))
 		{
@@ -137,11 +143,11 @@ void Demon::Draw() const
 	switch (m_MyState)
 	{
 	case DemonState::Spawning:
-		m_pSpawnAnimation.Draw(m_Collider, false, false);
+		m_SpawnAnimation.Draw(m_Collider, false, false);
 		break;
 
 	case DemonState::Shooting:
-		m_pShootAnimation.Draw(m_Collider, m_IsFacingRight);
+		m_ShootAnimation.Draw(m_Collider, m_IsFacingRight);
 		break;
 
 	case DemonState::MoveToTopRight:
@@ -149,7 +155,7 @@ void Demon::Draw() const
 	case DemonState::MovingToTheLeft:
 	case DemonState::MovingUp:
 	case DemonState::MovingDown:
-		m_pFlyAnimation.Draw(m_Collider, m_IsFacingRight);
+		m_FlyAnimation.Draw(m_Collider, m_IsFacingRight);
 		break;
 
 	default:
@@ -167,7 +173,7 @@ void Demon::SetEntityManager(EntityManager* manager)
 
 bool Demon::SpawnUpdate()
 {
-	return m_pSpawnAnimation.IsFinished();
+	return m_SpawnAnimation.IsFinished();
 }
 
 bool Demon::MoveToThePoint(float elapsedSec, const Vector2f& targetPoint)
@@ -236,11 +242,14 @@ bool Demon::UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bo
 	float t = (m_Collider.left - leftX) / width;
 
 	// Clamp t to valid range
-	if (t < 0.f) 
+	if (t < 0.f)
+	{
 		t = 0.f;
-	if (t > 1.f) 
+	}
+	if (t > 1.f)
+	{
 		t = 1.f;
-
+	}
 	//top heigh
 	float topY = lockedPlayerPos.y + m_TopRightModifier.y;
 
@@ -292,7 +301,7 @@ bool Demon::UpdateShooting(float elapsedSec, const Vector2f& playerPos)
 	}
 
 	
-	if (m_pShootAnimation.IsFinished() && isAtShootPoint)
+	if (m_ShootAnimation.IsFinished() && isAtShootPoint)
 	{
 		m_HasFiredThisShot = false;
 		return true;

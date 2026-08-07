@@ -8,7 +8,7 @@
 Enemy::Enemy(Rectf startPos)
 	: m_Collider{ startPos }
 {
-	m_bagTexture = TextureManager::GetInstance().GetTexture("Bag.png");
+	m_pBagTexture = TextureManager::GetInstance().GetTexture("Bag.png");
 }
 
 
@@ -63,9 +63,9 @@ int Enemy::GetScore() const
 }
 
 
-void Enemy::SetBag(bool DoesHaveBag)
+void Enemy::SetBag(bool doesHaveBag)
 {
-	m_DoesHaveBag = DoesHaveBag;
+	m_DoesHaveBag = doesHaveBag;
 }
 bool Enemy::HasBag() const
 {
@@ -74,8 +74,10 @@ bool Enemy::HasBag() const
 void Enemy::DrawBag() const
 {
 	if (!m_DoesHaveBag)
+	{
 		return;
-	m_bagTexture->Draw(
+	}
+	m_pBagTexture->Draw(
 		Vector2f{ m_Collider.left, m_Collider.bottom },
 		m_IsFacingRight
 	);
