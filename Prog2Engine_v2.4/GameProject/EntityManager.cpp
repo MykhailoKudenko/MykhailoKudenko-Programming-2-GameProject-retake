@@ -217,7 +217,14 @@ void EntityManager::Update(float elapsedSec)
     KillProjectilesOutsideSpawnArea();
 }
 
-
+void DrawGreenRectIfDebug(const Rectf& rect, bool isDebug)
+{
+    if (isDebug)
+    {
+        utils::SetColor(Color4f{ 0, 1, 0, 1 });
+        utils::DrawRect(rect);
+    }
+}
 
 void EntityManager::Draw(bool isDebug) const
 {
@@ -233,49 +240,35 @@ void EntityManager::Draw(bool isDebug) const
         {
             enemy->DrawBag();
         }
-
-        if (isDebug)
-        {
-            utils::SetColor(Color4f{ 0, 1, 0, 1 });
-            utils::DrawRect(enemy->GetHitbox());
-        }
+        DrawGreenRectIfDebug(enemy->GetHitbox(), isDebug);
     }
 
     for (const Projectile* proj : m_pPlayerProjectiles)
     {
 
         proj->Draw(); 
-        if (isDebug)
-        {
-            utils::SetColor(Color4f{ 0, 1, 0, 1 });
-            utils::DrawRect(proj->GetHitbox());
-        }
+        DrawGreenRectIfDebug(proj->GetHitbox(), isDebug);
+
     }
 
     for (const Projectile* proj : m_pEnemyProjectiles)
     {
         proj->Draw();
-        if (isDebug)
-        {
-            utils::SetColor(Color4f{ 0, 1, 0, 1 });
-            utils::DrawRect(proj->GetHitbox());
-        }
+        DrawGreenRectIfDebug(proj->GetHitbox(), isDebug);
+
     }
     for (const Drop* drop : m_pDrops)
     {
         drop->Draw();
-        if (isDebug)
-        {
-            utils::SetColor(Color4f{ 0, 1, 0, 1 });
-            utils::DrawRect(drop->GetHitbox());
-        }
+        DrawGreenRectIfDebug(drop->GetHitbox(), isDebug);
+
     }
+
+    DrawGreenRectIfDebug(m_pPlayer->GetHitbox(), isDebug);
+
 
     if (isDebug)
     {
-        utils::SetColor(Color4f{ 0, 1, 0, 1 });
-        utils::DrawRect(m_pPlayer->GetHitbox());
-
         DebugSpawnDraw();
     }
 }
