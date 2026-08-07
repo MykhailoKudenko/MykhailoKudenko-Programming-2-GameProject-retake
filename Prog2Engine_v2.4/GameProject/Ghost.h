@@ -40,6 +40,6 @@ private:
 
 	float m_TargetBottomAfterDrop{ 0.f };
 
-	Animation m_pFlyAnimation;
-	Animation m_pSpawnAnimation;
+	Animation m_FlyAnimation;
+	Animation m_SpawnAnimation;
 };

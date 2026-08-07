@@ -28,6 +28,6 @@ private:
 	float m_Amplitude{ 8.f };
 	float m_Frequency{ 2.f };
 
-	Animation m_pFlyAnimation;
-	Animation m_pSpawnAnimation;
+	Animation m_FlyAnimation;
+	Animation m_SpawnAnimation;
 };

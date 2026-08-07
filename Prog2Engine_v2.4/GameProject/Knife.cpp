@@ -1,6 +1,3 @@
-
-#include "pch.h"
-#include "Knife.h"
 #include "pch.h"
 #include "Knife.h"
 

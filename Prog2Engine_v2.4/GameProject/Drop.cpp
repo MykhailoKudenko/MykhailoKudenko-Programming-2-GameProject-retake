@@ -11,25 +11,25 @@ Drop::Drop(const Vector2f& pos, DropType type)
 	switch (m_Type)
 	{
 	case DropType::Lance: 
-		pTexture = TextureManager::GetInstance().GetTexture("Lance.png");
+		m_pTexture = TextureManager::GetInstance().GetTexture("Lance.png");
 		break;
 	case DropType::Knife:
-		pTexture = TextureManager::GetInstance().GetTexture("Knife.png");
+		m_pTexture = TextureManager::GetInstance().GetTexture("Knife.png");
 		break;
 	case DropType::Torch:
-		pTexture = TextureManager::GetInstance().GetTexture("Torch.png");
+		m_pTexture = TextureManager::GetInstance().GetTexture("Torch.png");
 		break;
 	case DropType::Doll:
-		pTexture = TextureManager::GetInstance().GetTexture("Doll.png");
+		m_pTexture = TextureManager::GetInstance().GetTexture("Doll.png");
 		break;
 	case DropType::MoneyBag:
-		pTexture = TextureManager::GetInstance().GetTexture("MoneyBag.png");
+		m_pTexture = TextureManager::GetInstance().GetTexture("MoneyBag.png");
 		break;
 	}
-	if (pTexture != nullptr)
+	if (m_pTexture != nullptr)
 	{
-		m_Collider.width = pTexture->GetWidth();
-		m_Collider.height = pTexture->GetHeight();
+		m_Collider.width = m_pTexture->GetWidth();
+		m_Collider.height = m_pTexture->GetHeight();
 	}
 }
 
@@ -53,9 +53,9 @@ void Drop::Update(float elapsedSec)
 
 void Drop::Draw() const
 {
-	if (pTexture != nullptr)
+	if (m_pTexture != nullptr)
 	{
-		pTexture->Draw(Vector2f{ m_Collider.left, m_Collider.bottom });
+		m_pTexture->Draw(Vector2f{ m_Collider.left, m_Collider.bottom });
 	}
 }
 

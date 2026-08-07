@@ -7,8 +7,8 @@
 Ghost::Ghost(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 24, 13.f })
 	, m_State{ GhostState::Spawning }
-	, m_pFlyAnimation{ Animation("GhostFly.png", 2, 0.13f, true) }
-	, m_pSpawnAnimation{ Animation("GhostSpawn.png", 2, 0.39f, false) }
+	, m_FlyAnimation{ Animation("GhostFly.png", 2, 0.13f, true) }
+	, m_SpawnAnimation{ Animation("GhostSpawn.png", 2, 0.39f, false) }
 {
 	m_IsFacingRight = facingRight;
 	m_Speed = 40.f;
@@ -28,8 +28,8 @@ void Ghost::Update(float elapsedSec)
 
 	if (m_State == GhostState::Spawning)
 	{
-		m_pSpawnAnimation.Update(elapsedSec);
-		if (m_pSpawnAnimation.IsFinished())
+		m_SpawnAnimation.Update(elapsedSec);
+		if (m_SpawnAnimation.IsFinished())
 		{
 			m_State = GhostState::Flying;
 			m_HasPassedPlayerX = false;
@@ -39,7 +39,7 @@ void Ghost::Update(float elapsedSec)
 
 	if (m_State == GhostState::Flying)
 	{
-		m_pFlyAnimation.Update(elapsedSec);
+		m_FlyAnimation.Update(elapsedSec);
 		m_Collider.left += m_Speed * elapsedSec;
 
 		float ghostCenterX = m_Collider.left + m_Collider.width / 2.f;
@@ -96,7 +96,7 @@ void Ghost::Update(float elapsedSec)
 
 	if (m_State == GhostState::Dropping)
 	{
-		m_pFlyAnimation.Update(elapsedSec);
+		m_FlyAnimation.Update(elapsedSec);
 
 		m_Collider.bottom -= m_DropSpeed * elapsedSec;
 
@@ -115,11 +115,11 @@ void Ghost::Draw() const
 {
 	if (m_State == GhostState::Spawning)
 	{
-		m_pSpawnAnimation.Draw(m_Collider, false, false);
+		m_SpawnAnimation.Draw(m_Collider, false, false);
 	}
 	else if (m_State == GhostState::Flying || m_State == GhostState::Dropping)
 	{
-		m_pFlyAnimation.Draw(m_Collider, m_IsFacingRight);
+		m_FlyAnimation.Draw(m_Collider, m_IsFacingRight);
 		
 	}
 }

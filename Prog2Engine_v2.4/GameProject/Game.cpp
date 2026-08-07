@@ -16,46 +16,46 @@ Game::~Game( )
 
 void Game::Initialize()
 {
-	m_P1 = new Player(Vector2f{ 50.f, 38.f });
+	m_pPlayer = new Player(Vector2f{ 50.f, 38.f });
 	m_pEntityManager = new EntityManager();
-	m_SoundManager = new SoundManager();
-	m_pEntityManager->SetSoundManager(m_SoundManager);
-	m_hud = new HUD();
+	m_pSoundManager = new SoundManager();
+	m_pEntityManager->SetSoundManager(m_pSoundManager);
+	m_pHud = new HUD();
 	m_pCamera = new Camera(1024.f, 960.f);
 
-	m_MainMenu = TextureManager::GetInstance().GetTexture("StartScreen.png");
-	m_DeathMenu = TextureManager::GetInstance().GetTexture("DeathMenu.png");
+	m_pMainMenu = TextureManager::GetInstance().GetTexture("StartScreen.png");
+	m_pDeathMenu = TextureManager::GetInstance().GetTexture("DeathMenu.png");
 
-	m_level1 = nullptr;
+	m_pLevel1 = nullptr;
 
 	m_PLayerLivesCurrent = m_PlayerLivesMax;
 	m_MyState = GameState::MainMenu;
 
-	m_SoundManager->SetMusicVolume(20);
-	m_SoundManager->SetEffectVolume(20);
+	m_pSoundManager->SetMusicVolume(20);
+	m_pSoundManager->SetEffectVolume(20);
 }
 
 void Game::Cleanup()
 {
-	delete m_hud;
-	m_hud = nullptr;
+	delete m_pHud;
+	m_pHud = nullptr;
 
 	delete m_pEntityManager;
 	m_pEntityManager = nullptr;
 
-	delete m_level1;
-	m_level1 = nullptr;
+	delete m_pLevel1;
+	m_pLevel1 = nullptr;
 
 	delete m_pCamera;
 	m_pCamera = nullptr;
 
-	delete m_P1;
-	m_P1 = nullptr;
+	delete m_pPlayer;
+	m_pPlayer = nullptr;
 
-	m_SoundManager->StopMusic();
+	m_pSoundManager->StopMusic();
 
-	delete m_SoundManager;
-	m_SoundManager = nullptr;
+	delete m_pSoundManager;
+	m_pSoundManager = nullptr;
 
 
 }
@@ -69,36 +69,36 @@ void Game::Update(float elapsedSec)
 
 	case GameState::Playing:
 		// Always update player, so death animation/physics can continue
-		m_P1->Update(
+		m_pPlayer->Update(
 			elapsedSec,
-			m_level1->GetVertices(),
-			m_level1->GetPlayerOnlyVertices(),
-			m_level1->GetLadders(),
-			m_level1->GetPlatformTopEdges()
+			m_pLevel1->GetVertices(),
+			m_pLevel1->GetPlayerOnlyVertices(),
+			m_pLevel1->GetLadders(),
+			m_pLevel1->GetPlatformTopEdges()
 		);
 
 		
-		m_level1->Update(elapsedSec);
+		m_pLevel1->Update(elapsedSec);
 		m_pEntityManager->Update(elapsedSec);
-		m_hud->Update(elapsedSec);
+		m_pHud->Update(elapsedSec);
 		
-		if (m_hud->DidTimerFinish())
+		if (m_pHud->DidTimerFinish())
 		{
-			m_SoundManager->StopMusic();
+			m_pSoundManager->StopMusic();
 			m_MyState = GameState::MainMenu;
-			m_hud->ResetTimer();
+			m_pHud->ResetTimer();
 		}
 
-		if (m_P1->IsDeathAnimationFinished() || m_P1->GetCenterPosition().y < 0)
+		if (m_pPlayer->IsDeathAnimationFinished() || m_pPlayer->GetCenterPosition().y < 0)
 		{
 			m_PLayerLivesCurrent -= 1;
 
-			m_SoundManager->StopMusic();
+			m_pSoundManager->StopMusic();
 
 			if (m_PLayerLivesCurrent > 0)
 			{
 				m_MyState = GameState::DeathMenu;
-				m_SoundManager->PlayEffect(SoundManager::SFX::Death);
+				m_pSoundManager->PlayEffect(SoundManager::SFX::Death);
 
 			}
 			else
@@ -119,11 +119,11 @@ void Game::Draw() const
 	switch (m_MyState)
 	{
 	case GameState::MainMenu:
-		if (m_MainMenu != nullptr)
+		if (m_pMainMenu != nullptr)
 		{
 			glPushMatrix();
 			glScalef(4, 4, 1.0f);
-			m_MainMenu->Draw(Vector2f{ 0.f, 0.f });
+			m_pMainMenu->Draw(Vector2f{ 0.f, 0.f });
 			glPopMatrix();
 
 		}
@@ -131,25 +131,25 @@ void Game::Draw() const
 
 	case GameState::Playing:
 		m_pCamera->Aim(
-			m_level1->GetWidth(), m_level1->GetHeight(), 0, 20,
-			Vector2f{ m_P1->GetCenterPosition().x, 0 }, (float)m_CameraScale
+			m_pLevel1->GetWidth(), m_pLevel1->GetHeight(), 0, 20,
+			Vector2f{ m_pPlayer->GetCenterPosition().x, 0 }, static_cast<float>(m_CameraScale)
 		);
 
-		m_level1->Draw(m_DebugShowColliders);
+		m_pLevel1->Draw(m_DebugShowColliders);
 		m_pEntityManager->Draw(m_DebugShowColliders);
-		m_P1->Draw();
+		m_pPlayer->Draw();
 
 		m_pCamera->Reset();
 
-		m_hud->Draw(m_P1->GetPlayerScore(), m_P1->GetPlayerWeapon());
+		m_pHud->Draw(m_pPlayer->GetPlayerScore(), m_pPlayer->GetPlayerWeapon());
 		break;
 
 	case GameState::DeathMenu:
-		if (m_DeathMenu != nullptr)
+		if (m_pDeathMenu != nullptr)
 		{
 			glPushMatrix();
 			glScalef(4, 4, 1.0f);
-			m_DeathMenu->Draw(Vector2f{ 0.f, 0.f });
+			m_pDeathMenu->Draw(Vector2f{ 0.f, 0.f });
 			glPopMatrix();
 		}
 		break;
@@ -164,14 +164,14 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		{
 		case GameState::MainMenu:
 			StartNewRun();
-			m_SoundManager->PlayMusic();
+			m_pSoundManager->PlayMusic();
 			break;
 
 		case GameState::Playing:
 			break;
 
 		case GameState::DeathMenu:
-			m_SoundManager->PlayMusic();
+			m_pSoundManager->PlayMusic();
 			StartNextLife();
 			break;
 
@@ -195,8 +195,8 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		break;
 	case SDLK_F2:
 		
-		m_P1->SetImmortal(!m_P1->IsImmortal());
-		if (m_P1->IsImmortal())
+		m_pPlayer->SetImmortal(!m_pPlayer->IsImmortal());
+		if (m_pPlayer->IsImmortal())
 		{
 			std::cout << "DEBUG: IMMORTALITY ON" << std::endl;
 		}
@@ -207,8 +207,8 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		break;
 	case SDLK_F3:
 
-		m_P1->SetFlying(!m_P1->IsFlying());
-		if (m_P1->IsFlying())
+		m_pPlayer->SetFlying(!m_pPlayer->IsFlying());
+		if (m_pPlayer->IsFlying())
 		{
 			std::cout << "DEBUG: FLYING ON" << std::endl;
 
@@ -269,43 +269,43 @@ void Game::ClearBackground( ) const
 
 void Game::LoadLevel1()
 {
-	if (m_level1 != nullptr)
+	if (m_pLevel1 != nullptr)
 	{
-		delete m_level1;
-		m_level1 = nullptr;
+		delete m_pLevel1;
+		m_pLevel1 = nullptr;
 	}
 	// make it readabl for a file svg (game technique)
-	m_level1 = new Level("Level1Data.txt");
+	m_pLevel1 = new Level("Level1Data.txt");
 }
 
 void Game::ResetLevel()
 {
-	int savedScore = m_P1->GetPlayerScore();
+	int savedScore = m_pPlayer->GetPlayerScore();
 
 	delete m_pEntityManager;
 	m_pEntityManager = new EntityManager();
 
 	LoadLevel1();
 
-	m_P1->Respawn(Vector2f{ 150.f, 38.f });
-	m_P1->SetPlayerScore(savedScore);
+	m_pPlayer->Respawn(Vector2f{ 150.f, 38.f });
+	m_pPlayer->SetPlayerScore(savedScore);
 
-	m_hud->ResetTimer();
+	m_pHud->ResetTimer();
 
-	m_pEntityManager->SetLevel(m_level1);
-	m_pEntityManager->SetPlayer(m_P1);
+	m_pEntityManager->SetLevel(m_pLevel1);
+	m_pEntityManager->SetPlayer(m_pPlayer);
 	m_pEntityManager->SpawnPointEnemies();
-	m_pEntityManager->SetSoundManager(m_SoundManager);
+	m_pEntityManager->SetSoundManager(m_pSoundManager);
 
 	
 }
 void Game::StartNewRun()
 {
 	m_PLayerLivesCurrent = m_PlayerLivesMax;
-	m_P1->SetPlayerScore(0);
+	m_pPlayer->SetPlayerScore(0);
 	ResetLevel();
 	m_MyState = GameState::Playing;
-	m_hud->ResetTimer();
+	m_pHud->ResetTimer();
 }
 
 void Game::StartNextLife()

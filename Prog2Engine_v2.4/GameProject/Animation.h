@@ -26,7 +26,7 @@ public:
 	float GetFrameHeight() const;
 
 private:
-	const Texture* m_Texture{nullptr};
+	const Texture* m_pTexture{nullptr};
 
 	int m_NrFrames{};
 	int m_CurrentFrame{};

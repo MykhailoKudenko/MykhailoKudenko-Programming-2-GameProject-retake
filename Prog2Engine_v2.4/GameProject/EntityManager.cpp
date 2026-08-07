@@ -76,12 +76,12 @@ void EntityManager::Update(float elapsedSec)
 
         if (enemy->GetIsActive())
         {
-            if (enemy->GetsoundType() == SoundManager::SFX::Ghost)
+            if (enemy->GetSoundType() == SoundManager::SFX::Ghost)
             {
                 hasGhostInRange = true;
             }
 
-            if (enemy->GetsoundType() == SoundManager::SFX::FlyingKnight)
+            if (enemy->GetSoundType() == SoundManager::SFX::FlyingKnight)
             {
                 hasFlyingKnightInRange = true;
             }
@@ -284,15 +284,15 @@ void EntityManager::DebugSpawnDraw() const
 {
     utils::SetColor(Color4f{ 0, 1, 0, 1 });
 
-   std::vector<Level::EnemySpawnPoint>& spawnPoints = m_pLevel->GetEnemySpawnPoints();
+   const std::vector<Level::EnemySpawnPoint>& spawnPoints = m_pLevel->GetEnemySpawnPoints();
 
-    for (Level::EnemySpawnPoint& spawnPoint : spawnPoints)
+    for (const Level::EnemySpawnPoint& spawnPoint : spawnPoints)
     {
         utils::DrawEllipse(spawnPoint.position, 10, 10);
     }
-     std::vector<Level::EnemySpawnArea>& spawnAreas = m_pLevel->GetEnemySpawnAreas();
+    const std::vector<Level::EnemySpawnArea>& spawnAreas = m_pLevel->GetEnemySpawnAreas();
 
-    for (  Level::EnemySpawnArea& spawnArea : spawnAreas)
+    for (const  Level::EnemySpawnArea& spawnArea : spawnAreas)
     {
         utils::DrawRect(spawnArea.area);
     }
@@ -300,11 +300,11 @@ void EntityManager::DebugSpawnDraw() const
 
     utils::DrawEllipse(playerPos, m_XSpawnLenth, m_XSpawnLenth);
 
-     std::vector<Level::DropSpawnPoint>& DropspawnPoints = m_pLevel->GetDropSpawnPoints();
+    const std::vector<Level::DropSpawnPoint>& dropspawnPoints = m_pLevel->GetDropSpawnPoints();
 
-    for (  Level::DropSpawnPoint& SpawnPoint : DropspawnPoints)
+    for (const  Level::DropSpawnPoint& spawnPoint : dropspawnPoints)
     {
-        utils::DrawEllipse(SpawnPoint.position, 10, 10);
+        utils::DrawEllipse(spawnPoint.position, 10, 10);
     }
 }
 void EntityManager::SpawnEnemyByType(Level::EnemyType type, const Vector2f& pos, bool startsFacingRight)
@@ -433,8 +433,7 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
         }
 
         float x = targetSpawnArea.left +
-            float(std::rand()) / float(RAND_MAX) * targetSpawnArea.width;
-
+            static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
         float y{ 0.f };
 
         if (!spawnArea.SpawnAtTheGround)
@@ -455,7 +454,7 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
                 continue;
             }
 
-            y = minY + float(std::rand()) / float(RAND_MAX) * (maxY - minY);
+            y = minY + static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * (maxY - minY);
         }
         else
         {

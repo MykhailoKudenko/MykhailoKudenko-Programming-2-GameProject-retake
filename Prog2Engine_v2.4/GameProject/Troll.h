@@ -43,10 +43,10 @@ private:
 	bool UpdateJumping( );
 	bool UpdateFalling( );
 
-	Animation m_pJumpAnimation;
-	Animation m_pShootAnimation;
-	Animation m_pWalkAnimation;
-	Animation m_pSpawnAnimation;
+	Animation m_JumpAnimation;
+	Animation m_ShootAnimation;
+	Animation m_WalkAnimation;
+	Animation m_SpawnAnimation;
 
 	EntityManager* m_pEntityManager{ nullptr };
 	const std::vector<std::vector<Vector2f>>* m_pVertices{ nullptr };

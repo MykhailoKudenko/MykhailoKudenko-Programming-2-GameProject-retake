@@ -39,7 +39,9 @@ const Texture* TextureManager::GetTexture(const std::string& path)
     for (size_t i = 0; i < m_Textures.size(); ++i)
     {
         if (m_Textures[i]->path == path)
+        {
             return m_Textures[i]->pTexture;
+        }
     }
 
 
@@ -58,7 +60,9 @@ const Texture* TextureManager::GetTextTexture(const std::string& text, const std
     for (size_t i = 0; i < m_TextTextures.size(); ++i)
     {
         if (m_TextTextures[i]->path == key)
+        {
             return m_TextTextures[i]->pTexture;
+        }
     }
 
     TextureEntry* entry = new TextureEntry();

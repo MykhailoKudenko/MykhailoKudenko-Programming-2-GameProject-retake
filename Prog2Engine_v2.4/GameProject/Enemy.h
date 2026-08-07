@@ -36,11 +36,11 @@ public:
 
 
 
-	void SetBag(bool DoesHaveBag);
+	void SetBag(bool doesHaveBag);
 	bool HasBag() const;
 	void DrawBag() const;
 	Effect::EffectType GetEffectType() const;
-	SoundManager::SFX GetsoundType() const;
+	SoundManager::SFX GetSoundType() const;
 
 	bool IsFacingRight() const;
 	bool IsBoss() const;
@@ -61,7 +61,7 @@ protected:
 	Effect::EffectType m_EffectType{ Effect::EffectType::Blood };
 	SoundManager::SFX m_SoundType{ SoundManager::SFX::None };
 
-	const Texture* m_bagTexture;
+	const Texture* m_pBagTexture;
 
 };
 

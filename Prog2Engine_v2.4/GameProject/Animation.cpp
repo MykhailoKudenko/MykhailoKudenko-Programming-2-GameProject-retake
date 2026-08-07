@@ -4,7 +4,7 @@
 
 
 Animation::Animation(const std::string& texturePath, int nrFrames, float frameSec, bool loop)
-	: m_Texture{ TextureManager::GetInstance().GetTexture(texturePath) }
+	: m_pTexture{ TextureManager::GetInstance().GetTexture(texturePath) }
 	, m_NrFrames{ nrFrames }
 	, m_CurrentFrame{ 0 }
 	, m_FrameSec{ frameSec }
@@ -15,7 +15,7 @@ Animation::Animation(const std::string& texturePath, int nrFrames, float frameSe
 {
 }
 Animation::Animation()
-	: m_Texture{ nullptr }
+	: m_pTexture{ nullptr }
 	, m_NrFrames{ 0 }
 	, m_CurrentFrame{ 0 }
 	, m_FrameSec{ 0 }
@@ -63,8 +63,8 @@ void Animation::Draw(const Rectf& destRect, bool isMirrored, bool stretchToFit) 
 		return;
 	}
 
-	const float frameWidth{ m_Texture->GetWidth() / m_NrFrames };
-	const float frameHeight{ m_Texture->GetHeight() };
+	const float frameWidth{ m_pTexture->GetWidth() / m_NrFrames };
+	const float frameHeight{ m_pTexture->GetHeight() };
 
 	const Rectf srcRect
 	{
@@ -95,7 +95,7 @@ void Animation::Draw(const Rectf& destRect, bool isMirrored, bool stretchToFit) 
 		drawHeight
 	};
 
-	m_Texture->Draw(localDestRect, srcRect);
+	m_pTexture->Draw(localDestRect, srcRect);
 
 	glPopMatrix();
 }
@@ -175,12 +175,12 @@ float Animation::GetFrameWidth() const
 		return 0.f;
 	}
 
-	return m_Texture->GetWidth() / m_NrFrames;
+	return m_pTexture->GetWidth() / m_NrFrames;
 }
 
 float Animation::GetFrameHeight() const
 {
-	return m_Texture->GetHeight();
+	return m_pTexture->GetHeight();
 }
 
 

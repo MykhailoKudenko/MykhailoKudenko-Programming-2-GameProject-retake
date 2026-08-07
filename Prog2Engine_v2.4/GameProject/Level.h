@@ -13,8 +13,8 @@ public:
 		float minX;
 		float maxX;
 
-		Vector2f* TopLeftEdge = nullptr;
-		Vector2f* TopRightEdge = nullptr;
+		Vector2f* topLeftEdge = nullptr;
+		Vector2f* topRightEdge = nullptr;
 
 		void Update(float elapsedSec);
 		void Init(std::vector<Vector2f>& vertices);
@@ -90,7 +90,7 @@ private:
 
 	std::vector<DropSpawnPoint> m_DropSpawnPoints;
 
-	const Texture* m_Texture;
-	const Texture* m_PlatformTexture;
+	const Texture* m_pTexture;
+	const Texture* m_pPlatformTexture;
 	const float m_PlatfromSpeedX{ 20 };
 };

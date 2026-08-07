@@ -31,7 +31,7 @@ private:
 
 
 	bool SpawnUpdate();
-	bool MoveToThePoint(float elapsedSec, const Vector2f& TargetPoint);
+	bool MoveToThePoint(float elapsedSec, const Vector2f& targetPoint);
 	bool UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bool movingRight);
 	bool UpdateShooting(float elapsedSec, const Vector2f& playerPos);
 
@@ -41,9 +41,9 @@ private:
 
 	Vector2f m_TopRightModifier{ 100, 80 };
 
-	Animation m_pFlyAnimation;
-	Animation m_pShootAnimation;
-	Animation m_pSpawnAnimation;
+	Animation m_FlyAnimation;
+	Animation m_ShootAnimation;
+	Animation m_SpawnAnimation;
 
 	float m_ParabolaProgress{ 0.f };
 	float m_ParabolaHorizontalSpeed{ 60.f };

@@ -20,6 +20,6 @@ private:
 
 	EntityManager* m_pEntityManager{ nullptr };
 
-	Animation m_pPlantAnimation;
+	Animation m_PlantAnimation;
 };
 

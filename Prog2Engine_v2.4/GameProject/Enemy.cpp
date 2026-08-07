@@ -87,7 +87,7 @@ Effect::EffectType Enemy::GetEffectType() const
 {
 	return m_EffectType;
 }
-SoundManager::SFX Enemy::GetsoundType() const
+SoundManager::SFX Enemy::GetSoundType() const
 {
 	return m_SoundType;
 }

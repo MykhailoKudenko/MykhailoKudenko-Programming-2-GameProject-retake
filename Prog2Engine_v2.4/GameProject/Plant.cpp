@@ -7,7 +7,7 @@
 
 Plant::Plant(Vector2f startPos)
 	: Enemy(Rectf{ startPos.x, startPos.y, 16, 24 }),
-	m_pPlantAnimation{ Animation("Plant.png", 2, 1.06f, false) }
+	m_PlantAnimation{ Animation("Plant.png", 2, 1.06f, false) }
 
 {
 	m_Speed = 0.f;
@@ -17,11 +17,11 @@ Plant::Plant(Vector2f startPos)
 
 void Plant::Update(float elapsedSec)
 {
-	m_pPlantAnimation.Update(elapsedSec);
-	if (m_pPlantAnimation.IsFinished())
+	m_PlantAnimation.Update(elapsedSec);
+	if (m_PlantAnimation.IsFinished())
 	{
 		Fire(m_pEntityManager->GetPlayerPosition());
-		m_pPlantAnimation.Reset();
+		m_PlantAnimation.Reset();
 	}
 }
 void Plant::Fire(const Vector2f& playerPos)
@@ -46,7 +46,7 @@ void Plant::Fire(const Vector2f& playerPos)
 
 void Plant::Draw() const
 {
-	m_pPlantAnimation.Draw(m_Collider, m_IsFacingRight);
+	m_PlantAnimation.Draw(m_Collider, m_IsFacingRight);
 }
 
 void Plant::SetEntityManager(EntityManager* pEntityManager)

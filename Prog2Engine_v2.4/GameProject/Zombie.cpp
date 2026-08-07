@@ -6,8 +6,8 @@
 
 Zombie::Zombie(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 19, 27 }),
-	m_pWalkAnimation{ Animation("ZombieWalk.png", 2, 0.13f, true ) }, 
-	m_pSpawnAnimation{ Animation( "ZombieSpawn.png", 3, 0.39f, false ) }
+	m_WalkAnimation{ Animation("ZombieWalk.png", 2, 0.13f, true ) }, 
+	m_SpawnAnimation{ Animation( "ZombieSpawn.png", 3, 0.39f, false ) }
 {
 	m_IsFacingRight = facingRight;
 	m_Speed = 30.f;
@@ -32,14 +32,14 @@ void Zombie::Update(float elapsedSec)
 	switch (m_State)
 	{
 	case ZombieState::Spawning:
-		m_pSpawnAnimation.Update(elapsedSec);
-		if (m_pSpawnAnimation.IsFinished())
+		m_SpawnAnimation.Update(elapsedSec);
+		if (m_SpawnAnimation.IsFinished())
 		{
 			m_State = ZombieState::Walking;
 		}
 		break;
 	case ZombieState::Walking:
-		m_pWalkAnimation.Update(elapsedSec);
+		m_WalkAnimation.Update(elapsedSec);
 
 		m_Velocity.x = m_Speed * elapsedSec;
 		m_Velocity.y = m_Gravity * elapsedSec;
@@ -103,10 +103,10 @@ void Zombie::Draw() const
 	switch (m_State)
 	{
 	case ZombieState::Spawning:
-		m_pSpawnAnimation.Draw(m_Collider, m_IsFacingRight, false);
+		m_SpawnAnimation.Draw(m_Collider, m_IsFacingRight, false);
 		break;
 	case ZombieState::Walking:
-		m_pWalkAnimation.Draw(m_Collider, m_IsFacingRight);
+		m_WalkAnimation.Draw(m_Collider, m_IsFacingRight);
 		break;
 	}
 }

@@ -30,6 +30,6 @@ private:
 
 	ZombieState m_State{ ZombieState::Spawning };
 
-	Animation m_pWalkAnimation;
-	Animation m_pSpawnAnimation;
+	Animation m_WalkAnimation;
+	Animation m_SpawnAnimation;
 };

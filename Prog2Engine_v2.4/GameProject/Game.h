@@ -54,19 +54,19 @@ private:
 	};
 
 	Camera* m_pCamera;
-	Player* m_P1;
-	Level* m_level1;
+	Player* m_pPlayer;
+	Level* m_pLevel1;
 	EntityManager* m_pEntityManager;
-	SoundManager* m_SoundManager;
+	SoundManager* m_pSoundManager;
 
-	HUD* m_hud;
+	HUD* m_pHud;
 
 	GameState m_MyState{ GameState::DeathMenu };
 	const int m_PlayerLivesMax = 3;
 	int m_PLayerLivesCurrent = 3;
 
-	const Texture* m_MainMenu;
-	const Texture* m_DeathMenu;
+	const Texture* m_pMainMenu;
+	const Texture* m_pDeathMenu;
 
 	bool m_DebugShowColliders = false;
 	int m_CameraScale = 4;
