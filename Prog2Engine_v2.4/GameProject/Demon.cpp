@@ -132,7 +132,7 @@ void Demon::Fire(const Vector2f& playerPos)
 
 
 
-	m_pEntityManager->SpawnDemonProjectile(spawnPos, direction.Normalized());
+	m_pEntityManager->SpawnEnemyProjectile(spawnPos, direction.Normalized(), SimpleProjectile::SimpleProjectileType::Demon);
 }
 
 

@@ -277,7 +277,7 @@ void Troll::Fire(const Vector2f& playerPos)
 		0.f
 	};
 
-	m_pEntityManager->SpawnDemonProjectile(spawnPos, direction);
+	m_pEntityManager->SpawnEnemyProjectile(spawnPos, direction.Normalized(), SimpleProjectile::SimpleProjectileType::Troll);
 }
 
 void Troll::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)

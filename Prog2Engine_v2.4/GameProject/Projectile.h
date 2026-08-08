@@ -4,12 +4,12 @@
 class Projectile
 {
 public:
-	Projectile(Rectf startPos);
+	Projectile(Rectf startPos, Vector2f direction, float speed);
 	virtual ~Projectile() = default;
 
 	void virtual Update(float elapsedSec);
 
-	void virtual Draw() const;
+	void virtual Draw() const = 0;
 	Rectf GetHitbox() const;
 	Vector2f GetCenterPosition() const;
 
@@ -17,11 +17,10 @@ public:
 	bool IsDead() const;
 
 protected:
-	Vector2f m_Speed{ 0,0 };
 	Rectf m_Collider;
-
-	const Texture* m_pTexture{nullptr};
-
-	bool m_IsDead = false;
+	Vector2f m_Direction;
+	float m_Speed;
+	bool m_IsDead;
+	const Texture* m_pTexture;
 };
 

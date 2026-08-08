@@ -25,8 +25,6 @@ private:
 	};
 
 	const std::vector<std::vector<Vector2f>>* m_pVertices{};
-	static constexpr float m_Gravity{ -60.f };
-
 
 	ZombieState m_State{ ZombieState::Spawning };
 

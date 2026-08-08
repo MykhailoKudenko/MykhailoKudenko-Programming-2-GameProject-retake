@@ -41,7 +41,7 @@ void Plant::Fire(const Vector2f& playerPos)
 		playerPos.y - spawnPos.y
 	};
 
-	m_pEntityManager->SpawnPlantProjectile(spawnPos, direction.Normalized());
+	m_pEntityManager->SpawnEnemyProjectile(spawnPos, direction.Normalized(), SimpleProjectile::SimpleProjectileType::Plant);
 }
 
 void Plant::Draw() const

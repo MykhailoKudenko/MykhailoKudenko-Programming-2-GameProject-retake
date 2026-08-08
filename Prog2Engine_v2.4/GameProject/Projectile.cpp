@@ -2,7 +2,7 @@
 #include "Projectile.h"
 #include "utils.h"
 
-Projectile::Projectile(Rectf startPos) :m_Collider{ startPos }
+Projectile::Projectile(Rectf startPos, Vector2f direction, float speed) :m_Collider{ startPos }, m_Direction{ direction }, m_Speed{ speed }, m_IsDead{false}, m_pTexture{nullptr}
 {
 
 }
@@ -10,21 +10,8 @@ Projectile::Projectile(Rectf startPos) :m_Collider{ startPos }
 
 void Projectile::Update(float elapsedSec)
 {
-	m_Collider.left += m_Speed.x * elapsedSec;
-	m_Collider.bottom += m_Speed.y * elapsedSec;
-}
-
-void Projectile::Draw() const
-{
-	if (m_pTexture == nullptr)
-	{
-		return;
-	}
-
-	m_pTexture->Draw(
-		Vector2f{ m_Collider.left, m_Collider.bottom },
-		m_Speed.x <= 0
-	);
+	m_Collider.left += m_Direction.x * m_Speed * elapsedSec;
+	m_Collider.bottom += m_Direction.y * m_Speed* elapsedSec;
 }
 
 Rectf Projectile::GetHitbox() const

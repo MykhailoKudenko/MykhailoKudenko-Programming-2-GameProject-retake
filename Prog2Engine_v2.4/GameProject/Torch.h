@@ -11,7 +11,7 @@
 class Torch final : public Projectile
 {
 public:
-	Torch(Vector2f pos, bool isRight);
+	Torch(Vector2f pos, bool isFacingRight);
 
 	void Update(float elapsedSec) override;
 
@@ -34,6 +34,6 @@ private:
 
 	TorchStates m_MyState = TorchStates::FlyingUp;
 
-	float m_TimeFliyngUp = 0.5f;
+	float m_TimeFliyngUp;
 };
 

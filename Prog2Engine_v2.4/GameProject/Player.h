@@ -94,7 +94,6 @@ private:
 	bool IsStillOnLadder() const;
 	void SnapToCurrentLadderCenter();
 	//movement(speeds)
-	float m_Gravity{-60};
 	float m_MovementSpeed{ 50 };
 	float m_JumpSpeed{ 60 };
 	float m_KnockBackSpeed{ 80 };

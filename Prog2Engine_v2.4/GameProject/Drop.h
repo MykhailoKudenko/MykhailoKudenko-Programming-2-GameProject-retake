@@ -46,7 +46,6 @@ private:
 
 	const Texture* m_pTexture{ nullptr };
 
-	static constexpr float m_Gravity{ -60.f };
 	State m_Mystate = State::Falling;
 
 };

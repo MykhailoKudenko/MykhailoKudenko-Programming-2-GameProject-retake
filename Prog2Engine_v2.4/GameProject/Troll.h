@@ -57,8 +57,6 @@ private:
 
 	float m_WalkTimer{ 0.f };
 
-	const float m_Gravity{ -250.f }; 
-
 	bool m_DoJumpNext{ false };
 	bool m_IsGrounded{ false };
 

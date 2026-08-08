@@ -21,7 +21,7 @@ private:
     Animation GetAnimation(EffectType type);
 
     Vector2f m_Position;
-    bool m_IsMirrored{ false };
+    bool m_IsMirrored;
 
     Animation m_MyAnimation;
 

@@ -15,13 +15,9 @@
 #include "Demon.h"
 #include "Troll.h"
 
-#include "Lance.h"
-#include "Knife.h"
+
+#include "SimpleProjectile.h"
 #include "Torch.h"
-
-#include "PlantProjectile.h"
-#include "DemonProjectile.h"
-
 
 #include "Drop.h"
 
@@ -55,12 +51,9 @@ public:
     void AddDemon(const Vector2f& spawnPos);
     void AddTroll(const Vector2f& spawnPos);
 
-    void SpawnLance(const Vector2f& pos, bool isRight);
-    void SpawnKnife(const Vector2f& pos, bool isRight);
-    void SpawnTorch(const Vector2f& pos, bool isRight);
 
-    void SpawnPlantProjectile(const Vector2f& pos, const Vector2f& direction);
-    void SpawnDemonProjectile(const Vector2f& pos, const Vector2f& direction);
+    void SpawnPlayerWeapon(const Vector2f& pos, bool isRight, Player::PlayerWeapon weapon);
+    void SpawnEnemyProjectile(const Vector2f& pos, const Vector2f& direction,SimpleProjectile::SimpleProjectileType type);
 
 
     void AddDrop(const Vector2f& pos, Drop::DropType type);
@@ -71,7 +64,7 @@ public:
     void SpawnEffect(const Vector2f& pos, Effect::EffectType type, bool isMirrored = false);
   
 private:
-
+    void SpawnTorch(const Vector2f& pos, bool isRight);
     void KillProjectilesOutsideSpawnArea();
 
     void SpawnEnemyByType(Level::EnemyType type, const Vector2f& pos, bool startsFacingRight);

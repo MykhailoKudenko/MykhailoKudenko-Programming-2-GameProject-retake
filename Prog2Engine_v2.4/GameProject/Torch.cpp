@@ -2,22 +2,10 @@
 #include "Torch.h"
 #include "utils.h"
 
-Torch::Torch(Vector2f pos, bool isRight)
-	: Projectile(Rectf{ pos.x, pos.y, 12.f, 8.f }),
-	m_BurningGround{ Animation("BurningGround.png", 2, 0.26f, false) }
+Torch::Torch(Vector2f pos, bool isFacingRight)
+: Projectile(Rectf{ pos.x, pos.y,TextureManager::GetInstance().GetTexture("Torch.png")->GetWidth(),TextureManager::GetInstance().GetTexture("Torch.png")->GetHeight() }, Vector2f{ isFacingRight ? 0.848f : -0.848f , 0.530f }, 100),
+	m_BurningGround{ Animation("BurningGround.png", 2, 0.26f, false) }, m_TimeFliyngUp{0.5f}
 {
-	if (isRight)
-	{
-		m_Speed.x = 80.f;
-	}
-	else
-	{
-		m_Speed.x = -80.f;
-
-	}
-	m_Speed.y = 50;
-
-	
 	m_pTourchTexture = TextureManager::GetInstance().GetTexture("Torch.png");
 	
 
@@ -27,11 +15,11 @@ void Torch::Draw() const
 {
 	if (m_MyState == TorchStates::Burning)
 	{
-		m_BurningGround.Draw(m_Collider, m_Speed.x >= 0, false);
+		m_BurningGround.Draw(m_Collider, m_Direction.x >= 0, false);
 	}
 	else
 	{
-		m_pTourchTexture->Draw(Vector2f{ m_Collider.left, m_Collider.bottom }, m_Speed.x >= 0);
+		m_pTourchTexture->Draw(Vector2f{ m_Collider.left, m_Collider.bottom }, m_Direction.x >= 0);
 	}
 }
 
@@ -52,16 +40,16 @@ void Torch::Update(float elapsedSec)
 			m_MyState = TorchStates::FlyingDown;
 		}
 
-		m_Collider.left += m_Speed.x * elapsedSec;
-		m_Collider.bottom += m_Speed.y * elapsedSec;
+		m_Collider.left += m_Direction.x * m_Speed * elapsedSec;
+		m_Collider.bottom += m_Direction.y * m_Speed * elapsedSec;
 		break;
 
 	case TorchStates::FlyingDown:
 
 		if (utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom) == false)
 		{
-			m_Collider.left += m_Speed.x * elapsedSec;
-			m_Collider.bottom -= m_Speed.y * elapsedSec;
+			m_Collider.left += m_Direction.x * m_Speed * elapsedSec;
+			m_Collider.bottom -= m_Direction.y * m_Speed * elapsedSec;
 		}
 		else
 		{

@@ -166,19 +166,11 @@ void EntityManager::Update(float elapsedSec)
 
     if (m_pPlayer->DoesWantToThrow())
     {
-        switch (m_pPlayer->GetPlayerWeapon())
-        {
-        case Player::PlayerWeapon::Lance:
-            SpawnLance(m_pPlayer->GetThrowPosition(), m_pPlayer->IsFacingRight());
-            break;
-        case Player::PlayerWeapon::Knife:
-            SpawnKnife(m_pPlayer->GetThrowPosition(), m_pPlayer->IsFacingRight());
-            break;
-        case Player::PlayerWeapon::Torch:
-            SpawnTorch(m_pPlayer->GetThrowPosition(), m_pPlayer->IsFacingRight());
-            break;
-        }
+        SpawnPlayerWeapon(m_pPlayer->GetThrowPosition(),
+            m_pPlayer->IsFacingRight(),
+            m_pPlayer->GetPlayerWeapon());
     }
+    
 
     for (Enemy* enemy : m_pEnemies)
     {
@@ -426,7 +418,7 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
         }
 
         float x = targetSpawnArea.left +
-            static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
+            static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * targetSpawnArea.width;
         float y{ 0.f };
 
         if (!spawnArea.SpawnAtTheGround)
@@ -542,19 +534,34 @@ void EntityManager::AddTroll(const Vector2f& spawnPos)
     }
     m_pEnemies.push_back(troll);
 }
-void EntityManager::SpawnLance(const Vector2f& pos, bool isRight)
+void EntityManager::SpawnPlayerWeapon(const Vector2f& pos, bool isRight,
+    Player::PlayerWeapon weapon)
 {
     m_pSoundManager->PlayEffect(SoundManager::SFX::Throw);
-    Lance* lance = new Lance(pos, isRight);
-    m_pPlayerProjectiles.push_back(lance);
-}
-void EntityManager::SpawnKnife(const Vector2f& pos, bool isRight)
-{
-    m_pSoundManager->PlayEffect(SoundManager::SFX::Throw);
-    Knife* knife = new Knife(pos, isRight);
-    m_pPlayerProjectiles.push_back(knife);
+    const Vector2f direction{ isRight ? 1.f : -1.f, 0.f };
 
+    switch (weapon)
+    {
+    case Player::PlayerWeapon::Lance:
+        m_pPlayerProjectiles.push_back(
+            new SimpleProjectile{ pos, direction, SimpleProjectile::SimpleProjectileType::Lance });
+        break;
+    case Player::PlayerWeapon::Knife:
+        m_pPlayerProjectiles.push_back(
+            new SimpleProjectile{ pos, direction, SimpleProjectile::SimpleProjectileType::Knife });
+        break;
+    case Player::PlayerWeapon::Torch:
+        SpawnTorch(pos, isRight);
+        break;
+    }
 }
+
+void EntityManager::SpawnEnemyProjectile(const Vector2f& pos, const Vector2f& direction,
+    SimpleProjectile::SimpleProjectileType type)
+{
+    m_pEnemyProjectiles.push_back(new SimpleProjectile{ pos, direction, type });
+}
+
 void EntityManager::SpawnTorch(const Vector2f& pos, bool isRight)
 {
     m_pSoundManager->PlayEffect(SoundManager::SFX::Throw);
@@ -566,19 +573,6 @@ void EntityManager::SpawnTorch(const Vector2f& pos, bool isRight)
     m_pPlayerProjectiles.push_back(torch);
 }
 
-void EntityManager::SpawnPlantProjectile(const Vector2f& pos, const Vector2f& direction)
-{
-    PlantProjectile* proj = new PlantProjectile(pos, direction);
-
-    m_pEnemyProjectiles.push_back(proj);
-}
-
-void EntityManager::SpawnDemonProjectile(const Vector2f& pos, const Vector2f& direction)
-{
-    DemonProjectile* proj = new DemonProjectile(pos, direction);
-
-    m_pEnemyProjectiles.push_back(proj);
-}
 void EntityManager::AddDrop(const Vector2f& pos, Drop::DropType type)
 {
     Drop* drop = new Drop(pos, type);
