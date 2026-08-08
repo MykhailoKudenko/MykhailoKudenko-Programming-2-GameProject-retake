@@ -2,6 +2,13 @@
 #include "HUD.h"
 #include "TextureManager.h"
 
+namespace
+{
+    const std::string s_FontPath{ "LowresPixel-Regular.otf" };
+    const int s_FontSize{ 60 };
+    const Color4f s_DigitColour{ 1.f, 1.f, 1.f, 1.f };
+    const Color4f s_LabelColour{ 243.f / 255.f, 194.f / 255.f, 191.f / 255.f, 1.f };
+}
 
 HUD::HUD()
     : m_TimeLeft{ 240.f },
@@ -45,9 +52,8 @@ void HUD::Draw(int score, Player::PlayerWeapon weapon) const
 
     displacement += DrawNumber(minutes, Vector2f{ 100.f, 720 });
         
-    const Texture* symbolTexture = TextureManager::GetInstance().GetTextTexture(":", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    symbolTexture->Draw(Vector2f{ 100.f + displacement, 720 });
-    displacement += symbolTexture->GetWidth();
+    m_pcolonSymbol->Draw(Vector2f{ 100.f + displacement, 720 });
+    displacement += m_pcolonSymbol->GetWidth();
 
      DrawNumber(seconds, Vector2f{ 100.f+ displacement, 720 });
 
@@ -117,16 +123,16 @@ bool HUD::DidTimerFinish() const
 
 float HUD::DrawNumber(int number, Vector2f location) const
 {
-    std::string numberString = std::to_string(number);
-
+    int absNumber = std::abs(number);
     float displacement = 0;
+
+    std::string numberString = std::to_string(absNumber);
 
     for (char c : numberString)
     {
-        std::string s{ c };
-        const Texture* currentNumberTexture = TextureManager::GetInstance().GetTextTexture(s, "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-        currentNumberTexture->Draw(Vector2f{location.x+ displacement, location.y});
-        displacement += currentNumberTexture->GetWidth();
+        
+        m_pDigitTextures[c - '0']->Draw(Vector2f{location.x + displacement, location.y});
+        displacement += m_pDigitTextures[c - '0']->GetWidth();
 
     }
     return displacement;
@@ -134,18 +140,16 @@ float HUD::DrawNumber(int number, Vector2f location) const
 
 void HUD::InitNumbersAndSymbols()
 {
-    TextureManager::GetInstance().GetTextTexture("0", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    TextureManager::GetInstance().GetTextTexture("1", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    TextureManager::GetInstance().GetTextTexture("2", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    TextureManager::GetInstance().GetTextTexture("3", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    TextureManager::GetInstance().GetTextTexture("4", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    TextureManager::GetInstance().GetTextTexture("5", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    TextureManager::GetInstance().GetTextTexture("6", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    TextureManager::GetInstance().GetTextTexture("7", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    TextureManager::GetInstance().GetTextTexture("8", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-    TextureManager::GetInstance().GetTextTexture("9", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    m_pDigitTextures[0] = TextureManager::GetInstance().GetTextTexture("0", "LowresPixel-Regular.otf", 60, Color4f{1,1,1,1});
+    m_pDigitTextures[1] = TextureManager::GetInstance().GetTextTexture("1", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    m_pDigitTextures[2] = TextureManager::GetInstance().GetTextTexture("2", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    m_pDigitTextures[3] = TextureManager::GetInstance().GetTextTexture("3", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    m_pDigitTextures[4] = TextureManager::GetInstance().GetTextTexture("4", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    m_pDigitTextures[5] = TextureManager::GetInstance().GetTextTexture("5", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    m_pDigitTextures[6] = TextureManager::GetInstance().GetTextTexture("6", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    m_pDigitTextures[7] = TextureManager::GetInstance().GetTextTexture("7", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    m_pDigitTextures[8] = TextureManager::GetInstance().GetTextTexture("8", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    m_pDigitTextures[9] = TextureManager::GetInstance().GetTextTexture("9", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
 
-    TextureManager::GetInstance().GetTextTexture(":", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
-
-
+    m_pcolonSymbol = TextureManager::GetInstance().GetTextTexture(":", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
 }
