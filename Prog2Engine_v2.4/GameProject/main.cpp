@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <ctime>
 #include "Game.h"
+#include <iostream>
 
 
 void StartHeapControl();
@@ -12,12 +13,24 @@ int SDL_main(int argv, char** args)
 
 	StartHeapControl();
 
-	Game* pGame{ new Game{ Window{ "GAME PROJECT, Mykhailo Kudenko - 1DAE14", 1024.f , 960.f } } };
-	pGame->Run();
+	Game* pGame{ nullptr };
+	int returnValue{ 0 };
+	try
+	{
+		pGame = new Game{ Window{ "GAME PROJECT, Mykhailo Kudenko - 1DAE14", 1024.f , 960.f } };
+		pGame->Run();
+
+	}
+	catch (const std::exception& error)
+	{
+		std::cerr << "Fatal error: " << error.what() << std::endl;
+		returnValue = 1;
+	}
 	delete pGame;
 
 	//DumpMemoryLeaks();
-	return 0;
+
+	return returnValue;
 }
 
 

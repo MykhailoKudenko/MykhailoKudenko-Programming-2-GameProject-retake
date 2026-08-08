@@ -125,15 +125,24 @@ Level::Level(const std::string& txtPath) : m_pTexture{ nullptr }
 			std::cout << "wrong keyword:" << keyword << std::endl;
 		}
 	}
+
+	if (levelTexturePath.empty())
+	{
+		throw std::runtime_error("level texture not found ");
+	}
+	if (m_Platforms.size() > 0 && platformTexturePath.empty())
+	{
+		throw std::runtime_error("Platfrom texture not found ");
+	}
+	if (svgPath.empty())
+	{
+		throw std::runtime_error("SVG not found ");
+	}
+
 	m_pTexture = TextureManager::GetInstance().GetTexture(levelTexturePath);
 	m_pPlatformTexture = TextureManager::GetInstance().GetTexture(platformTexturePath);
 
 	m_PlatformTopEdges.assign(m_Platforms.size(), std::vector<Vector2f>(2));
-
-	for (size_t i = 0; i < m_Platforms.size(); ++i)
-	{
-		m_Platforms[i].Init(m_PlatformTopEdges[i]);
-	}
 
 	LoadFromSvg(svgPath);
 }
@@ -144,7 +153,7 @@ void Level::LoadFromSvg(const std::string& svgPath)
 
 	if (!SVGParser::GetVerticesFromSvgFile(svgPath, m_Vertices))
 	{
-		std::cout << "Failed SVG " << svgPath << std::endl;
+		throw std::runtime_error("SVG error:  " + svgPath);
 	}
 }
 
@@ -260,11 +269,14 @@ void Level::Update(float elapsedSec)
 	{
 		platform.Update(elapsedSec);
 	}
+
+	UpdatePlatformTopEdges();
 }
 
 void Level::MovingPlatform::Update(float elapsedSec)
 {
 	rect.left += speedX * elapsedSec;
+
 	if (rect.left <= minX)
 	{
 		rect.left = minX;
@@ -275,16 +287,19 @@ void Level::MovingPlatform::Update(float elapsedSec)
 		rect.left = maxX - rect.width;
 		speedX = -std::abs(speedX);
 	}
-
-	*topLeftEdge = Vector2f{ rect.left, rect.bottom + rect.height };
-	*topRightEdge = Vector2f{ rect.left+rect.width, rect.bottom + rect.height };
-
 }
 
-void Level::MovingPlatform::Init(std::vector<Vector2f>& vertices)
+void Level::UpdatePlatformTopEdges()
 {
-	topLeftEdge = &vertices[0];
-	topRightEdge = &vertices[1];
+	for (size_t i{ 0 }; i < m_Platforms.size(); ++i)
+	{
+		const Rectf& platfromRect{ m_Platforms[i].rect };
+		const float platfromTop{ platfromRect.bottom + platfromRect.height };
+
+		std::vector<Vector2f>& edge{ m_PlatformTopEdges[i] };
+		edge[0] = Vector2f{ platfromRect.left, platfromTop };
+		edge[1] = Vector2f{ platfromRect.left + platfromRect.width, platfromTop };
+	}
 }
 
 

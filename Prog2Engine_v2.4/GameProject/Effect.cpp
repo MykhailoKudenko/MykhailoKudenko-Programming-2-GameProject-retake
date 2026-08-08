@@ -2,6 +2,26 @@
 #include "Effect.h"
 #include "TextureManager.h"
 
+namespace{
+    Animation GetAnimation(Effect::EffectType type)
+    {
+        switch (type)
+        {
+        case Effect::EffectType::Blood:
+            return Animation("BloodDeath.png", 3, 0.13f, false);
+            break;
+        case Effect::EffectType::Fire:
+            return  Animation("FireDeath.png", 3, 0.13f, false);
+            break;
+        case Effect::EffectType::Blink:
+            return  Animation("SparklingHit.png", 2, 0.13f, false);
+            break;
+        default:
+            return Animation();
+        }
+    }
+}
+
 Effect::Effect(const Vector2f& pos, EffectType type, bool isMirrored)
     : m_Position{ pos }
     , m_IsMirrored{ isMirrored },
@@ -33,25 +53,6 @@ void Effect::Draw() const
 bool Effect::IsFinished() const
 {
     return m_MyAnimation.IsFinished();
-}
-
-
-Animation Effect::GetAnimation(EffectType type)
-{
-    switch (type)
-    {
-    case EffectType::Blood:
-        return Animation("BloodDeath.png", 3, 0.13f, false);
-        break;
-    case EffectType::Fire:
-        return  Animation("FireDeath.png", 3, 0.13f, false);
-        break;
-    case EffectType::Blink:
-        return  Animation("SparklingHit.png", 2, 0.13f, false);
-        break;
-    default:
-        return Animation();
-    }
 }
 
 

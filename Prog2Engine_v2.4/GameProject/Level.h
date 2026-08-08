@@ -13,11 +13,10 @@ public:
 		float minX;
 		float maxX;
 
-		Vector2f* topLeftEdge = nullptr;
-		Vector2f* topRightEdge = nullptr;
+		int topLeftEdgeIndex;
+		int topRightEdgeIndex;
 
 		void Update(float elapsedSec);
-		void Init(std::vector<Vector2f>& vertices);
 	};
 
 	enum class EnemyType
@@ -76,6 +75,7 @@ public:
 	void Update(float elapsedSec);
 
 private:
+	void UpdatePlatformTopEdges();
 	void LoadFromSvg(const std::string& svgPath);
 
 	std::vector<std::vector<Vector2f>> m_Vertices;
