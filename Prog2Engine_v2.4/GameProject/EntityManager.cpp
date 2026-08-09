@@ -174,8 +174,10 @@ void EntityManager::Update(float elapsedSec)
 
     for (Enemy* enemy : m_pEnemies)
     {
+        if (enemy->IsDead()) { continue; }
         for (Projectile* proj : m_pPlayerProjectiles)
         {
+            if (proj->IsDead()) { continue; }
             if (utils::IsOverlapping(enemy->GetHitbox(), proj->GetHitbox()))
             {
                 enemy->TakeDamage();
