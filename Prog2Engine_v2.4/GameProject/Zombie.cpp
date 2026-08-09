@@ -4,12 +4,12 @@
 
 
 
-Zombie::Zombie(const Vector2f& startPos, bool facingRight)
+Zombie::Zombie(const Vector2f& startPos, bool facingRight, const std::vector<std::vector<Vector2f>>* vertices)
 	: Enemy(Rectf{ startPos.x, startPos.y, 19, 27 }, facingRight ? 30.f : -30.f, facingRight),
 	m_State{ ZombieState::Spawning },
 	m_WalkAnimation{ "ZombieWalk.png", 2, 0.13f, true }, 
 	m_SpawnAnimation{"ZombieSpawn.png", 3, 0.39f, false },
-	m_pVertices{nullptr}
+	m_pVertices{ vertices }
 {
 }
 
@@ -102,12 +102,6 @@ void Zombie::Draw() const
 		break;
 	}
 }
-
-void Zombie::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
-{
-	m_pVertices = vertices;
-}
-
 
 bool Zombie::IsSpawning() const
 {

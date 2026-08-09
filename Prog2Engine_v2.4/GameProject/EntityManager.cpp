@@ -483,16 +483,12 @@ bool EntityManager::FindGroundBelow(const Vector2f& pos, float& outGroundY) cons
 
 void EntityManager::AddZombie(const Vector2f& spawnPos, bool startsFacingRight)
 {
-    Zombie* zombie = new Zombie(spawnPos, startsFacingRight);
-
     if (m_pLevel != nullptr)
     {
-        zombie->SetWorld(&m_pLevel->GetVertices());
+        Zombie* zombie = new Zombie(spawnPos, startsFacingRight, &m_pLevel->GetVertices());
+        zombie->SetBag(RollBagDrop());
+        m_pEnemies.push_back(zombie);
     }
-
-    zombie->SetBag(RollBagDrop());
-
-    m_pEnemies.push_back(zombie);
 }
 void EntityManager::AddBird(const Vector2f& spawnPos, bool startsFacingRight)
 {
@@ -515,26 +511,23 @@ void EntityManager::AddGhost(const Vector2f& SpawnPos, bool startsFacingRight)
 }
 void EntityManager::AddPlant(const Vector2f& spawnPos)
 {
-    Plant* plant = new Plant(spawnPos);
-    plant->SetEntityManager(this);
+    Plant* plant = new Plant(spawnPos, this);
     m_pEnemies.push_back(plant);
 }
 void EntityManager::AddDemon(const Vector2f& spawnPos)
 {
-    Demon* demon = new Demon(spawnPos);
-    demon->SetEntityManager(this);
+    Demon* demon = new Demon(spawnPos, this);
     m_pEnemies.push_back(demon);
 }
 
 void EntityManager::AddTroll(const Vector2f& spawnPos)
 {
-    Troll* troll = new Troll(spawnPos);
-    troll->SetEntityManager(this);
     if (m_pLevel != nullptr)
     {
-        troll->SetWorld(&m_pLevel->GetVertices());
+        Troll* troll = new Troll(spawnPos, &m_pLevel->GetVertices(), this);
+
+        m_pEnemies.push_back(troll);
     }
-    m_pEnemies.push_back(troll);
 }
 void EntityManager::SpawnPlayerWeapon(const Vector2f& pos, bool isRight,
     Player::PlayerWeapon weapon)
@@ -566,23 +559,22 @@ void EntityManager::SpawnEnemyProjectile(const Vector2f& pos, const Vector2f& di
 
 void EntityManager::SpawnTorch(const Vector2f& pos, bool isRight)
 {
-    m_pSoundManager->PlayEffect(SoundManager::SFX::Throw);
-    Torch* torch = new Torch(pos, isRight);
     if (m_pLevel != nullptr)
     {
-        torch->SetWorld(&m_pLevel->GetVertices());
+        m_pSoundManager->PlayEffect(SoundManager::SFX::Throw);
+        Torch* torch = new Torch(pos, isRight, &m_pLevel->GetVertices());
+        m_pPlayerProjectiles.push_back(torch);
+
     }
-    m_pPlayerProjectiles.push_back(torch);
 }
 
 void EntityManager::AddDrop(const Vector2f& pos, Drop::DropType type)
 {
-    Drop* drop = new Drop(pos, type);
     if (m_pLevel != nullptr)
     {
-        drop->SetWorld(&m_pLevel->GetVertices());
+        Drop* drop = new Drop(pos, type, &m_pLevel->GetVertices());
+        m_pDrops.push_back(drop);
     }
-    m_pDrops.push_back(drop);
 }
 void EntityManager::SpawnEffect(const Vector2f& pos, Effect::EffectType type, bool isMirrored)
 {

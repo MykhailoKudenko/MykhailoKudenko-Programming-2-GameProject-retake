@@ -9,17 +9,10 @@ class EntityManager;
 class Troll final : public Enemy
 {
 public:
-	Troll(Vector2f startPos);
+	Troll(Vector2f startPos, const std::vector<std::vector<Vector2f>>* vertices, EntityManager* manager);
 
 	void Update(float elapsedSec) override;
-	void Draw() const override;
-
-
-	void SetEntityManager(EntityManager* manager);
-	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
-	
-		
-	
+	void Draw() const override;	
 private:
 
 	enum class TrollState

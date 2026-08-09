@@ -19,7 +19,7 @@ public:
 	};
 
 
-	Drop(const Vector2f& pos, DropType type);
+	Drop(const Vector2f& pos, DropType type, const std::vector<std::vector<Vector2f>>* vertices);
 
 	void Update(float elapsedSec);
 	void Draw() const;
@@ -29,8 +29,6 @@ public:
 	bool IsDead() const;
 	void Kill();
 
-	void SetWorld(const std::vector<std::vector<Vector2f>>* vertices);
-
 private:
 	enum class State
 	{
@@ -38,7 +36,7 @@ private:
 		NotFalling
 	};
 
-	const std::vector<std::vector<Vector2f>>* m_pVertices{ nullptr };
+	const std::vector<std::vector<Vector2f>>* m_pVertices;
 
 	Rectf m_Collider;
 	DropType m_Type;

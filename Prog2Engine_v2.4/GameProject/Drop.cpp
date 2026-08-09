@@ -3,9 +3,10 @@
 #include "utils.h"
 #include "TextureManager.h"
 
-Drop::Drop(const Vector2f& pos, DropType type)
+Drop::Drop(const Vector2f& pos, DropType type, const std::vector<std::vector<Vector2f>>* vertices)
 	: m_Collider{ pos.x, pos.y, 10.f, 10.f }
 	, m_Type{ type }
+	, m_pVertices{vertices}
 {
 	
 	switch (m_Type)
@@ -77,9 +78,4 @@ bool Drop::IsDead() const
 void Drop::Kill()
 {
 	m_IsDead = true;
-}
-
-void Drop::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
-{
-	m_pVertices = vertices;
 }

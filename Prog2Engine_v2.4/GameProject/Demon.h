@@ -9,9 +9,7 @@ class EntityManager;
 class Demon final : public Enemy
 {
 public:
-	Demon(Vector2f startPos);
-
-	void SetEntityManager(EntityManager* manager);
+	Demon(Vector2f startPos, EntityManager* manager);
 
 	void Update(float elapsedSec) override;
 	void Draw() const override;

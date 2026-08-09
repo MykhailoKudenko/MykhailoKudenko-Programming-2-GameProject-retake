@@ -55,7 +55,7 @@ const Texture* TextureManager::GetTextTexture(const std::string& text, const std
         }
     }
 
-    m_Textures.push_back(TextureEntry{ key, new Texture{ key } });
+    m_Textures.push_back(TextureEntry{ key, new Texture{ text, fontPath, ptSize, textColor } });
     return m_Textures.back().pTexture;
 
 }

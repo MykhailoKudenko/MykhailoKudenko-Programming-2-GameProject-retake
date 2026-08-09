@@ -2,9 +2,11 @@
 #include "Torch.h"
 #include "utils.h"
 
-Torch::Torch(Vector2f pos, bool isFacingRight)
+Torch::Torch(Vector2f pos, bool isFacingRight, const std::vector<std::vector<Vector2f>>* vertices)
 : Projectile(Rectf{ pos.x, pos.y,TextureManager::GetInstance().GetTexture("Torch.png")->GetWidth(),TextureManager::GetInstance().GetTexture("Torch.png")->GetHeight() }, Vector2f{ isFacingRight ? 0.848f : -0.848f , 0.530f }, 100),
-	m_BurningGround{ Animation("BurningGround.png", 2, 0.26f, false) }, m_TimeFliyngUp{0.5f}
+	m_BurningGround{ Animation("BurningGround.png", 2, 0.26f, false) }, 
+	m_TimeFliyngUp{0.5f},
+	m_pVertices{ vertices }
 {
 	m_pTourchTexture = TextureManager::GetInstance().GetTexture("Torch.png");
 	
@@ -74,9 +76,4 @@ void Torch::Kill()
 	{
 		m_IsDead = true;
 	}
-}
-
-void Torch::SetWorld(const std::vector<std::vector<Vector2f>>* vertices)
-{
-	m_pVertices = vertices;
 }

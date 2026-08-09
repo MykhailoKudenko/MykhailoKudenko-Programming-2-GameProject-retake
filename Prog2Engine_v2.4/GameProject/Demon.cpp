@@ -6,7 +6,7 @@
 #include <iostream>
 #include <ctime>
 
-Demon::Demon(Vector2f startPos)
+Demon::Demon(Vector2f startPos, EntityManager* manager)
 	: Enemy(Rectf{ startPos.x, startPos.y, 24, 26 }, 80, false, 200, false, Effect::EffectType::Fire, SoundManager::SFX::None, true, 5),
 	m_FlyAnimation{ Animation("DemonFly.png", 2, 0.13f, true) },
 	m_ShootAnimation{ Animation("DemonShoot.png", 1, 0.52f, false) },
@@ -19,7 +19,7 @@ Demon::Demon(Vector2f startPos)
 	m_MyState{ DemonState::Spawning },
 	m_IsAtRightSide{ true },
 	m_HasFiredThisShot{ false },
-	m_pEntityManager{ nullptr }
+	m_pEntityManager{ manager }
 {
 }
 
@@ -164,14 +164,6 @@ void Demon::Draw() const
 	default:
 		break;
 	}
-}
-
-
-
-
-void Demon::SetEntityManager(EntityManager* manager)
-{
-	m_pEntityManager = manager;
 }
 
 bool Demon::SpawnUpdate()

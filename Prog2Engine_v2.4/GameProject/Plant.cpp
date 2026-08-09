@@ -5,10 +5,10 @@
 #include <cmath>
 
 
-Plant::Plant(Vector2f startPos)
+Plant::Plant(Vector2f startPos, EntityManager* manager)
 	: Enemy(Rectf{ startPos.x, startPos.y, 16, 24 }, 0, false, 100, false, Effect::EffectType::Fire),
 	m_PlantAnimation{ Animation("Plant.png", 2, 1.06f, false) },
-	m_pEntityManager{nullptr}
+	m_pEntityManager{manager}
 {
 }
 
@@ -44,9 +44,4 @@ void Plant::Fire(const Vector2f& playerPos)
 void Plant::Draw() const
 {
 	m_PlantAnimation.Draw(m_Collider, m_IsFacingRight);
-}
-
-void Plant::SetEntityManager(EntityManager* pEntityManager)
-{
-	m_pEntityManager = pEntityManager;
 }

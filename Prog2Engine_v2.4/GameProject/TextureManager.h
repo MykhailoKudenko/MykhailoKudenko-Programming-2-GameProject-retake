@@ -1,6 +1,5 @@
 #pragma once
 #include "Texture.h"
-#include "Animation.h"
 #include <vector>
 
 class TextureManager final
