@@ -174,12 +174,19 @@ float Animation::GetFrameWidth() const
 	{
 		return 0.f;
 	}
-
+	if (m_pTexture == nullptr)
+	{
+		return 0;
+	}
 	return m_pTexture->GetWidth() / m_NrFrames;
 }
 
 float Animation::GetFrameHeight() const
 {
+	if (m_pTexture == nullptr)
+	{
+		return 0;
+	}
 	return m_pTexture->GetHeight();
 }
 
