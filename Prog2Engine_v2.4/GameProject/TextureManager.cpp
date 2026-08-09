@@ -4,8 +4,6 @@
 
 TextureManager::TextureManager()
 {
-    m_Textures.reserve(500);
-    m_TextTextures.reserve(500);
 }
 
 
@@ -18,19 +16,14 @@ TextureManager& TextureManager::GetInstance()
 
 TextureManager::~TextureManager()
 {
-    for (size_t i = 0; i < m_Textures.size(); ++i)
-    {
-        delete m_Textures[i]->pTexture;
-        delete m_Textures[i];
+    for (const TextureEntry& entry : m_Textures) 
+    { 
+        delete entry.pTexture; 
     }
-    m_Textures.clear();
-
-    for (size_t i = 0; i < m_TextTextures.size(); ++i)
-    {
-        delete m_TextTextures[i]->pTexture;
-        delete m_TextTextures[i];
+    for (const TextureEntry& entry : m_TextTextures) 
+    { 
+        delete entry.pTexture; 
     }
-    m_TextTextures.clear();
 }
 
 
@@ -38,18 +31,15 @@ const Texture* TextureManager::GetTexture(const std::string& path)
 {
     for (size_t i = 0; i < m_Textures.size(); ++i)
     {
-        if (m_Textures[i]->path == path)
+        if (m_Textures[i].path == path)
         {
-            return m_Textures[i]->pTexture;
+            return m_Textures[i].pTexture;
         }
     }
 
 
-    TextureEntry* entry = new TextureEntry();
-    entry->path = path;
-    entry->pTexture = new Texture(path);
-    m_Textures.push_back(entry);
-    return entry->pTexture;
+    m_Textures.push_back(TextureEntry{ path, new Texture{ path } });
+    return m_Textures.back().pTexture;
 }
 
 const Texture* TextureManager::GetTextTexture(const std::string& text, const std::string& fontPath, int ptSize, const Color4f& textColor)
@@ -59,16 +49,13 @@ const Texture* TextureManager::GetTextTexture(const std::string& text, const std
 
     for (size_t i = 0; i < m_TextTextures.size(); ++i)
     {
-        if (m_TextTextures[i]->path == key)
+        if (m_TextTextures[i].path == key)
         {
-            return m_TextTextures[i]->pTexture;
+            return m_TextTextures[i].pTexture;
         }
     }
 
-    TextureEntry* entry = new TextureEntry();
-    entry->path = key;
-    entry->pTexture = new Texture(text, fontPath, ptSize, textColor);
-    m_TextTextures.push_back(entry);
-    return entry->pTexture;
+    m_Textures.push_back(TextureEntry{ key, new Texture{ key } });
+    return m_Textures.back().pTexture;
 
 }

@@ -23,14 +23,14 @@ private:
 	struct TextureEntry
 	{
 		std::string path;
-		Texture* pTexture;
+		Texture* pTexture{ nullptr };
 	};
 
 	TextureManager();
 	~TextureManager();
 
-	std::vector<TextureEntry*> m_Textures;
-	std::vector<TextureEntry*> m_TextTextures;
+	std::vector<TextureEntry> m_Textures;
+	std::vector<TextureEntry> m_TextTextures;
 
 };
 
