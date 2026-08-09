@@ -50,8 +50,6 @@ public:
 
 	void Respawn(const Vector2f& pos);
 
-	void SetPos(const Vector2f& pos);
-
 	void SetImmortal(bool isImmortal);
 
 	bool IsImmortal() const;

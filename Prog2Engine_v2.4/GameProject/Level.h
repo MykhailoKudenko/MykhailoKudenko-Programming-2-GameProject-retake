@@ -60,12 +60,13 @@ public:
 	const std::vector<std::vector<Vector2f>>& GetPlatformTopEdges() const;
 	const std::vector<Rectf>& GetLadders() const;
 
-	 std::vector<EnemySpawnPoint>& GetEnemySpawnPoints();
-	 std::vector<EnemySpawnArea>& GetEnemySpawnAreas();
+	std::vector<EnemySpawnPoint>& GetEnemySpawnPoints();
+	std::vector<EnemySpawnArea>& GetEnemySpawnAreas();
 
-	 std::vector<DropSpawnPoint>& GetDropSpawnPoints();
+	std::vector<DropSpawnPoint>& GetDropSpawnPoints();
 
-	 std::vector<std::vector<Vector2f>>& GetPlayerOnlyVertices();
+	std::vector<std::vector<Vector2f>>& GetPlayerOnlyVertices();
+	const Vector2f& GetPlayerPosition() const;
 
 	float GetWidth() const;
 	float GetHeight() const;
@@ -90,7 +91,9 @@ private:
 
 	std::vector<DropSpawnPoint> m_DropSpawnPoints;
 
+	Vector2f m_PlayerSpawnPos;
+
 	const Texture* m_pTexture;
 	const Texture* m_pPlatformTexture;
-	const float m_PlatfromSpeedX{ 20 };
+	const float m_PlatfromSpeedX;
 };

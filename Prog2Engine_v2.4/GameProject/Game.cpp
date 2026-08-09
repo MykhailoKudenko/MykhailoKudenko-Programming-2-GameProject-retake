@@ -16,7 +16,7 @@ Game::~Game( )
 
 void Game::Initialize()
 {
-	m_pPlayer = new Player(Vector2f{ 50.f, 38.f });
+	m_pPlayer = new Player(Vector2f{ 0,0 });
 	m_pEntityManager = new EntityManager();
 	m_pSoundManager = new SoundManager();
 	m_pEntityManager->SetSoundManager(m_pSoundManager);
@@ -287,7 +287,8 @@ void Game::ResetLevel()
 
 	LoadLevel1();
 
-	m_pPlayer->Respawn(Vector2f{ 150.f, 38.f });
+	m_pPlayer->Respawn(m_pLevel1->GetPlayerPosition());
+
 	m_pPlayer->SetPlayerScore(savedScore);
 
 	m_pHud->ResetTimer();

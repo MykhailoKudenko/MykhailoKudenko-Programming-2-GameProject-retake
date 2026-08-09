@@ -32,8 +32,10 @@ namespace
 }
 
 
-Level::Level(const std::string& txtPath) : m_pTexture{ nullptr }
-, m_pPlatformTexture{ nullptr }
+Level::Level(const std::string& txtPath) : m_pTexture{ nullptr },
+m_pPlatformTexture{ nullptr },
+m_PlayerSpawnPos{0,0},
+m_PlatfromSpeedX{20}
 {
 	std::ifstream file{ txtPath };
 	if (!file.is_open())
@@ -54,7 +56,11 @@ Level::Level(const std::string& txtPath) : m_pTexture{ nullptr }
 		std::string keyword;
 		iss >> keyword;
 
-		if (keyword == "texture")
+		if (keyword == "playerStartPos")
+		{
+			iss >> m_PlayerSpawnPos.x >> m_PlayerSpawnPos.y;
+		}
+		else if (keyword == "texture")
 		{
 			iss >> levelTexturePath;
 		}
@@ -198,6 +204,10 @@ float Level::GetWidth() const
 float Level::GetHeight() const
 {
 	return m_pTexture->GetHeight();
+}
+const Vector2f& Level::GetPlayerPosition() const 
+{ 
+	return m_PlayerSpawnPos;
 }
 
 void Level::Draw(bool isDebug) const

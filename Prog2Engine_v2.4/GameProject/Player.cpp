@@ -793,11 +793,6 @@ void Player::Respawn(const Vector2f& pos)
 	m_pCurrentLadder = nullptr;
 }
 
-
-void Player::SetPos(const Vector2f& pos)
-{
-	m_Collider = Rectf{ pos.x, pos.y, 16.f, 24.f };
-}
 void Player::SetImmortal(bool isImmortal)
 {
 	m_IsImmortal = isImmortal;
