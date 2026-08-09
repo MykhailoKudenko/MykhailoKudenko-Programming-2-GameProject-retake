@@ -28,18 +28,19 @@ private:
 		Dropping
 	};
 
-	EntityManager* m_pEntityManager{ nullptr };
 
-	GhostState m_State{ GhostState::Spawning };
+	GhostState m_State;
 
-	float m_DropDistance{ 30.f };
-	float m_DropSpeed{ 20.f };
+	float m_DropDistance;
+	float m_DropSpeed;
 
-	float m_ExtraPastPlayer{ 80.f };
-	bool m_HasPassedPlayerX{ false };
+	float m_ExtraPastPlayer;
+	bool m_HasPassedPlayerX;
 
 	float m_TargetBottomAfterDrop{ 0.f };
 
 	Animation m_FlyAnimation;
 	Animation m_SpawnAnimation;
+
+	EntityManager* m_pEntityManager{ nullptr };
 };

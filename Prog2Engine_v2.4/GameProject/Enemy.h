@@ -8,7 +8,7 @@
 class Enemy
 {
 public:
-	Enemy(Rectf startPos);
+	Enemy(Rectf startPos, float speed, bool isFacingRightm, int score = 100, bool doesHaveBag = false, Effect::EffectType deathEffect = Effect::EffectType::Blood, SoundManager::SFX soundType = SoundManager::SFX::None, bool isBoss = false, int health = 1);
 	virtual ~Enemy() = default;
 
 	Enemy(const Enemy&) = delete;
@@ -46,20 +46,20 @@ public:
 	bool IsBoss() const;
 protected:
 	Rectf m_Collider;
-	float m_Speed{ 0.f };
-	Vector2f m_Velocity{ 0.f, 0.f };
+	float m_Speed;
+	Vector2f m_Velocity;
+	bool m_IsFacingRight;
 
-	int m_Health{ 1 };
-	int m_Score{ 100 };
-	bool m_IsDead{ false };
-	bool m_IsBoss{ false };
-	bool m_IsActive{ false };
-	bool m_DoesHaveBag{ false };
+	int m_Health;
+	int m_Score;
+	bool m_IsBoss;
+	bool m_IsActive;
+	bool m_DoesHaveBag;
+	bool m_IsDead;
 
-	bool m_IsFacingRight{ true };
 
-	Effect::EffectType m_EffectType{ Effect::EffectType::Blood };
-	SoundManager::SFX m_SoundType{ SoundManager::SFX::None };
+	Effect::EffectType m_EffectType;
+	SoundManager::SFX m_SoundType;
 
 	const Texture* m_pBagTexture;
 

@@ -7,20 +7,20 @@
 #include <iostream>
 
 Troll::Troll(Vector2f startPos)
-	: Enemy(Rectf{ startPos.x, startPos.y, 43, 40 }),
+	: Enemy(Rectf{ startPos.x, startPos.y, 43, 40 }, 30, false, 300, false, Effect::EffectType::Fire, SoundManager::SFX::None, true, 10),
 	m_JumpAnimation{ Animation("TrollJump.png", 1, 0.13f, true) },
 	m_ShootAnimation{ Animation("TrollShoot.png", 1, 0.52f, false) },
 	m_WalkAnimation{ Animation("TrollWalking.png", 2, 0.13f, true) },
-	m_SpawnAnimation{ Animation("TrollStand.png", 1, 0.52f, false) }
+	m_SpawnAnimation{ Animation("TrollStand.png", 1, 0.52f, false) },
+	m_pEntityManager{ nullptr },
+	m_pVertices{ nullptr },
+	m_MyState{ TrollState::Spawning },
+	m_HasFiredThisShot{ false },
+	m_WalkTimer{ 0.f },
+	m_DoJumpNext{ false },
+	m_IsGrounded{ false },
+	m_JumpSpeed{ 180.f }
 {
-	m_Speed = 30.f;
-	m_Health = 10;
-	m_IsBoss = true;
-
-
-	m_EffectType = Effect::EffectType::Fire;
-
-
 }
 
 void Troll::Update(float elapsedSec)
@@ -228,7 +228,7 @@ void Troll::ApplyGravity(float elapsedSec)
 		return;
 	}
 
-	m_Velocity.y += utils::g_Gravity * elapsedSec;
+	m_Velocity.y += utils::g_Gravity * 3 * elapsedSec;
 
 	if (m_Velocity.y <= 0.f)
 	{

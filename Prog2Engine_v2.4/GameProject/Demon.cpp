@@ -7,17 +7,20 @@
 #include <ctime>
 
 Demon::Demon(Vector2f startPos)
-	: Enemy(Rectf{ startPos.x, startPos.y, 24, 26 }),
+	: Enemy(Rectf{ startPos.x, startPos.y, 24, 26 }, 80, false, 200, false, Effect::EffectType::Fire, SoundManager::SFX::None, true, 5),
 	m_FlyAnimation{ Animation("DemonFly.png", 2, 0.13f, true) },
 	m_ShootAnimation{ Animation("DemonShoot.png", 1, 0.52f, false) },
-	m_SpawnAnimation{ Animation("DemonSpawn.png", 3, 0.26f, false) }
+	m_SpawnAnimation{ Animation("DemonSpawn.png", 3, 0.26f, false) },
+	m_TopRightModifier{ 100.f, 80.f },
+	m_ParabolaProgress{ 0.f },
+	m_ParabolaHorizontalSpeed{ 60.f },
+	m_ParabolaLockedPlayerPos{ 0.f, 0.f},
+	m_HasLockedParabolaTarget{ false },
+	m_MyState{ DemonState::Spawning },
+	m_IsAtRightSide{ true },
+	m_HasFiredThisShot{ false },
+	m_pEntityManager{ nullptr }
 {
-	m_Speed = 80.f;
-	m_Health = 5;
-	m_IsBoss = true;
-
-	m_EffectType = Effect::EffectType::Fire;
-
 }
 
 void Demon::Update(float elapsedSec)

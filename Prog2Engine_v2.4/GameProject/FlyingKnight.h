@@ -14,12 +14,12 @@ public:
 
 private:
 
-	float m_StateTime{ 0.f };
-	float m_FlyTime{ 0.f };
-	float m_StartY{};
+	float m_StartY;
+	float m_StateTime;
+	float m_FlyTime;
 
-	float m_Amplitude{ 50.f };
-	float m_Frequency{ 2.f };
+	float m_Amplitude;
+	float m_Frequency;
 
 	const Texture* m_pTexture;
 };

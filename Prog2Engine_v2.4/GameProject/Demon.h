@@ -37,23 +37,26 @@ private:
 
 	void Fire(const Vector2f& playerPos);
 
-	EntityManager* m_pEntityManager{ nullptr };
 
-	Vector2f m_TopRightModifier{ 100, 80 };
 
 	Animation m_FlyAnimation;
 	Animation m_ShootAnimation;
 	Animation m_SpawnAnimation;
 
-	float m_ParabolaProgress{ 0.f };
-	float m_ParabolaHorizontalSpeed{ 60.f };
+	Vector2f m_TopRightModifier;
 
-	Vector2f m_ParabolaLockedPlayerPos{};
-	bool m_HasLockedParabolaTarget{ false };
 
-	DemonState m_MyState{ DemonState::Spawning };
+	float m_ParabolaProgress;
+	float m_ParabolaHorizontalSpeed;
+
+	Vector2f m_ParabolaLockedPlayerPos;
+	bool m_HasLockedParabolaTarget;
+
+	DemonState m_MyState;
 	
-	bool m_IsAtRightSide{ true };
-	bool m_HasFiredThisShot{ false };
+	bool m_IsAtRightSide;
+	bool m_HasFiredThisShot;
+
+	EntityManager* m_pEntityManager;
 
 };

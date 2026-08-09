@@ -5,21 +5,15 @@
 
 
 Bird::Bird(Vector2f startPos, bool facingRight)
-	: Enemy(Rectf{ startPos.x, startPos.y, 12.f, 13.f })
-	, m_State{ BirdState::Spawning }
-	, m_StartY{ startPos.y },
+	: Enemy(Rectf{ startPos.x, startPos.y, 12.f, 13.f }, facingRight ? 25.f : -25.f, facingRight),
+	m_State{ BirdState::Spawning },
+	m_StartY{ startPos.y },
+	m_FlyTime{0.f},
+	m_Amplitude{8.f},
+	m_Frequency{2.f},
 	m_FlyAnimation{ Animation("BirdFly.png", 2, 0.15f, true) },
 	m_SpawnAnimation{ Animation("BirdSpawn.png", 2, 0.52f, false) }
 {
-
-	m_IsFacingRight = facingRight;
-	m_Speed = 25.f;
-
-	if (!facingRight)
-	{
-		m_Speed *= -1.f;
-	}
-
 }
 
 void Bird::Update(float elapsedSec)

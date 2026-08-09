@@ -18,7 +18,7 @@ public:
 private:
 	void Fire(const Vector2f& playerPos);
 
-	EntityManager* m_pEntityManager{ nullptr };
+	EntityManager* m_pEntityManager;
 
 	Animation m_PlantAnimation;
 };

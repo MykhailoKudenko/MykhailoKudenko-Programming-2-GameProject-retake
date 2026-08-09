@@ -11,7 +11,7 @@ public:
 	void Update(float elapsedSec) override;
 	void Draw() const override;
 
-	bool IsSpawning() const;
+	bool IsSpawning() const override;
 
 
 private:
@@ -21,12 +21,12 @@ private:
 		Flying
 	};
 
-	BirdState m_State{ BirdState::Spawning };
-	float m_FlyTime{ 0.f };
-	float m_StartY{};
+	BirdState m_State;
+	float m_StartY;
+	float m_FlyTime;
 
-	float m_Amplitude{ 8.f };
-	float m_Frequency{ 2.f };
+	float m_Amplitude;
+	float m_Frequency;
 
 	Animation m_FlyAnimation;
 	Animation m_SpawnAnimation;

@@ -8,7 +8,7 @@ class Zombie final : public Enemy
 {
 
 public:
-	Zombie(Vector2f startPos, bool facingRight);
+	Zombie(const Vector2f& startPos, bool facingRight);
 
 	void Update(float elapsedSec) override;
 	void Draw() const override;
@@ -23,11 +23,10 @@ private:
 		Spawning,
 		Walking
 	};
-
-	const std::vector<std::vector<Vector2f>>* m_pVertices{};
-
-	ZombieState m_State{ ZombieState::Spawning };
+	ZombieState m_State;
 
 	Animation m_WalkAnimation;
 	Animation m_SpawnAnimation;
+
+	const std::vector<std::vector<Vector2f>>* m_pVertices;
 };

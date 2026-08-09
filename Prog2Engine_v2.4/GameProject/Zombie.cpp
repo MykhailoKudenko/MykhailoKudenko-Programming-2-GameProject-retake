@@ -4,21 +4,13 @@
 
 
 
-Zombie::Zombie(Vector2f startPos, bool facingRight)
-	: Enemy(Rectf{ startPos.x, startPos.y, 19, 27 }),
-	m_WalkAnimation{ Animation("ZombieWalk.png", 2, 0.13f, true ) }, 
-	m_SpawnAnimation{ Animation( "ZombieSpawn.png", 3, 0.39f, false ) }
+Zombie::Zombie(const Vector2f& startPos, bool facingRight)
+	: Enemy(Rectf{ startPos.x, startPos.y, 19, 27 }, facingRight ? 30.f : -30.f, facingRight),
+	m_State{ ZombieState::Spawning },
+	m_WalkAnimation{ "ZombieWalk.png", 2, 0.13f, true }, 
+	m_SpawnAnimation{"ZombieSpawn.png", 3, 0.39f, false },
+	m_pVertices{nullptr}
 {
-	m_IsFacingRight = facingRight;
-	m_Speed = 30.f;
-
-
-
-	if (!facingRight)
-	{
-		m_Speed *= -1.f;
-	}
-	
 }
 
 

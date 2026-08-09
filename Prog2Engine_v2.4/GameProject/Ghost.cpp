@@ -5,21 +5,17 @@
 
 
 Ghost::Ghost(Vector2f startPos, bool facingRight)
-	: Enemy(Rectf{ startPos.x, startPos.y, 24, 13.f })
-	, m_State{ GhostState::Spawning }
-	, m_FlyAnimation{ Animation("GhostFly.png", 2, 0.13f, true) }
-	, m_SpawnAnimation{ Animation("GhostSpawn.png", 2, 0.39f, false) }
-{
-	m_IsFacingRight = facingRight;
-	m_Speed = 40.f;
-
-	m_SoundType = SoundManager::SFX::Ghost;
-
-	if (!facingRight)
-	{
-		m_Speed *= -1.f;
-	}
-
+	: Enemy(Rectf{ startPos.x, startPos.y, 24, 13.f }, facingRight ? 40.f : -40.f, facingRight, 100, false, Effect::EffectType::Blood, SoundManager::SFX::Ghost), 
+	m_State{ GhostState::Spawning },
+	m_DropDistance{30.f},
+	m_DropSpeed{20.f},
+	m_ExtraPastPlayer{80.f},
+	m_HasPassedPlayerX{false},
+	m_TargetBottomAfterDrop{0.f},
+	m_FlyAnimation{ "GhostFly.png", 2, 0.13f, true },
+	m_SpawnAnimation{ "GhostSpawn.png", 2, 0.39f, false },
+	m_pEntityManager{nullptr}
+{	
 }
 
 

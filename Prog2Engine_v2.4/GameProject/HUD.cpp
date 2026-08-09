@@ -2,14 +2,6 @@
 #include "HUD.h"
 #include "TextureManager.h"
 
-namespace
-{
-    const std::string s_FontPath{ "LowresPixel-Regular.otf" };
-    const int s_FontSize{ 60 };
-    const Color4f s_DigitColour{ 1.f, 1.f, 1.f, 1.f };
-    const Color4f s_LabelColour{ 243.f / 255.f, 194.f / 255.f, 191.f / 255.f, 1.f };
-}
-
 HUD::HUD()
     : m_TimeLeft{ 240.f },
     m_StartingTime{ 240.f }
