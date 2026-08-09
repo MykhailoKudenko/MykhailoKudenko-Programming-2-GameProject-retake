@@ -21,6 +21,8 @@ namespace {
 		case SimpleProjectile::SimpleProjectileType::Troll:
 			return TextureManager::GetInstance().GetTexture("TrollBullet.png");
 			break;
+		default:
+			return nullptr;
 		}
 	}
 
@@ -39,6 +41,8 @@ namespace {
 		case SimpleProjectile::SimpleProjectileType::Troll:
 			return 60.f;
 			break;
+		default:
+			return 0;
 		}
 	}
 }
