@@ -24,35 +24,31 @@ private:
 		Falling
 	};
 
-	bool SpawnUpdate();
-	bool UpdateShooting(float elapsedSec, const Vector2f& playerPos);
-	bool UpdateWalking(float elapsedSec, const Vector2f& playerPos);
 	void Fire(const Vector2f& playerPos);
 
-	void ApplyGravity(float elapsedSec);
+	void ApplyVerticalmovement(float elapsedSec);
 	void ApplyHorisontalMovement(float elapsedSec);
-
-	void StartJump();
-	bool UpdateJumping( );
-	bool UpdateFalling( );
 
 	Animation m_JumpAnimation;
 	Animation m_ShootAnimation;
 	Animation m_WalkAnimation;
 	Animation m_SpawnAnimation;
 
-	EntityManager* m_pEntityManager{ nullptr };
-	const std::vector<std::vector<Vector2f>>* m_pVertices{ nullptr };
+	EntityManager* m_pEntityManager;
+	const std::vector<std::vector<Vector2f>>* m_pVertices;
 
-	TrollState m_MyState{ TrollState::Spawning };
+	TrollState m_MyState;
 
-	bool m_HasFiredThisShot{ false };
+	bool m_HasFiredThisShot;
 
-	float m_WalkTimer{ 0.f };
+	const float m_WalkTimerMax;
+	float m_WalkTimerCurrent;
 
-	bool m_DoJumpNext{ false };
-	bool m_IsGrounded{ false };
+	bool m_DoJumpNext;
+	bool m_IsGrounded;
 
-	const float m_JumpSpeed{ 180.f };
+	const float m_JumpTimeMax;
+	float m_JumpTimCurrent;
+	const float m_JumpSpeed;
 
 };

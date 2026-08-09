@@ -3,7 +3,7 @@ texture Level1.png
 platformTexture Platform.png
 svg Level1.svg
 
-playerStartPos 150 38
+playerStartPos 3150 38
 
 # --- player only vertices (polygons) ---
 polygon
