@@ -54,7 +54,7 @@ public:
 		bool spawned{ false };
 	};
 
-	Level(const std::string& txtPath);
+	explicit Level(const std::string& txtPath);
 
 	const std::vector<std::vector<Vector2f>>& GetVertices() const;
 	const std::vector<std::vector<Vector2f>>& GetPlatformTopEdges() const;
