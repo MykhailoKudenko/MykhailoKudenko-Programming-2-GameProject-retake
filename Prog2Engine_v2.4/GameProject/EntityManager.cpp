@@ -4,9 +4,35 @@
 #include <cstdlib>
 #include <cmath>
 
-EntityManager::EntityManager()
+EntityManager::EntityManager():
+
+m_pPlayer{ nullptr },
+m_pLevel{ nullptr },
+
+m_pSoundManager{ nullptr },
+
+m_pEnemies{ },
+m_pPlayerProjectiles{ },
+m_pEnemyProjectiles{ },
+m_pDrops{ },
+m_pEffects{ },
+
+m_UpdateLenth{ 256 / 2.f + 50 },
+m_DeathLenth{ 256 / 2.f + 150 },
+
+m_XSpawnLenth{ 256 / 2.f + 50 },
+m_YMinSpawnForAir{ 37.f },
+m_YMaxHeight{ 200.f },
+
+m_IsGhostSoundPlaying{ false },
+m_IsFlyingKnightSoundPlaying{ false },
+
+m_GhostSoundTimer{ 0.f },
+m_FlyingKnightSoundTimer{ 0.f },
+
+m_GhostSoundCooldown{ 2.0f },
+m_FlyingKnightSoundCooldown{ 2.0f }
 {
-    //test
 }
 
 EntityManager::~EntityManager()

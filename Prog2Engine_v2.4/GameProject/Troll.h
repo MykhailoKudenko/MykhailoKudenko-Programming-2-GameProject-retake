@@ -39,8 +39,6 @@ private:
 
 	TrollState m_MyState;
 
-	bool m_HasFiredThisShot;
-
 	const float m_WalkTimerMax;
 	float m_WalkTimerCurrent;
 

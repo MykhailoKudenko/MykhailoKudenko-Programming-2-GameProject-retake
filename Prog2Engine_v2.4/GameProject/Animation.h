@@ -26,15 +26,15 @@ public:
 	float GetFrameHeight() const;
 
 private:
-	const Texture* m_pTexture{nullptr};
+	const Texture* m_pTexture;
 
-	int m_NrFrames{};
-	int m_CurrentFrame{};
+	int m_NrFrames;
+	int m_CurrentFrame;
 
-	float m_FrameSec{};
-	float m_AccumulatedSec{};
+	float m_FrameSec;
+	float m_AccumulatedSec;
 
-	bool m_IsLooping{ true };
-	bool m_IsPlaying{ true };
-	bool m_IsFinished{ false };
+	bool m_IsLooping;
+	bool m_IsPlaying;
+	bool m_IsFinished;
 };

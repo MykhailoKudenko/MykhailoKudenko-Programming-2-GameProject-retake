@@ -36,14 +36,14 @@ private:
 		NotFalling
 	};
 
-	const std::vector<std::vector<Vector2f>>* m_pVertices;
-
 	Rectf m_Collider;
 	DropType m_Type;
-	bool m_IsDead{ false };
+	bool m_IsDead;
 
-	const Texture* m_pTexture{ nullptr };
+	const Texture* m_pTexture;
 
-	State m_Mystate = State::Falling;
+	State m_Mystate;
+
+	const std::vector<std::vector<Vector2f>>* m_pVertices;
 
 };

@@ -4,7 +4,23 @@
 #include <iostream>
 
 Game::Game( const Window& window ) 
-	:BaseGame{ window }
+	:BaseGame{ window },
+m_pCamera{ nullptr },
+m_pPlayer{ nullptr },
+m_pLevel1{ nullptr },
+m_pEntityManager{ nullptr },
+m_pSoundManager{ nullptr },
+
+m_pHud{},
+m_MyState{ GameState::DeathMenu },
+m_PlayerLivesMax{ 3 },
+m_PLayerLivesCurrent{ 3 },
+
+m_pMainMenu{ nullptr },
+m_pDeathMenu{ nullptr },
+
+m_DebugShowColliders{false},
+m_CameraScale{4}
 {
 	Initialize();
 }

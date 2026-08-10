@@ -92,33 +92,33 @@ private:
 	bool IsStillOnLadder() const;
 	void SnapToCurrentLadderCenter();
 	//movement(speeds)
-	float m_MovementSpeed{ 50 };
-	float m_JumpSpeed{ 60 };
-	float m_KnockBackSpeed{ 80 };
-	float m_ClimbSpeed{ 60.f };
+	float m_MovementSpeed;
+	float m_JumpSpeed;
+	float m_KnockBackSpeed;
+	float m_ClimbSpeed;
 
 	//input
-	int m_InputDirectionX{ 0 };
-	int m_InputDirectionY{ 0 };
-	bool m_IsShootButtonPressed{false};
+	int m_InputDirectionX;
+	int m_InputDirectionY;
+	bool m_IsShootButtonPressed;
 	//POSITION
-	bool m_IsFacingRight = true;
-	bool m_IsOnTheGround = false;
+	bool m_IsFacingRight;
+	bool m_IsOnTheGround;
 	Rectf m_Collider;
 
 	//jumping
-	float m_JumpDirectionX{0.f};
-	const float m_JumpTimeUpMax{ 0.3f };
-	float m_JumpTimeUpCurrent{ 0.f };
+	float m_JumpDirectionX;
+	const float m_JumpTimeUpMax;
+	float m_JumpTimeUpCurrent;
 	//KonkBack
-	const float m_InvulnerableTimeMax{ 1.f };
-	float m_InvulnerableTimeCurrent{ 0.f };
-	const float	m_KnockbackTimeMax{ 0.2f };
-	float m_KnockbackTimeCurrent{ 0.f };
-	float m_KnockBackDirectionX{ -1.f };
+	const float m_InvulnerableTimeMax;
+	float m_InvulnerableTimeCurrent;
+	const float	m_KnockbackTimeMax;
+	float m_KnockbackTimeCurrent;
+	float m_KnockBackDirectionX;
 	//climbing 
-	const Rectf* m_pCurrentLadder = nullptr;
-	bool m_BlockVerticalActionsUntilReleased{ false };
+	const Rectf* m_pCurrentLadder;
+	bool m_BlockVerticalActionsUntilReleased;
 	//Animations
 	Animation m_WalkingArmour;
 	Animation m_ClimbingArmour;
@@ -142,26 +142,26 @@ private:
 	const Texture* m_Death;
 
 	//State machine
-	bool m_IsWearingArmour = true;
-	PlayerState m_Mystate{ PlayerState::Standing };
+	bool m_IsWearingArmour;
+	PlayerState m_Mystate;
 
 	//Throwing
-	bool m_PreviousShootPressed{ false };
-	bool m_DoesWantToThrow{ false };
+	bool m_PreviousShootPressed;
+	bool m_DoesWantToThrow;
 
-	float m_ThrowCooldownMax{ 0.2f };
-	float m_ThrowCooldownCurrent{ 0.0f };
+	float m_ThrowCooldownMax;
+	float m_ThrowCooldownCurrent;
 
 	//wepon
-	PlayerWeapon m_MyWeapon{ PlayerWeapon::Lance };
+	PlayerWeapon m_MyWeapon;
 
-	int m_Score{ 0 };
+	int m_Score;
 	//Death
-	bool m_IsImmortal{ false };
-	const float m_DeathTimerMax{1.f};
-	float m_DeathTimeCurrent{1.f};
+	bool m_IsImmortal;
+	const float m_DeathTimerMax;
+	float m_DeathTimeCurrent;
 	//DEBUG fly
-	bool m_IsFlying{ false };
-	float m_FlySpeed{ 120.f };
+	bool m_IsFlying;
+	float m_FlySpeed;
 };
 

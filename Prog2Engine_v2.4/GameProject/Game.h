@@ -61,13 +61,13 @@ private:
 
 	HUD* m_pHud;
 
-	GameState m_MyState{ GameState::DeathMenu };
-	const int m_PlayerLivesMax = 3;
-	int m_PLayerLivesCurrent = 3;
+	GameState m_MyState;
+	const int m_PlayerLivesMax;
+	int m_PLayerLivesCurrent;
 
 	const Texture* m_pMainMenu;
 	const Texture* m_pDeathMenu;
 
-	bool m_DebugShowColliders = false;
-	int m_CameraScale = 4;
+	bool m_DebugShowColliders;
+	int m_CameraScale;
 };

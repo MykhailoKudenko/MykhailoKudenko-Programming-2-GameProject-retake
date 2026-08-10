@@ -6,7 +6,7 @@
 #include <iostream>
 #include "TextureManager.h"
 
-Player::Player(Vector2f startPos) : m_Collider{ Rectf{startPos.x, startPos.y, 16, 24} },
+Player::Player(Vector2f startPos) :
 m_WalkingArmour{ "WalkKnight.png", 3,  0.10f, true },
 m_WalkingNaked{ "WalkKnightNaked.png", 3, 0.10f, true },
 
@@ -27,7 +27,41 @@ m_JumpingNaked{ TextureManager::GetInstance().GetTexture("JumpKnightNaked.png") 
 
 m_Hit{ TextureManager::GetInstance().GetTexture("HitKnight.png") },
 m_DeathKnockBack{ TextureManager::GetInstance().GetTexture("DeadKnockBack.png") },
-m_Death{ TextureManager::GetInstance().GetTexture("DeadGround.png") }
+m_Death{ TextureManager::GetInstance().GetTexture("DeadGround.png") },
+
+m_MovementSpeed{ 50 },
+m_JumpSpeed{ 60 },
+m_KnockBackSpeed{ 80 },
+m_ClimbSpeed{ 60.f },
+m_InputDirectionX{ 0 },
+m_InputDirectionY{ 0 },
+m_IsShootButtonPressed{ false },
+m_IsFacingRight{ true },
+m_IsOnTheGround{ false },
+m_Collider{ startPos.x, startPos.y, 16, 24 },
+m_JumpDirectionX{ 0.f },
+m_JumpTimeUpMax{ 0.3f },
+m_JumpTimeUpCurrent{ 0.f },
+m_InvulnerableTimeMax{ 1.f },
+m_InvulnerableTimeCurrent{ 0.f },
+m_KnockbackTimeMax{ 0.2f },
+m_KnockbackTimeCurrent{ 0.f },
+m_KnockBackDirectionX{ -1.f },
+m_pCurrentLadder {nullptr},
+m_BlockVerticalActionsUntilReleased{ false },
+m_IsWearingArmour{true},
+ m_Mystate{ PlayerState::Standing },
+m_PreviousShootPressed{ false },
+m_DoesWantToThrow{ false },
+m_ThrowCooldownMax{ 0.2f },
+m_ThrowCooldownCurrent{ 0.0f },
+m_MyWeapon{ PlayerWeapon::Lance },
+m_Score{ 0 },
+m_IsImmortal{ false },
+m_DeathTimerMax{ 1.f },
+m_DeathTimeCurrent{ 1.f },
+m_IsFlying{ false },
+m_FlySpeed{ 120.f }
 {
 }
 
@@ -119,14 +153,14 @@ void Player::Draw() const
 		}
 		else
 		{
-			m_DuckThrowNaked.Draw(Rectf{ m_Collider.left, m_Collider.bottom, m_DuckThrowArmour.GetFrameWidth(), m_DuckThrowArmour.GetFrameHeight() }, !m_IsFacingRight);
+			m_DuckThrowNaked.Draw(Rectf{ m_Collider.left, m_Collider.bottom, m_DuckThrowNaked.GetFrameWidth(), m_DuckThrowNaked.GetFrameHeight() }, !m_IsFacingRight);
 		}
 		break;
 	case PlayerState::Dead:
 		m_Death->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_Death->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		break;
 	case PlayerState::KnockbackDead:
-		m_DeathKnockBack->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_Hit->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+		m_DeathKnockBack->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_DeathKnockBack->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		break;
 	}
 }

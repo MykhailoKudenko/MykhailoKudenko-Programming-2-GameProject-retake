@@ -14,6 +14,7 @@ Animation::Animation(const std::string& texturePath, int nrFrames, float frameSe
 	, m_IsFinished{ false }
 {
 }
+
 Animation::Animation()
 	: m_pTexture{ nullptr }
 	, m_NrFrames{ 0 }

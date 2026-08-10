@@ -31,7 +31,7 @@ private:
 	const Texture* m_pTourchTexture;
 	Animation m_BurningGround;
 
-	TorchStates m_MyState = TorchStates::FlyingUp;
+	TorchStates m_MyState;
 
 	float m_TimeFliyngUp;
 };

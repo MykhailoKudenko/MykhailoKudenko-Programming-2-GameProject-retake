@@ -4,8 +4,6 @@
 #include "EntityManager.h"
 #include <cmath>
 
-#include <iostream>
-
 Troll::Troll(Vector2f startPos, const std::vector<std::vector<Vector2f>>* vertices, EntityManager* manager)
 	: Enemy(Rectf{ startPos.x, startPos.y, 43, 40 }, 30, false, 300, false, Effect::EffectType::Fire, SoundManager::SFX::None, true, 10),
 	m_JumpAnimation{ Animation("TrollJump.png", 1, 0.13f, true) },
@@ -15,7 +13,6 @@ Troll::Troll(Vector2f startPos, const std::vector<std::vector<Vector2f>>* vertic
 	m_pEntityManager{ manager },
 	m_pVertices{ vertices },
 	m_MyState{ TrollState::Spawning },
-	m_HasFiredThisShot{ false },
 	m_WalkTimerMax{1.f},
 	m_WalkTimerCurrent{ 0.f },
 	m_DoJumpNext{ false },
@@ -70,8 +67,7 @@ void Troll::Update(float elapsedSec)
 			m_MyState = TrollState::Falling;
 			m_WalkTimerCurrent = 0;
 		}
-
-		if (m_WalkTimerCurrent >= m_WalkTimerMax)
+		else if (m_WalkTimerCurrent >= m_WalkTimerMax)
 		{
 			m_MyState = TrollState::Shooting;
 			Fire(m_pEntityManager->GetPlayerPosition());
@@ -97,8 +93,6 @@ void Troll::Update(float elapsedSec)
 		{
 			m_MyState = TrollState::Shooting;
 			Fire(m_pEntityManager->GetPlayerPosition());
-
-			m_HasFiredThisShot = false;
 		}
 		break;
 	}

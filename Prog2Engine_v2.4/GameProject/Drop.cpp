@@ -5,8 +5,11 @@
 
 Drop::Drop(const Vector2f& pos, DropType type, const std::vector<std::vector<Vector2f>>* vertices)
 	: m_Collider{ pos.x, pos.y, 10.f, 10.f }
-	, m_Type{ type }
-	, m_pVertices{vertices}
+	, m_Type{ type },
+	m_IsDead{ false },
+	m_pTexture{ nullptr },
+	m_Mystate{ State::Falling },
+	m_pVertices{vertices}
 {
 	
 	switch (m_Type)

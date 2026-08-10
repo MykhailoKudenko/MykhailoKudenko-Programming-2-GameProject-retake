@@ -77,10 +77,10 @@ private:
     bool RollBagDrop() const;
     Drop::DropType GetRandomBagDrop() const;
 
-    Player* m_pPlayer{ nullptr };
-    Level* m_pLevel{ nullptr };
+    Player* m_pPlayer;
+    Level* m_pLevel;
 
-    SoundManager* m_pSoundManager{ nullptr };
+    SoundManager* m_pSoundManager;
 
     std::vector<Enemy*> m_pEnemies;
     std::vector<Projectile*> m_pPlayerProjectiles;
@@ -88,19 +88,19 @@ private:
     std::vector<Drop*> m_pDrops;
     std::vector<Effect*> m_pEffects;
 
-    float m_UpdateLenth{ 256 / 2.f + 50 };
-    float m_DeathLenth{ 256 / 2.f + 150 };
+    float m_UpdateLenth;
+    float m_DeathLenth;
 
-    float m_XSpawnLenth{256/2.f + 50};
-    float m_YMinSpawnForAir{ 37.f };
-    float m_YMaxHeight{ 200.f};
+    float m_XSpawnLenth;
+    float m_YMinSpawnForAir;
+    float m_YMaxHeight;
     //non unique sounds/ group sounds
-    bool m_IsGhostSoundPlaying{ false };
-    bool m_IsFlyingKnightSoundPlaying{ false };
+    bool m_IsGhostSoundPlaying;
+    bool m_IsFlyingKnightSoundPlaying;
 
-    float m_GhostSoundTimer{ 0.f };
-    float m_FlyingKnightSoundTimer{ 0.f };
+    float m_GhostSoundTimer;
+    float m_FlyingKnightSoundTimer;
 
-    const float m_GhostSoundCooldown{ 2.0f };
-    const float m_FlyingKnightSoundCooldown{ 2.0f };
+    const float m_GhostSoundCooldown;
+    const float m_FlyingKnightSoundCooldown;
 };

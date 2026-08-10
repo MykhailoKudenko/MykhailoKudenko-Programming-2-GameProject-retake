@@ -37,10 +37,10 @@ private:
 	float m_ExtraPastPlayer;
 	bool m_HasPassedPlayerX;
 
-	float m_TargetBottomAfterDrop{ 0.f };
+	float m_TargetBottomAfterDrop;
 
 	Animation m_FlyAnimation;
 	Animation m_SpawnAnimation;
 
-	EntityManager* m_pEntityManager{ nullptr };
+	EntityManager* m_pEntityManager;
 };
