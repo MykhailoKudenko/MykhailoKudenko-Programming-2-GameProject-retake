@@ -18,7 +18,6 @@ m_pDrops{ },
 m_pEffects{ },
 
 m_UpdateLenth{ 256 / 2.f + 50 },
-m_DeathLenth{ 256 / 2.f + 150 },
 
 m_XSpawnLenth{ 256 / 2.f + 50 },
 m_YMinSpawnForAir{ 37.f },

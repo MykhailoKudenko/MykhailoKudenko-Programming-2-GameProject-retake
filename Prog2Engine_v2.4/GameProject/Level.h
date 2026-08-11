@@ -72,7 +72,6 @@ public:
 	float GetHeight() const;
 
 	void Draw(bool isDebug) const;
-	void DrawDebugSpawns() const;
 	void Update(float elapsedSec);
 
 private:
@@ -95,5 +94,4 @@ private:
 
 	const Texture* m_pTexture;
 	const Texture* m_pPlatformTexture;
-	const float m_PlatfromSpeedX;
 };

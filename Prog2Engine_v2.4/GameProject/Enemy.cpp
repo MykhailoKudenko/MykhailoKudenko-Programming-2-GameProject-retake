@@ -8,7 +8,7 @@ Enemy::Enemy(Rectf startPos, float speed, bool isFacingRight, int score, bool do
 	: m_Collider{ startPos },
 	m_Speed{ speed },
 	m_Velocity{ Vector2f{0, 0} },
-	m_IsFacingRight{ isFacingRightm },
+	m_IsFacingRight{ isFacingRight },
 	m_Health{ health },
 	m_Score{ score },
 	m_IsBoss{ isBoss },

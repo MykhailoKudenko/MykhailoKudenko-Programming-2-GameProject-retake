@@ -89,7 +89,6 @@ private:
     std::vector<Effect*> m_pEffects;
 
     float m_UpdateLenth;
-    float m_DeathLenth;
 
     float m_XSpawnLenth;
     float m_YMinSpawnForAir;
