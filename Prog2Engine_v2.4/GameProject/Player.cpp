@@ -488,7 +488,9 @@ void Player::UpdateTimers(float elapsedSec)
 	if (m_Mystate == PlayerState::Dead)
 	{
 		if (m_DeathTimeCurrent >= 0)
+		{
 			m_DeathTimeCurrent -= elapsedSec;
+		}
 	}
 	if (m_ThrowCooldownCurrent >= 0)
 	{
@@ -753,7 +755,6 @@ bool Player::IsStillOnLadder() const
 	const Rectf& ladder = *m_pCurrentLadder;
 
 	const float playerBottom = m_Collider.bottom;
-	const float playerTop = m_Collider.bottom + m_Collider.height;
 	const float ladderBottom = ladder.bottom;
 	const float ladderTop = ladder.bottom + ladder.height;
 

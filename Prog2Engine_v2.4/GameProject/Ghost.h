@@ -11,12 +11,12 @@ class Ghost final : public Enemy
 public:
 	Ghost(Vector2f startPos, bool facingRight);
 
-	void Update(float elapsedSec) override;
-	void Draw() const override;
+	virtual void Update(float elapsedSec) override;
+	virtual void Draw() const override;
 
 	void SetEntityManager(EntityManager* manager);
 
-	bool IsSpawning() const override;
+	virtual bool IsSpawning() const override;
 
 
 private:

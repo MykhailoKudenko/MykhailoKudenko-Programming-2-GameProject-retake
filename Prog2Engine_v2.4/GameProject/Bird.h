@@ -8,10 +8,10 @@ class Bird final : public Enemy
 public:
 	Bird(Vector2f startPos, bool facingRight);
 
-	void Update(float elapsedSec) override;
-	void Draw() const override;
+	virtual void Update(float elapsedSec) override;
+	virtual void Draw() const override;
 
-	bool IsSpawning() const override;
+	virtual bool IsSpawning() const override;
 
 
 private:

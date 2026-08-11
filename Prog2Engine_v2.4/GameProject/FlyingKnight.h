@@ -9,13 +9,12 @@ class FlyingKnight final : public Enemy
 public:
 	FlyingKnight(Vector2f startPos, bool facingRight);
 
-	void Update(float elapsedSec) override;
-	void Draw() const override;
+	virtual void Update(float elapsedSec) override;
+	virtual void Draw() const override;
 
 private:
 
 	float m_StartY;
-	float m_StateTime;
 	float m_FlyTime;
 
 	float m_Amplitude;

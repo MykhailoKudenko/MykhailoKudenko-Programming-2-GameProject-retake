@@ -11,8 +11,8 @@ class Troll final : public Enemy
 public:
 	Troll(Vector2f startPos, const std::vector<std::vector<Vector2f>>* vertices, EntityManager* manager);
 
-	void Update(float elapsedSec) override;
-	void Draw() const override;	
+	virtual void Update(float elapsedSec) override;
+	virtual void Draw() const override;
 private:
 
 	enum class TrollState

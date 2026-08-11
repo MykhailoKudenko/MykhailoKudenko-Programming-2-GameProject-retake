@@ -11,8 +11,8 @@ class Demon final : public Enemy
 public:
 	Demon(Vector2f startPos, EntityManager* manager);
 
-	void Update(float elapsedSec) override;
-	void Draw() const override;
+	virtual void Update(float elapsedSec) override;
+	virtual void Draw() const override;
 
 private:
 

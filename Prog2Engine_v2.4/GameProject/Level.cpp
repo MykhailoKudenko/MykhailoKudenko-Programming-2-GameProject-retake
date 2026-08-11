@@ -34,8 +34,7 @@ namespace
 
 Level::Level(const std::string& txtPath) : m_pTexture{ nullptr },
 m_pPlatformTexture{ nullptr },
-m_PlayerSpawnPos{0,0},
-m_PlatfromSpeedX{20}
+m_PlayerSpawnPos{0,0}
 {
 	std::ifstream file{ txtPath };
 	if (!file.is_open())
@@ -246,33 +245,6 @@ void Level::Draw(bool isDebug) const
 		}
 	}
 }
-
-void Level::DrawDebugSpawns() const
-{
-	// Spawn areas in green
-	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	for (const EnemySpawnArea& spawnArea : m_EnemySpawnAreas)
-	{
-		utils::DrawRect(spawnArea.area);
-	}
-
-	// Spawn points in red
-	utils::SetColor(Color4f{ 1.f, 0.f, 0.f, 1.f });
-	for (const EnemySpawnPoint& spawnPoint : m_EnemySpawnPoints)
-	{
-		const float size{ 8.f };
-		Rectf pointRect
-		{
-			spawnPoint.position.x - size / 2.f,
-			spawnPoint.position.y - size / 2.f,
-			size,
-			size
-		};
-
-		utils::DrawRect(pointRect);
-	}
-}
-
 void Level::Update(float elapsedSec)
 {
 	for (MovingPlatform& platform : m_Platforms)

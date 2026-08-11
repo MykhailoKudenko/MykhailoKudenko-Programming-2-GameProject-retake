@@ -3,15 +3,13 @@
 #include "utils.h"
 
 Torch::Torch(Vector2f pos, bool isFacingRight, const std::vector<std::vector<Vector2f>>* vertices)
-: Projectile(Rectf{ pos.x, pos.y,TextureManager::GetInstance().GetTexture("Torch.png")->GetWidth(),TextureManager::GetInstance().GetTexture("Torch.png")->GetHeight() }, Vector2f{ isFacingRight ? 0.848f : -0.848f , 0.530f }, 100),
-	m_BurningGround{ Animation("BurningGround.png", 2, 0.26f, false) }, 
-	m_TimeFliyngUp{0.5f},
+	: Projectile(Rectf{ pos.x, pos.y,TextureManager::GetInstance().GetTexture("Torch.png")->GetWidth(),TextureManager::GetInstance().GetTexture("Torch.png")->GetHeight() }, Vector2f{ isFacingRight ? 0.848f : -0.848f , 0.530f }, 100),
+	m_BurningGround{ Animation("BurningGround.png", 2, 0.26f, false) },
+	m_TimeFliyngUp{ 0.5f },
 	m_MyState{ TorchStates::FlyingUp },
 	m_pVertices{ vertices }
 {
-	m_pTourchTexture = TextureManager::GetInstance().GetTexture("Torch.png");
-	
-
+	m_pTexture = TextureManager::GetInstance().GetTexture("Torch.png");
 }
 
 void Torch::Draw() const
@@ -22,7 +20,7 @@ void Torch::Draw() const
 	}
 	else
 	{
-		m_pTourchTexture->Draw(Vector2f{ m_Collider.left, m_Collider.bottom }, m_Direction.x >= 0);
+		m_pTexture->Draw(Vector2f{ m_Collider.left, m_Collider.bottom }, m_Direction.x >= 0);
 	}
 }
 
