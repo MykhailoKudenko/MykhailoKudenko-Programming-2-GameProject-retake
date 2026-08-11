@@ -28,7 +28,7 @@ Animation::Animation()
 }
 void Animation::Update(float elapsedSec)
 {
-	if (!m_IsPlaying || m_IsFinished || m_NrFrames <= 0)
+	if (!m_IsPlaying || m_IsFinished || m_NrFrames <= 0 || m_FrameSec <= 0.f)
 	{
 		return;
 	}
@@ -96,7 +96,11 @@ void Animation::Draw(const Rectf& destRect, bool isMirrored, bool stretchToFit) 
 		drawHeight
 	};
 
-	m_pTexture->Draw(localDestRect, srcRect);
+	if (m_pTexture != nullptr)
+	{
+		m_pTexture->Draw(localDestRect, srcRect);
+
+	}
 
 	glPopMatrix();
 }
