@@ -166,7 +166,10 @@ void EntityManager::Update(float elapsedSec)
         drop->Update(elapsedSec);
         if (utils::IsOverlapping(m_pPlayer->GetHitbox(), drop->GetHitbox()))
         {
-            m_pSoundManager->PlayEffect(SoundManager::SFX::PickUp);
+            if (m_pSoundManager != nullptr)
+            {
+                m_pSoundManager->PlayEffect(SoundManager::SFX::PickUp);
+            }
             switch (drop->GetType())
             {
             case Drop::DropType::Lance:
@@ -586,7 +589,6 @@ void EntityManager::SpawnTorch(const Vector2f& pos, bool isRight)
 {
     if (m_pLevel != nullptr)
     {
-        m_pSoundManager->PlayEffect(SoundManager::SFX::Throw);
         Torch* torch = new Torch(pos, isRight, &m_pLevel->GetVertices());
         m_pPlayerProjectiles.push_back(torch);
 

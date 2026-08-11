@@ -17,25 +17,24 @@ void Plant::Update(float elapsedSec)
 	m_PlantAnimation.Update(elapsedSec);
 	if (m_PlantAnimation.IsFinished())
 	{
-		Fire(m_pEntityManager->GetPlayerPosition());
+		if (m_pEntityManager == nullptr)
+		{
+			return;
+		}
+		Fire();
 		m_PlantAnimation.Reset();
 	}
 }
-void Plant::Fire(const Vector2f& playerPos)
+void Plant::Fire()
 {
-	if (m_pEntityManager == nullptr)
-	{
-		return;
-	}
-
 	Vector2f spawnPos{
 		m_Collider.left + m_Collider.width / 2.f,
 		m_Collider.bottom + m_Collider.height / 2.f
 	};
 
 	Vector2f direction{
-		playerPos.x - spawnPos.x,
-		playerPos.y - spawnPos.y
+		m_pEntityManager->GetPlayerPosition().x - spawnPos.x,
+		m_pEntityManager->GetPlayerPosition().y - spawnPos.y
 	};
 
 	m_pEntityManager->SpawnEnemyProjectile(spawnPos, direction.Normalized(), SimpleProjectile::SimpleProjectileType::Plant);

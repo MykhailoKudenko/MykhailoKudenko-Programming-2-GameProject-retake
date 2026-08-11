@@ -34,7 +34,7 @@ void Troll::Update(float elapsedSec)
 		if (m_SpawnAnimation.IsFinished())
 		{
 			m_MyState = TrollState::Shooting;
-			Fire(m_pEntityManager->GetPlayerPosition());
+			Fire();
 
 		}
 		break;
@@ -70,7 +70,7 @@ void Troll::Update(float elapsedSec)
 		else if (m_WalkTimerCurrent >= m_WalkTimerMax)
 		{
 			m_MyState = TrollState::Shooting;
-			Fire(m_pEntityManager->GetPlayerPosition());
+			Fire();
 			m_WalkTimerCurrent = 0;
 
 		}
@@ -92,7 +92,7 @@ void Troll::Update(float elapsedSec)
 		if (m_IsGrounded)
 		{
 			m_MyState = TrollState::Shooting;
-			Fire(m_pEntityManager->GetPlayerPosition());
+			Fire();
 		}
 		break;
 	}
@@ -225,14 +225,13 @@ void Troll::ApplyVerticalmovement(float elapsedSec)
 	}
 }
 
-void Troll::Fire(const Vector2f& playerPos)
+void Troll::Fire()
 {
 	if (m_pEntityManager == nullptr)
 	{
 		return;
 	}
-
-	m_IsFacingRight = playerPos.x > m_Collider.left;
+	m_IsFacingRight = m_pEntityManager->GetPlayerPosition().x > m_Collider.left;
 
 	float shootY = m_Collider.bottom + 18.f;
 

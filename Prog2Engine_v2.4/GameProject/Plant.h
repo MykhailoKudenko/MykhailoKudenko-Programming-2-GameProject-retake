@@ -13,7 +13,7 @@ public:
 	virtual void Draw() const override;
 
 private:
-	void Fire(const Vector2f& playerPos);
+	void Fire();
 
 	EntityManager* m_pEntityManager;
 

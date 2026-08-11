@@ -24,7 +24,7 @@ private:
 		Falling
 	};
 
-	void Fire(const Vector2f& playerPos);
+	void Fire();
 
 	void ApplyVerticalmovement(float elapsedSec);
 	void ApplyHorisontalMovement(float elapsedSec);

@@ -116,7 +116,7 @@ void Demon::Update(float elapsedSec)
 
 	
 }
-void Demon::Fire(const Vector2f& playerPos)
+void Demon::Fire()
 {
 	if (m_pEntityManager == nullptr)
 	{
@@ -129,8 +129,8 @@ void Demon::Fire(const Vector2f& playerPos)
 	};
 
 	Vector2f direction{
-		playerPos.x - spawnPos.x,
-		playerPos.y - spawnPos.y
+		m_pEntityManager->GetPlayerPosition().x - spawnPos.x,
+		m_pEntityManager->GetPlayerPosition().y - spawnPos.y
 	};
 
 
@@ -291,7 +291,7 @@ bool Demon::UpdateShooting(float elapsedSec, const Vector2f& playerPos)
 
 	if (!m_HasFiredThisShot)
 	{
-		Fire(playerPos);
+		Fire();
 		m_HasFiredThisShot = true;
 	}
 
