@@ -13,9 +13,6 @@ public:
 		float minX;
 		float maxX;
 
-		int topLeftEdgeIndex;
-		int topRightEdgeIndex;
-
 		void Update(float elapsedSec);
 	};
 
