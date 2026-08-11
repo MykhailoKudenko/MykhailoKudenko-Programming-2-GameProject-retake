@@ -6,6 +6,10 @@ class Projectile
 public:
 	Projectile(Rectf startPos, Vector2f direction, float speed);
 	virtual ~Projectile() = default;
+	Projectile(const Projectile&) = delete;
+	Projectile& operator=(const Projectile&) = delete;
+	Projectile(Projectile&&) = delete;
+	Projectile& operator=(Projectile&&) = delete;
 
 	void virtual Update(float elapsedSec);
 

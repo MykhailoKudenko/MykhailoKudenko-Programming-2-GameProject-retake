@@ -21,7 +21,6 @@ public:
     };
 
     SoundManager();
-    ~SoundManager() = default;
 
     void PlayMusic();
     void StopMusic();
