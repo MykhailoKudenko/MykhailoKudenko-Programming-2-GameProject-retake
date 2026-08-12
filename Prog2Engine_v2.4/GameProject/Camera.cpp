@@ -2,9 +2,9 @@
 #include "Camera.h"
 #include <cmath>
 
-Camera::Camera(float screenWidth, float screenHeight)
-	: m_ScreenWidth{ screenWidth }
-	, m_ScreenHeight{ screenHeight }
+Camera::Camera(Vector2f WindowSize)
+	: m_ScreenWidth{ WindowSize.x }
+	, m_ScreenHeight{ WindowSize.y }
 {
 }
 

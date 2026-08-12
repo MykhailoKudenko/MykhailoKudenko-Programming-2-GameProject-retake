@@ -53,7 +53,7 @@ private:
 		DeathMenu
 	};
 
-	Camera* m_pCamera;
+	Camera m_pCamera;
 	Player* m_pPlayer;
 	Level* m_pLevel1;
 	EntityManager* m_pEntityManager;

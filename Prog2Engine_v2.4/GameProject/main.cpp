@@ -17,7 +17,7 @@ int SDL_main(int argv, char** args)
 	int returnValue{ 0 };
 	try
 	{
-		pGame = new Game{ Window{ "GAME PROJECT, Mykhailo Kudenko - 1DAE14", 1024.f , 960.f } };
+		pGame = new Game{ Window{ "GAME PROJECT, Mykhailo Kudenko - 1DAE14", utils::g_WindowSize.x , utils::g_WindowSize.y } };
 		pGame->Run();
 
 	}

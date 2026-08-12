@@ -3,7 +3,7 @@
 class Camera final
 {
 public:
-	Camera(float screenWidth, float screenHeight);
+	Camera(Vector2f WindowSize);
 
 	void Aim(float levelWidth, float levelHeight, float xNegativeSpace, float yNegativeSpace, const Vector2f& trackCenter, float zoom) const;
 	void Reset() const;

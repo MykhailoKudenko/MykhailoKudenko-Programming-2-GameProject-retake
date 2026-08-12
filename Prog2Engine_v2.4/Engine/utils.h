@@ -92,6 +92,8 @@ namespace utils
 	};
 	const float g_Gravity{ -60 };
 
+	const Vector2f g_WindowSize{ 1024.f, 960.f };
+
 	bool LoopOverVertices(const std::vector<std::vector<Vector2f>>& vertices, const Vector2f& rayP1, const Vector2f& rayP2, utils::HitInfo& myInfo);// same as raycast but for a few vectors 
 
 	bool CheckSideCollision(const std::vector<std::vector<Vector2f>>& vertices, const Rectf& collider, Side side, float sweepDistance = 1.f, HitInfo* outHitInfo = nullptr);

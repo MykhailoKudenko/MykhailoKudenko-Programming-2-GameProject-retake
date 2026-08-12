@@ -5,7 +5,7 @@
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window },
-m_pCamera{ nullptr },
+m_pCamera{ utils::g_WindowSize },
 m_pPlayer{ nullptr },
 m_pLevel1{ nullptr },
 m_pEntityManager{ nullptr },
@@ -37,7 +37,6 @@ void Game::Initialize()
 	m_pSoundManager = new SoundManager();
 	m_pEntityManager->SetSoundManager(m_pSoundManager);
 	m_pHud = new HUD();
-	m_pCamera = new Camera(1024.f, 960.f);
 
 	m_pMainMenu = TextureManager::GetInstance().GetTexture("StartScreen.png");
 	m_pDeathMenu = TextureManager::GetInstance().GetTexture("DeathMenu.png");
@@ -61,9 +60,6 @@ void Game::Cleanup()
 
 	delete m_pLevel1;
 	m_pLevel1 = nullptr;
-
-	delete m_pCamera;
-	m_pCamera = nullptr;
 
 	delete m_pPlayer;
 	m_pPlayer = nullptr;
@@ -138,7 +134,7 @@ void Game::Draw() const
 		if (m_pMainMenu != nullptr)
 		{
 			glPushMatrix();
-			glScalef(4, 4, 1.0f);
+			glScalef(m_CameraScale, m_CameraScale, 1.0f);
 			m_pMainMenu->Draw(Vector2f{ 0.f, 0.f });
 			glPopMatrix();
 
@@ -146,7 +142,7 @@ void Game::Draw() const
 		break;
 
 	case GameState::Playing:
-		m_pCamera->Aim(
+		m_pCamera.Aim(
 			m_pLevel1->GetWidth(), m_pLevel1->GetHeight(), 0, 20,
 			Vector2f{ m_pPlayer->GetCenterPosition().x, 0 }, static_cast<float>(m_CameraScale)
 		);
@@ -155,16 +151,19 @@ void Game::Draw() const
 		m_pEntityManager->Draw(m_DebugShowColliders);
 		m_pPlayer->Draw();
 
-		m_pCamera->Reset();
-
+		m_pCamera.Reset();
+		glPushMatrix();
+		glScalef(m_CameraScale, m_CameraScale, 1.0f);
 		m_pHud->Draw(m_pPlayer->GetPlayerScore(), m_pPlayer->GetPlayerWeapon());
+		glPopMatrix();
+
 		break;
 
 	case GameState::DeathMenu:
 		if (m_pDeathMenu != nullptr)
 		{
 			glPushMatrix();
-			glScalef(4, 4, 1.0f);
+			glScalef(m_CameraScale, m_CameraScale, 1.0f);
 			m_pDeathMenu->Draw(Vector2f{ 0.f, 0.f });
 			glPopMatrix();
 		}

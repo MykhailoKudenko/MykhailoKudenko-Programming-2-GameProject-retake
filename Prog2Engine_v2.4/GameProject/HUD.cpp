@@ -50,9 +50,8 @@ void HUD::Draw(int score, Player::PlayerWeapon weapon) const
      DrawNumber(seconds, Vector2f{ 100.f+ displacement, 720 });
 
     //weapon placement
-    const float screenWidth = 1024.f;
-    const float centerX = screenWidth / 2.f;
-    const float weaponY = 100.f;
+    const float centerX = utils::g_WindowSize.x / 2.f;
+    const float weaponY = utils::g_WindowSize.y / 9.6f;
     const float scale = 6.0f;
 
     const Texture* weaponToDraw = nullptr;
