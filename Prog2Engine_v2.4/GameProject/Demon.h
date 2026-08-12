@@ -21,14 +21,11 @@ private:
 		Spawning,
 		MoveToTopRight,
 		Shooting,
-		MovingToTheRight,
-		MovingToTheLeft,
+		ParabolaAttack,
 		MovingUp,
 		MovingDown
 	};
 
-
-	bool SpawnUpdate();
 	bool MoveToThePoint(float elapsedSec, const Vector2f& targetPoint);
 	bool UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bool movingRight);
 	bool UpdateShooting(float elapsedSec, const Vector2f& playerPos);

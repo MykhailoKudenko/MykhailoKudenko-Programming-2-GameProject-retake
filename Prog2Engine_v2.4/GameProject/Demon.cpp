@@ -30,7 +30,7 @@ void Demon::Update(float elapsedSec)
 	{
 	case DemonState::Spawning:
 		m_SpawnAnimation.Update(elapsedSec);
-		if (SpawnUpdate())
+		if (m_SpawnAnimation.IsFinished())
 		{
 			m_MyState = DemonState::MoveToTopRight;
 		}
@@ -55,16 +55,9 @@ void Demon::Update(float elapsedSec)
 
 			if (choice == 0)
 			{
-				if (m_IsAtRightSide)
-				{
-					m_MyState = DemonState::MovingToTheLeft;
+				
+				m_MyState = DemonState::ParabolaAttack;
 
-				}
-				else
-				{
-					m_MyState = DemonState::MovingToTheRight;
-
-				}
 			}
 			else
 			{
@@ -72,22 +65,12 @@ void Demon::Update(float elapsedSec)
 			}
 		}
 		break;
-	case DemonState::MovingToTheRight:
+	case DemonState::ParabolaAttack:
 		m_FlyAnimation.Update(elapsedSec);
 
-		if (UpdateParabolaAttack(elapsedSec, m_pEntityManager->GetPlayerPosition(), true))
+		if (UpdateParabolaAttack(elapsedSec, m_pEntityManager->GetPlayerPosition(), !m_IsAtRightSide))
 		{
-			m_IsAtRightSide = true;
-			m_MyState = DemonState::Shooting;
-			m_HasFiredThisShot = false;
-		}
-		break;
-	case DemonState::MovingToTheLeft:
-		m_FlyAnimation.Update(elapsedSec);
-
-		if (UpdateParabolaAttack(elapsedSec, m_pEntityManager->GetPlayerPosition(), false))
-		{
-			m_IsAtRightSide = false;
+			m_IsAtRightSide = !m_IsAtRightSide;
 			m_MyState = DemonState::Shooting;
 			m_HasFiredThisShot = false;
 		}
@@ -154,8 +137,7 @@ void Demon::Draw() const
 		break;
 
 	case DemonState::MoveToTopRight:
-	case DemonState::MovingToTheRight:
-	case DemonState::MovingToTheLeft:
+	case DemonState::ParabolaAttack:
 	case DemonState::MovingUp:
 	case DemonState::MovingDown:
 		m_FlyAnimation.Draw(m_Collider, m_IsFacingRight);
@@ -164,11 +146,6 @@ void Demon::Draw() const
 	default:
 		break;
 	}
-}
-
-bool Demon::SpawnUpdate()
-{
-	return m_SpawnAnimation.IsFinished();
 }
 
 bool Demon::MoveToThePoint(float elapsedSec, const Vector2f& targetPoint)
