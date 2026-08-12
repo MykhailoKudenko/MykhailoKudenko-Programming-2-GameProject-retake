@@ -12,7 +12,7 @@ public:
 		float speedX;
 		float minX;
 		float maxX;
-
+	
 		void Update(float elapsedSec);
 	};
 
@@ -41,7 +41,8 @@ public:
 		bool SpawnAtTheGround{true};
 		float timerMax{ 1.f };
 		float timer{ 0.f };
-	
+
+		void Update(float elapsedSec);
 	};
 
 	struct DropSpawnPoint
@@ -57,12 +58,16 @@ public:
 	const std::vector<std::vector<Vector2f>>& GetPlatformTopEdges() const;
 	const std::vector<Rectf>& GetLadders() const;
 
-	std::vector<EnemySpawnPoint>& GetEnemySpawnPoints();
-	std::vector<EnemySpawnArea>& GetEnemySpawnAreas();
+	const std::vector<EnemySpawnPoint>& GetEnemySpawnPoints() const;
+	void markEnemySpawnPointSpawned(int index);
 
-	std::vector<DropSpawnPoint>& GetDropSpawnPoints();
+	const std::vector<EnemySpawnArea>& GetEnemySpawnAreas() const;
+	bool IsEnemyAreaReadyToSpawn(int index);
 
-	std::vector<std::vector<Vector2f>>& GetPlayerOnlyVertices();
+	const std::vector<DropSpawnPoint>& GetDropSpawnPoints() const;
+	void markDropSpawnPointSpawned(int inde);
+
+	const std::vector<std::vector<Vector2f>>& GetPlayerOnlyVertices() const;
 	const Vector2f& GetPlayerPosition() const;
 
 	float GetWidth() const;

@@ -206,6 +206,8 @@ void EntityManager::Update(float elapsedSec)
         for (Projectile* proj : m_pPlayerProjectiles)
         {
             if (proj->IsDead()) { continue; }
+            if (enemy->IsDead()) { continue; }
+
             if (utils::IsOverlapping(enemy->GetHitbox(), proj->GetHitbox()))
             {
                 enemy->TakeDamage();
@@ -238,13 +240,14 @@ void EntityManager::Update(float elapsedSec)
     RemoveDeadEntities();
     KillProjectilesOutsideSpawnArea();
 }
-
-void DrawGreenRectIfDebug(const Rectf& rect, bool isDebug)
-{
-    if (isDebug)
+namespace {
+    void DrawGreenRectIfDebug(const Rectf& rect, bool isDebug)
     {
-        utils::SetColor(Color4f{ 0, 1, 0, 1 });
-        utils::DrawRect(rect);
+        if (isDebug)
+        {
+            utils::SetColor(Color4f{ 0, 1, 0, 1 });
+            utils::DrawRect(rect);
+        }
     }
 }
 
@@ -351,22 +354,27 @@ void EntityManager::SpawnEnemyByType(Level::EnemyType type, const Vector2f& pos,
 }
 void EntityManager::SpawnPointEnemies()
 {
-    if (m_pLevel == nullptr)
+    if (m_pLevel == nullptr || m_pPlayer == nullptr)
     {
         return;
     }
 
-    std::vector<Level::EnemySpawnPoint>& spawnPoints = m_pLevel->GetEnemySpawnPoints();
+    const std::vector<Level::EnemySpawnPoint>& spawnPoints = m_pLevel->GetEnemySpawnPoints();
+    Vector2f playerPos = m_pPlayer->GetCenterPosition();
 
-    for (Level::EnemySpawnPoint& spawnPoint : spawnPoints)
+    for (size_t i = 0; i < spawnPoints.size(); ++i)
     {
-        if (spawnPoint.spawned)
+        if (spawnPoints[i].spawned)
         {
             continue;
         }
-        bool faceRight = m_pPlayer->GetCenterPosition().x > spawnPoint.position.x;
-        SpawnEnemyByType(spawnPoint.type, spawnPoint.position, faceRight);
-        spawnPoint.spawned = true;
+        float dx = std::abs(spawnPoints[i].position.x - playerPos.x);
+        if (dx <= m_UpdateLenth)
+        {
+            bool faceRight = playerPos.x > spawnPoints[i].position.x;
+            SpawnEnemyByType(spawnPoints[i].type, spawnPoints[i].position, faceRight);
+            m_pLevel->markEnemySpawnPointSpawned(i);
+        }
     }
 }
 void EntityManager::SpawnPointDrops()
@@ -376,22 +384,23 @@ void EntityManager::SpawnPointDrops()
         return;
     }
 
-    std::vector<Level::DropSpawnPoint>& dropSpawnPoints = m_pLevel->GetDropSpawnPoints();
+    const std::vector<Level::DropSpawnPoint>& dropSpawnPoints = m_pLevel->GetDropSpawnPoints();
     Vector2f playerPos = m_pPlayer->GetCenterPosition();
 
-    for ( Level::DropSpawnPoint& dropSpawn : dropSpawnPoints)
+    for (size_t i = 0; i < dropSpawnPoints.size(); ++i)
     {
-        if (dropSpawn.spawned)
+        if (dropSpawnPoints[i].spawned)
         {
             continue;
         }
 
-        float dx = std::abs(dropSpawn.position.x - playerPos.x);
+        float dx = std::abs(dropSpawnPoints[i].position.x - playerPos.x);
 
         if (dx <= m_UpdateLenth)
         {
-            AddDrop(dropSpawn.position, dropSpawn.type);
-            dropSpawn.spawned = true;
+            AddDrop(dropSpawnPoints[i].position, dropSpawnPoints[i].type);
+            m_pLevel->markDropSpawnPointSpawned(i);
+
         }
     }
 }
@@ -403,34 +412,23 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
         return;
     }
 
-    std::vector<Level::EnemySpawnArea>& spawnAreas = m_pLevel->GetEnemySpawnAreas();
+    const std::vector<Level::EnemySpawnArea>& spawnAreas = m_pLevel->GetEnemySpawnAreas();
     Vector2f playerPos = m_pPlayer->GetCenterPosition();
 
-    for (Level::EnemySpawnArea& spawnArea : spawnAreas)
+    for (size_t i = 0; i < spawnAreas.size(); ++i)
     {
-        if (!utils::IsPointInRect(playerPos, spawnArea.area))
-        {
-            spawnArea.timer = 0.f;
-            continue;
-        }
-
-        spawnArea.timer += elapsedSec;
-
-        if (spawnArea.timer < spawnArea.timerMax)
+        if (!(utils::IsPointInRect(playerPos, spawnAreas[i].area) && m_pLevel->IsEnemyAreaReadyToSpawn(i)))
         {
             continue;
         }
-
-        spawnArea.timer = 0.f;
-
         Rectf targetSpawnArea{};
         targetSpawnArea.left = playerPos.x - m_XSpawnLenth;
         targetSpawnArea.width = m_XSpawnLenth * 2.f;
         targetSpawnArea.bottom = m_YMinSpawnForAir;
         targetSpawnArea.height = m_YMaxHeight;
 
-        float areaLeft = spawnArea.area.left;
-        float areaRight = spawnArea.area.left + spawnArea.area.width;
+        float areaLeft = spawnAreas[i].area.left;
+        float areaRight = spawnAreas[i].area.left + spawnAreas[i].area.width;
 
         if (targetSpawnArea.left < areaLeft)
         {
@@ -451,7 +449,7 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
             static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * targetSpawnArea.width;
         float y{ 0.f };
 
-        if (!spawnArea.SpawnAtTheGround)
+        if (!spawnAreas[i].SpawnAtTheGround)
         {
             float groundY{ 0.f };
             Vector2f rayStart{ x, playerPos.y + m_YMaxHeight };
@@ -482,7 +480,7 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
         }
 
         bool faceRight = playerPos.x > x;
-        SpawnEnemyByType(spawnArea.type, Vector2f{ x, y }, faceRight);
+        SpawnEnemyByType(spawnAreas[i].type, Vector2f{ x, y }, faceRight);
     }
 }
 bool EntityManager::FindGroundBelow(const Vector2f& pos, float& outGroundY) const

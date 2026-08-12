@@ -7,7 +7,7 @@
 
 Plant::Plant(Vector2f startPos, EntityManager* manager)
 	: Enemy(Rectf{ startPos.x, startPos.y, 16, 24 }, 0, false, 100, false, Effect::EffectType::Fire),
-	m_PlantAnimation{ Animation("Plant.png", 2, 1.06f, false) },
+	m_PlantAnimation{ "Plant.png", 2, 1.06f, false},
 	m_pEntityManager{manager}
 {
 }

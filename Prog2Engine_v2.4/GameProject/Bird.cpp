@@ -11,8 +11,8 @@ Bird::Bird(Vector2f startPos, bool facingRight)
 	m_FlyTime{0.f},
 	m_Amplitude{8.f},
 	m_Frequency{2.f},
-	m_FlyAnimation{ Animation("BirdFly.png", 2, 0.15f, true) },
-	m_SpawnAnimation{ Animation("BirdSpawn.png", 2, 0.52f, false) }
+	m_FlyAnimation{ "BirdFly.png", 2, 0.15f, true},
+	m_SpawnAnimation{ "BirdSpawn.png", 2, 0.52f, false}
 {
 }
 

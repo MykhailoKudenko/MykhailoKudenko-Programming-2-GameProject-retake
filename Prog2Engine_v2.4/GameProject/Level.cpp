@@ -177,20 +177,29 @@ const std::vector<Rectf>& Level::GetLadders() const
 	return m_Ladders;
 }
 
- std::vector<Level::EnemySpawnPoint>& Level::GetEnemySpawnPoints()
+const std::vector<Level::EnemySpawnPoint>& Level::GetEnemySpawnPoints()const
 {
 	return m_EnemySpawnPoints;
 }
+ void Level::markEnemySpawnPointSpawned(int index)
+ {
+	 m_EnemySpawnPoints.at(index).spawned = true;
+ }
 
- std::vector<Level::EnemySpawnArea>& Level::GetEnemySpawnAreas()
+ const std::vector<Level::EnemySpawnArea>& Level::GetEnemySpawnAreas() const
 {
 	return m_EnemySpawnAreas;
 }
- std::vector<Level::DropSpawnPoint>& Level::GetDropSpawnPoints()
+ const std::vector<Level::DropSpawnPoint>& Level::GetDropSpawnPoints() const
 {
 	return m_DropSpawnPoints;
 }
- std::vector<std::vector<Vector2f>>& Level::GetPlayerOnlyVertices()
+ void Level::markDropSpawnPointSpawned(int index)
+ {
+	 m_DropSpawnPoints.at(index).spawned = true;
+ }
+
+ const std::vector<std::vector<Vector2f>>& Level::GetPlayerOnlyVertices()const
 {
 	return m_PlayerOnlyVertices;
 }
@@ -251,6 +260,10 @@ void Level::Update(float elapsedSec)
 	{
 		platform.Update(elapsedSec);
 	}
+	for (EnemySpawnArea& spawnArea : m_EnemySpawnAreas)
+	{
+		spawnArea.Update(elapsedSec);
+	}
 
 	UpdatePlatformTopEdges();
 }
@@ -270,6 +283,28 @@ void Level::MovingPlatform::Update(float elapsedSec)
 		speedX = -std::abs(speedX);
 	}
 }
+
+void Level::EnemySpawnArea::Update(float elapsedSec)
+{
+	if (timer < timerMax)
+	{
+		timer += elapsedSec;
+	}
+}
+bool Level::IsEnemyAreaReadyToSpawn(int index)
+{
+	if (m_EnemySpawnAreas[index].timer >= m_EnemySpawnAreas[index].timerMax)
+	{
+		m_EnemySpawnAreas[index].timer = 0;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	
+}
+
 
 void Level::UpdatePlatformTopEdges()
 {

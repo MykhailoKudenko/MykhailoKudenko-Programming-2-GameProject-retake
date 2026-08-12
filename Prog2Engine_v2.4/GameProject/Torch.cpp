@@ -4,7 +4,7 @@
 
 Torch::Torch(Vector2f pos, bool isFacingRight, const std::vector<std::vector<Vector2f>>* vertices)
 	: Projectile(Rectf{ pos.x, pos.y,TextureManager::GetInstance().GetTexture("Torch.png")->GetWidth(),TextureManager::GetInstance().GetTexture("Torch.png")->GetHeight() }, Vector2f{ isFacingRight ? 0.848f : -0.848f , 0.530f }, 100),
-	m_BurningGround{ Animation("BurningGround.png", 2, 0.26f, false) },
+	m_BurningGround{ "BurningGround.png", 2, 0.26f, false },
 	m_TimeFliyngUp{ 0.5f },
 	m_MyState{ TorchStates::FlyingUp },
 	m_pVertices{ vertices }

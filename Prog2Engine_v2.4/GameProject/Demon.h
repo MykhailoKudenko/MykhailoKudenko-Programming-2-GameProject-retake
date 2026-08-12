@@ -33,7 +33,7 @@ private:
 	bool UpdateParabolaAttack(float elapsedSec, const Vector2f& playerPos, bool movingRight);
 	bool UpdateShooting(float elapsedSec, const Vector2f& playerPos);
 
-	void Fire(const Vector2f& playerPos);
+	void Fire();
 
 
 

@@ -8,9 +8,9 @@
 
 Demon::Demon(Vector2f startPos, EntityManager* manager)
 	: Enemy(Rectf{ startPos.x, startPos.y, 24, 26 }, 80, false, 200, false, Effect::EffectType::Fire, SoundManager::SFX::None, true, 5),
-	m_FlyAnimation{ Animation("DemonFly.png", 2, 0.13f, true) },
-	m_ShootAnimation{ Animation("DemonShoot.png", 1, 0.52f, false) },
-	m_SpawnAnimation{ Animation("DemonSpawn.png", 3, 0.26f, false) },
+	m_FlyAnimation{ "DemonFly.png", 2, 0.13f, true},
+	m_ShootAnimation{ "DemonShoot.png", 1, 0.52f, false},
+	m_SpawnAnimation{ "DemonSpawn.png", 3, 0.26f, false},
 	m_TopRightModifier{ 100.f, 80.f },
 	m_ParabolaProgress{ 0.f },
 	m_ParabolaHorizontalSpeed{ 60.f },
