@@ -9,13 +9,10 @@ namespace{
         {
         case Effect::EffectType::Blood:
             return Animation("BloodDeath.png", 3, 0.13f, false);
-            break;
         case Effect::EffectType::Fire:
             return  Animation("FireDeath.png", 3, 0.13f, false);
-            break;
         case Effect::EffectType::Blink:
             return  Animation("SparklingHit.png", 2, 0.13f, false);
-            break;
         default:
             return Animation();
         }

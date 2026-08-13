@@ -4,6 +4,37 @@
 #include <cstdlib>
 #include <cmath>
 
+namespace {
+    void DrawGreenRectIfDebug(const Rectf& rect, bool isDebug)
+    {
+        if (isDebug)
+        {
+            utils::SetColor(Color4f{ 0, 1, 0, 1 });
+            utils::DrawRect(rect);
+        }
+    }
+    bool RollBagDrop()
+    {
+        return std::rand() % 10 == 0;
+    }
+
+    Drop::DropType GetRandomBagDrop()
+    {
+        int randomIndex = std::rand() % 5;
+
+        return static_cast<Drop::DropType>( randomIndex);
+        switch (randomIndex)
+        {
+        case 0: return  Drop::DropType::Lance;
+        case 1: return  Drop::DropType::Knife;
+        case 2: return  Drop::DropType::Torch;
+        case 3: return  Drop::DropType::Doll;
+        case 4: return  Drop::DropType::MoneyBag;
+        default: return  Drop::DropType::Doll;
+        }
+    }
+}
+
 EntityManager::EntityManager():
 
 m_pPlayer{ nullptr },
@@ -239,35 +270,6 @@ void EntityManager::Update(float elapsedSec)
 
     RemoveDeadEntities();
     KillProjectilesOutsideSpawnArea();
-}
-namespace {
-    void DrawGreenRectIfDebug(const Rectf& rect, bool isDebug)
-    {
-        if (isDebug)
-        {
-            utils::SetColor(Color4f{ 0, 1, 0, 1 });
-            utils::DrawRect(rect);
-        }
-    }
-    bool RollBagDrop()
-    {
-        return std::rand() % 10 == 0;
-    }
-
-    Drop::DropType GetRandomBagDrop()
-    {
-        int randomIndex = std::rand() % 5;
-
-        switch (randomIndex)
-        {
-        case 0: return  Drop::DropType::Lance;
-        case 1: return  Drop::DropType::Knife;
-        case 2: return  Drop::DropType::Torch;
-        case 3: return  Drop::DropType::Doll;
-        case 4: return  Drop::DropType::MoneyBag;
-        default: return  Drop::DropType::Doll;
-        }
-    }
 }
 
 void EntityManager::Draw(bool isDebug) const

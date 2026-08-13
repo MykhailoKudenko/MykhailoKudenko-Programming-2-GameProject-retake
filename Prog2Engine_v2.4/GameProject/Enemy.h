@@ -45,7 +45,6 @@ public:
 	bool IsFacingRight() const;
 	bool IsBoss() const;
 
-	virtual void Fire();
 protected:
 	Rectf m_Collider;
 	float m_Speed;

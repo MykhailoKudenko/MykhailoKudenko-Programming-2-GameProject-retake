@@ -74,9 +74,6 @@ private:
     void RemoveDeadEntities();
     void DebugSpawnDraw() const;
 
-    bool RollBagDrop() const;
-    Drop::DropType GetRandomBagDrop() const;
-
     Player* m_pPlayer;
     Level* m_pLevel;
 
