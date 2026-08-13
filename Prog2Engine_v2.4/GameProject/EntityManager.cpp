@@ -3,6 +3,7 @@
 #include "utils.h"
 #include <cstdlib>
 #include <cmath>
+#include <iostream>
 
 namespace {
     void DrawGreenRectIfDebug(const Rectf& rect, bool isDebug)
@@ -33,6 +34,16 @@ namespace {
         default: return  Drop::DropType::Doll;
         }
     }
+}
+
+std::ostream& operator<<(std::ostream& out, const EntityManager& manager)
+{
+    out << "Enemy: " << manager.m_pEnemies.size()
+    << " PlayerProj: " << manager.m_pPlayerProjectiles.size()
+    << " EnemyProj: " << manager.m_pEnemyProjectiles.size()
+    << " Drops: " << manager.m_pDrops.size()
+    << " Effects: " << manager.m_pEffects.size();
+    return out;
 }
 
 EntityManager::EntityManager():
@@ -633,7 +644,6 @@ void EntityManager::RemoveDeadEntities()
             --i;
         }
     }
-
     for (size_t i = 0; i < m_pPlayerProjectiles.size(); ++i)
     {
         if (m_pPlayerProjectiles[i]->IsDead())

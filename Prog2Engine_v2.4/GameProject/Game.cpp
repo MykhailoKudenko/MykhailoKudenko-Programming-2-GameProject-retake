@@ -225,6 +225,9 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 
 		}
 		break;
+	case SDLK_F4:
+		std::cout << *m_pEntityManager << std::endl;
+		break;
 	case SDLK_F5:
 		if (m_CameraScale < 10)
 		{

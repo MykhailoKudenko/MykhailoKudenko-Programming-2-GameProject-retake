@@ -61,7 +61,9 @@ public:
     void SpawnPointDrops();
 
     void SpawnEffect(const Vector2f& pos, Effect::EffectType type, bool isMirrored = false);
-  
+    
+    friend std::ostream& operator<<(std::ostream& out, const EntityManager& manager);
+
 private:
     void SpawnTorch(const Vector2f& pos, bool isRight);
     void KillProjectilesOutsideSpawnArea();
