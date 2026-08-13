@@ -48,7 +48,7 @@ bool Enemy::IsDead() const
 }
 Vector2f Enemy::GetCenterPosition() const
 {
-	return(Vector2f{ m_Collider.left + m_Collider.width / 2, m_Collider.bottom + m_Collider.height / 2 });
+	return Vector2f{ m_Collider.left + m_Collider.width / 2, m_Collider.bottom + m_Collider.height / 2 };
 }
 
 

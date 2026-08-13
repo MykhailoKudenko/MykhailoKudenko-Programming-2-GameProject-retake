@@ -164,6 +164,7 @@ void Player::Draw() const
 		break;
 	}
 }
+
 void Player::Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& vertices, const std::vector<std::vector<Vector2f>>& playerOnlyVertices, const std::vector<Rectf>& ladders, const std::vector<std::vector<Vector2f>>& platfroms)
 {
 	//input
@@ -655,11 +656,11 @@ Rectf Player::GetHitbox() const
 {
 	if (m_Mystate == PlayerState::Ducking)
 	{
-		return(Rectf{ m_Collider.left, m_Collider.bottom, m_Collider.width, m_Collider.height - 16 });
+		return Rectf{ m_Collider.left, m_Collider.bottom, m_Collider.width, m_Collider.height - 16 };
 	}
 	else
 	{
-		return(m_Collider);
+		return m_Collider;
 	}
 }
 
@@ -709,7 +710,7 @@ bool Player::DoesWantToThrow() const
 
 bool Player::IsFacingRight() const
 {
-	return(m_IsFacingRight);
+	return m_IsFacingRight;
 }
 
 bool Player::TryClimb(const std::vector<Rectf>& ladders, bool isGoingUp)
@@ -791,7 +792,7 @@ void Player::SnapToCurrentLadderCenter()
 
 Player::PlayerWeapon Player::GetPlayerWeapon() const
 {
-	return(m_MyWeapon);
+	return m_MyWeapon;
 }
 void Player::SetPlayerWeapon(Player::PlayerWeapon weapon)
 {

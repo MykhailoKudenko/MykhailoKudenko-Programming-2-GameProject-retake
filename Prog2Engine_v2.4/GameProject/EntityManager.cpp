@@ -249,6 +249,25 @@ namespace {
             utils::DrawRect(rect);
         }
     }
+    bool RollBagDrop()
+    {
+        return std::rand() % 10 == 0;
+    }
+
+    Drop::DropType GetRandomBagDrop()
+    {
+        int randomIndex = std::rand() % 5;
+
+        switch (randomIndex)
+        {
+        case 0: return  Drop::DropType::Lance;
+        case 1: return  Drop::DropType::Knife;
+        case 2: return  Drop::DropType::Torch;
+        case 3: return  Drop::DropType::Doll;
+        case 4: return  Drop::DropType::MoneyBag;
+        default: return  Drop::DropType::Doll;
+        }
+    }
 }
 
 void EntityManager::Draw(bool isDebug) const
@@ -683,25 +702,6 @@ Vector2f EntityManager::GetPlayerPosition() const
     return Vector2f{ 0.f, 0.f };
 }
 
-bool EntityManager::RollBagDrop() const
-{
-    return std::rand() % 10 == 0;
-}
-
-Drop::DropType EntityManager::GetRandomBagDrop() const
-{
-    int randomIndex = std::rand() % 5;
-
-    switch (randomIndex)
-    {
-    case 0: return  Drop::DropType::Lance;
-    case 1: return  Drop::DropType::Knife;
-    case 2: return  Drop::DropType::Torch;
-    case 3: return  Drop::DropType::Doll;
-    case 4: return  Drop::DropType::MoneyBag;
-    default: return  Drop::DropType::Doll;
-    }
-}
 
 void EntityManager::KillProjectilesOutsideSpawnArea()
 {
