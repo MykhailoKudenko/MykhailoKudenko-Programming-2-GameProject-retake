@@ -9,7 +9,6 @@ m_pCamera{ utils::g_WindowSize },
 m_pPlayer{ nullptr },
 m_pLevel1{ nullptr },
 m_pEntityManager{ nullptr },
-m_pSoundManager{ nullptr },
 
 m_pHud{},
 m_MyState{ GameState::DeathMenu },
@@ -34,20 +33,17 @@ void Game::Initialize()
 {
 	m_pPlayer = new Player(Vector2f{ 0,0 });
 	m_pEntityManager = new EntityManager();
-	m_pSoundManager = new SoundManager();
-	m_pEntityManager->SetSoundManager(m_pSoundManager);
 	m_pHud = new HUD();
 
 	m_pMainMenu = TextureManager::GetInstance().GetTexture("StartScreen.png");
 	m_pDeathMenu = TextureManager::GetInstance().GetTexture("DeathMenu.png");
-
 	m_pLevel1 = nullptr;
 
 	m_PLayerLivesCurrent = m_PlayerLivesMax;
 	m_MyState = GameState::MainMenu;
 
-	m_pSoundManager->SetMusicVolume(20);
-	m_pSoundManager->SetEffectVolume(20);
+	SoundManager::GetInstance().SetMusicVolume(20);
+	SoundManager::GetInstance().SetEffectVolume(20);
 }
 
 void Game::Cleanup()
@@ -64,12 +60,7 @@ void Game::Cleanup()
 	delete m_pPlayer;
 	m_pPlayer = nullptr;
 
-	m_pSoundManager->StopMusic();
-
-	delete m_pSoundManager;
-	m_pSoundManager = nullptr;
-
-
+	SoundManager::GetInstance().StopMusic();
 }
 
 void Game::Update(float elapsedSec)
@@ -96,7 +87,7 @@ void Game::Update(float elapsedSec)
 		
 		if (m_pHud->DidTimerFinish())
 		{
-			m_pSoundManager->StopMusic();
+			SoundManager::GetInstance().StopMusic();
 			m_MyState = GameState::MainMenu;
 			m_pHud->ResetTimer();
 		}
@@ -105,12 +96,12 @@ void Game::Update(float elapsedSec)
 		{
 			m_PLayerLivesCurrent -= 1;
 
-			m_pSoundManager->StopMusic();
+			SoundManager::GetInstance().StopMusic();
 
 			if (m_PLayerLivesCurrent > 0)
 			{
 				m_MyState = GameState::DeathMenu;
-				m_pSoundManager->PlayEffect(SoundManager::SFX::Death);
+				SoundManager::GetInstance().PlayEffect(SoundManager::SFX::Death);
 
 			}
 			else
@@ -179,14 +170,14 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		{
 		case GameState::MainMenu:
 			StartNewRun();
-			m_pSoundManager->PlayMusic();
+			SoundManager::GetInstance().PlayMusic();
 			break;
 
 		case GameState::Playing:
 			break;
 
 		case GameState::DeathMenu:
-			m_pSoundManager->PlayMusic();
+			SoundManager::GetInstance().PlayMusic();
 			StartNextLife();
 			break;
 
@@ -311,9 +302,6 @@ void Game::ResetLevel()
 	m_pEntityManager->SetLevel(m_pLevel1);
 	m_pEntityManager->SetPlayer(m_pPlayer);
 	m_pEntityManager->SpawnPointEnemies();
-	m_pEntityManager->SetSoundManager(m_pSoundManager);
-
-	
 }
 void Game::StartNewRun()
 {

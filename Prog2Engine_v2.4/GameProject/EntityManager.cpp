@@ -40,8 +40,6 @@ EntityManager::EntityManager():
 m_pPlayer{ nullptr },
 m_pLevel{ nullptr },
 
-m_pSoundManager{ nullptr },
-
 m_pEnemies{ },
 m_pPlayerProjectiles{ },
 m_pEnemyProjectiles{ },
@@ -161,19 +159,17 @@ void EntityManager::Update(float elapsedSec)
 
     if (hasGhostInRange && m_GhostSoundTimer <= 0.f)
     {
-        if (m_pSoundManager != nullptr)
-        {
-            m_pSoundManager->PlayEffect(SoundManager::SFX::Ghost);
-        }
+        
+        SoundManager::GetInstance().PlayEffect(SoundManager::SFX::Ghost);
+        
         m_GhostSoundTimer = m_GhostSoundCooldown;
     }
 
     if (hasFlyingKnightInRange && m_FlyingKnightSoundTimer <= 0.f)
     {
-        if (m_pSoundManager != nullptr)
-        {
-            m_pSoundManager->PlayEffect(SoundManager::SFX::FlyingKnight);
-        }
+        
+        SoundManager::GetInstance().PlayEffect(SoundManager::SFX::FlyingKnight);
+        
         m_FlyingKnightSoundTimer = m_FlyingKnightSoundCooldown;
     }
 
@@ -197,10 +193,9 @@ void EntityManager::Update(float elapsedSec)
         drop->Update(elapsedSec);
         if (utils::IsOverlapping(m_pPlayer->GetHitbox(), drop->GetHitbox()))
         {
-            if (m_pSoundManager != nullptr)
-            {
-                m_pSoundManager->PlayEffect(SoundManager::SFX::PickUp);
-            }
+            
+            SoundManager::GetInstance().PlayEffect(SoundManager::SFX::PickUp);
+            
             switch (drop->GetType())
             {
             case Drop::DropType::Lance:
@@ -255,7 +250,7 @@ void EntityManager::Update(float elapsedSec)
                     SpawnEffect(enemy->GetCenterPosition(),enemy->GetEffectType(),enemy->IsFacingRight());
                     if (enemy->GetEffectType() == Effect::EffectType::Fire)
                     {
-                        m_pSoundManager->PlayEffect(SoundManager::SFX::FireDead);
+                        SoundManager::GetInstance().PlayEffect(SoundManager::SFX::FireDead);
                     }
                 }
                 else if (enemy->IsBoss())
@@ -579,7 +574,7 @@ void EntityManager::AddTroll(const Vector2f& spawnPos)
 void EntityManager::SpawnPlayerWeapon(const Vector2f& pos, bool isRight,
     Player::PlayerWeapon weapon)
 {
-    m_pSoundManager->PlayEffect(SoundManager::SFX::Throw);
+    SoundManager::GetInstance().PlayEffect(SoundManager::SFX::Throw);
     const Vector2f direction{ isRight ? 1.f : -1.f, 0.f };
 
     switch (weapon)
@@ -689,10 +684,6 @@ void EntityManager::SetPlayer(Player* pPlayer)
     m_pPlayer = pPlayer;
 }
 
-void EntityManager::SetSoundManager(SoundManager* pSoundManager)
-{
-    m_pSoundManager = pSoundManager;
-}
 
 Vector2f EntityManager::GetPlayerPosition() const
 {

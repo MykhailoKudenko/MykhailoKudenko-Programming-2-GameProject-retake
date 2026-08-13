@@ -57,7 +57,6 @@ private:
 	Player* m_pPlayer;
 	Level* m_pLevel1;
 	EntityManager* m_pEntityManager;
-	SoundManager* m_pSoundManager;
 
 	HUD* m_pHud;
 

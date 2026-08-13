@@ -8,6 +8,8 @@ class SoundManager final
 {
 public:
 
+    static SoundManager& GetInstance();
+
     enum class SFX
     {
         None,
@@ -20,7 +22,6 @@ public:
         LevelComplete
     };
 
-    SoundManager();
 
     void PlayMusic();
     void StopMusic();
@@ -31,6 +32,8 @@ public:
     void SetEffectVolume(int volume);
 
 private:
+    SoundManager();
+
     SoundStream m_Level1Music;
 
     SoundEffect m_Throw;

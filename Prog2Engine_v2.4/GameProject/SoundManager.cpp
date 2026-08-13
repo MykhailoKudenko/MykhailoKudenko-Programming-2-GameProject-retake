@@ -13,6 +13,15 @@ SoundManager::SoundManager()
 {
 }
 
+
+SoundManager& SoundManager::GetInstance()
+{
+    static SoundManager instance;
+
+    return instance;
+}
+
+
 void SoundManager::PlayMusic()
 {
     if (m_Level1Music.IsLoaded())

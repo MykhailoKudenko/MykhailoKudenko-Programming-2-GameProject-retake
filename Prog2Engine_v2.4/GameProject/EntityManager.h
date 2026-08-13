@@ -35,7 +35,6 @@ public:
 
     void SetLevel(Level* pLevel);
     void SetPlayer(Player* pPlayer);
-    void SetSoundManager(SoundManager* pSoundManager);
 
     Vector2f GetPlayerPosition() const;
 
@@ -76,8 +75,6 @@ private:
 
     Player* m_pPlayer;
     Level* m_pLevel;
-
-    SoundManager* m_pSoundManager;
 
     std::vector<Enemy*> m_pEnemies;
     std::vector<Projectile*> m_pPlayerProjectiles;
