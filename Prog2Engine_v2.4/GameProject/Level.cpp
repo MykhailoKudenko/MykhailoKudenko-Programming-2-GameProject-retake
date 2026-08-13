@@ -101,7 +101,7 @@ m_PlayerSpawnPos{0,0}
 				>> esa.area.width >> esa.area.height
 				>> groundFlag >> esa.timerMax;
 			esa.type = EnemyTypeFromString(typeStr);
-			esa.SpawnAtTheGround = (groundFlag != 0);
+			esa.spawnAtTheGround = (groundFlag != 0);
 			m_EnemySpawnAreas.push_back(esa);
 		}
 		else if (keyword == "drop")
@@ -181,7 +181,7 @@ const std::vector<Level::EnemySpawnPoint>& Level::GetEnemySpawnPoints()const
 {
 	return m_EnemySpawnPoints;
 }
- void Level::markEnemySpawnPointSpawned(int index)
+ void Level::MarkEnemySpawnPointSpawned(int index)
  {
 	 m_EnemySpawnPoints.at(index).spawned = true;
  }
@@ -194,7 +194,7 @@ const std::vector<Level::EnemySpawnPoint>& Level::GetEnemySpawnPoints()const
 {
 	return m_DropSpawnPoints;
 }
- void Level::markDropSpawnPointSpawned(int index)
+ void Level::MarkDropSpawnPointSpawned(int index)
  {
 	 m_DropSpawnPoints.at(index).spawned = true;
  }

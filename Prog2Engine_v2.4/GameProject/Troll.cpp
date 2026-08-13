@@ -18,7 +18,7 @@ Troll::Troll(Vector2f startPos, const std::vector<std::vector<Vector2f>>* vertic
 	m_DoJumpNext{ false },
 	m_IsGrounded{ false },
 	m_JumpTimeMax{0.3f},
-	m_JumpTimCurrent{0.f},
+	m_JumpTimeCurrent{0.f},
 	m_JumpSpeed{ 60.f }
 {
 }
@@ -78,11 +78,11 @@ void Troll::Update(float elapsedSec)
 
 	case TrollState::Jumping:
 		m_JumpAnimation.Update(elapsedSec);
-		m_JumpTimCurrent += elapsedSec;
-		if (m_JumpTimCurrent >= m_JumpTimeMax)
+		m_JumpTimeCurrent += elapsedSec;
+		if (m_JumpTimeCurrent >= m_JumpTimeMax)
 		{
 			m_MyState = TrollState::Falling;
-			m_JumpTimCurrent = 0;
+			m_JumpTimeCurrent = 0;
 		}
 		break;
 
@@ -97,8 +97,8 @@ void Troll::Update(float elapsedSec)
 		break;
 	}
 
-	ApplyVerticalmovement(elapsedSec);
-	ApplyHorisontalMovement(elapsedSec);
+	ApplyVerticalMovement(elapsedSec);
+	ApplyHorizontalMovement(elapsedSec);
 }
 
 
@@ -122,7 +122,7 @@ void Troll::Draw() const
 	}
 }
 
-void Troll::ApplyHorisontalMovement(float elapsedSec)
+void Troll::ApplyHorizontalMovement(float elapsedSec)
 {
 	if (m_pVertices == nullptr)
 	{
@@ -182,7 +182,7 @@ void Troll::ApplyHorisontalMovement(float elapsedSec)
 	}
 }
 
-void Troll::ApplyVerticalmovement(float elapsedSec)
+void Troll::ApplyVerticalMovement(float elapsedSec)
 {
 	if (m_pVertices == nullptr)
 	{

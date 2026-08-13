@@ -24,15 +24,6 @@ namespace {
         int randomIndex = std::rand() % 5;
 
         return static_cast<Drop::DropType>( randomIndex);
-        switch (randomIndex)
-        {
-        case 0: return  Drop::DropType::Lance;
-        case 1: return  Drop::DropType::Knife;
-        case 2: return  Drop::DropType::Torch;
-        case 3: return  Drop::DropType::Doll;
-        case 4: return  Drop::DropType::MoneyBag;
-        default: return  Drop::DropType::Doll;
-        }
     }
 }
 
@@ -76,27 +67,33 @@ m_FlyingKnightSoundCooldown{ 2.0f }
 
 EntityManager::~EntityManager()
 {
-    for (Enemy* enemy : m_pEnemies)
-    {
-        delete enemy;
+    DeleteAllEntities();
+}
+
+void EntityManager::DeleteAllEntities()
+{
+    for (Enemy* enemy : m_pEnemies) 
+    { 
+        delete enemy; 
     }
-    for (Projectile* proj : m_pPlayerProjectiles)
-    {
+    for (Projectile* proj : m_pPlayerProjectiles) 
+    { 
         delete proj;
     }
-    for (Projectile* proj : m_pEnemyProjectiles)
-    {
+    for (Projectile* proj : m_pEnemyProjectiles) 
+    { 
         delete proj;
     }
-    for (Drop* drop : m_pDrops)
-    {
-        delete drop;
+    for (Drop* drop : m_pDrops) 
+    { 
+        delete drop; 
     }
-    for (Effect* effect : m_pEffects)
-    {
-        delete effect;
+    for (Effect* effect : m_pEffects) 
+    { 
+        delete effect; 
     }
 }
+
 
 void EntityManager::Update(float elapsedSec)
 {
@@ -400,7 +397,7 @@ void EntityManager::SpawnPointEnemies()
         {
             bool faceRight = playerPos.x > spawnPoints[i].position.x;
             SpawnEnemyByType(spawnPoints[i].type, spawnPoints[i].position, faceRight);
-            m_pLevel->markEnemySpawnPointSpawned(i);
+            m_pLevel->MarkEnemySpawnPointSpawned(i);
         }
     }
 }
@@ -426,7 +423,7 @@ void EntityManager::SpawnPointDrops()
         if (dx <= m_UpdateLenth)
         {
             AddDrop(dropSpawnPoints[i].position, dropSpawnPoints[i].type);
-            m_pLevel->markDropSpawnPointSpawned(i);
+            m_pLevel->MarkDropSpawnPointSpawned(i);
 
         }
     }
@@ -476,7 +473,7 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
             static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX) * targetSpawnArea.width;
         float y{ 0.f };
 
-        if (!spawnAreas[i].SpawnAtTheGround)
+        if (!spawnAreas[i].spawnAtTheGround)
         {
             float groundY{ 0.f };
             Vector2f rayStart{ x, playerPos.y + m_YMaxHeight };
@@ -557,8 +554,7 @@ void EntityManager::AddFlyingKnight(const Vector2f& spawnPos, bool startsFacingR
 }
 void EntityManager::AddGhost(const Vector2f& SpawnPos, bool startsFacingRight)
 {
-    Ghost* ghost = new Ghost(SpawnPos, startsFacingRight);
-    ghost->SetEntityManager(this);
+    Ghost* ghost = new Ghost(SpawnPos, startsFacingRight, this);
     ghost->SetBag(RollBagDrop());
     m_pEnemies.push_back(ghost);
 }
@@ -705,6 +701,20 @@ Vector2f EntityManager::GetPlayerPosition() const
     return Vector2f{ 0.f, 0.f };
 }
 
+void EntityManager::Reset()
+{
+    DeleteAllEntities();
+    m_pEnemies.clear();
+    m_pPlayerProjectiles.clear();
+    m_pEnemyProjectiles.clear();
+    m_pDrops.clear();
+    m_pEffects.clear();
+
+    m_IsGhostSoundPlaying = false;
+    m_IsFlyingKnightSoundPlaying = false;
+    m_GhostSoundTimer = 0.f;
+    m_FlyingKnightSoundTimer = 0.f;
+}
 
 void EntityManager::KillProjectilesOutsideSpawnArea()
 {

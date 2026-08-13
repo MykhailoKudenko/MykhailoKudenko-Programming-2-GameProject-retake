@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "Player.h"
 
-
-//temp
-#include <iostream>
 #include "TextureManager.h"
 
 Player::Player(Vector2f startPos) :
@@ -19,15 +16,15 @@ m_ThrowNaked{ "ThrowKnightNaked.png", 2,  0.10f, false },
 m_DuckThrowArmour{ "DuckThrowKnight.png", 2,  0.10f, false },
 m_DuckThrowNaked{ "DuckThrowKnightNaked.png", 2,  0.10f, false },
 
-m_DuckArmour{ TextureManager::GetInstance().GetTexture("DuckKnight.png") },
-m_DuckNaked{ TextureManager::GetInstance().GetTexture("DuckKnightNaked.png") },
+m_pDuckArmour{ TextureManager::GetInstance().GetTexture("DuckKnight.png") },
+m_pDuckNaked{ TextureManager::GetInstance().GetTexture("DuckKnightNaked.png") },
 
-m_JumpingArmour{ TextureManager::GetInstance().GetTexture("JumpKnight.png") },
-m_JumpingNaked{ TextureManager::GetInstance().GetTexture("JumpKnightNaked.png") },
+m_pJumpingArmour{ TextureManager::GetInstance().GetTexture("JumpKnight.png") },
+m_pJumpingNaked{ TextureManager::GetInstance().GetTexture("JumpKnightNaked.png") },
 
-m_Hit{ TextureManager::GetInstance().GetTexture("HitKnight.png") },
-m_DeathKnockBack{ TextureManager::GetInstance().GetTexture("DeadKnockBack.png") },
-m_Death{ TextureManager::GetInstance().GetTexture("DeadGround.png") },
+m_pHit{ TextureManager::GetInstance().GetTexture("HitKnight.png") },
+m_pDeathKnockBack{ TextureManager::GetInstance().GetTexture("DeadKnockBack.png") },
+m_pDeath{ TextureManager::GetInstance().GetTexture("DeadGround.png") },
 
 m_MovementSpeed{ 50 },
 m_JumpSpeed{ 60 },
@@ -50,7 +47,7 @@ m_KnockBackDirectionX{ -1.f },
 m_pCurrentLadder {nullptr},
 m_BlockVerticalActionsUntilReleased{ false },
 m_IsWearingArmour{true},
- m_Mystate{ PlayerState::Standing },
+ m_MyState{ PlayerState::Standing },
 m_PreviousShootPressed{ false },
 m_DoesWantToThrow{ false },
 m_ThrowCooldownMax{ 0.2f },
@@ -69,7 +66,7 @@ m_FlySpeed{ 120.f }
 void Player::Draw() const
 {
 
-	switch (m_Mystate)
+	switch (m_MyState)
 	{
 	case PlayerState::Standing:
 		if (m_IsWearingArmour)
@@ -116,25 +113,25 @@ void Player::Draw() const
 	case PlayerState::Ducking:
 		if (m_IsWearingArmour)
 		{
-			m_DuckArmour->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_DuckArmour->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+			m_pDuckArmour->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_pDuckArmour->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		}
 		else
 		{
-			m_DuckNaked->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_DuckNaked->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+			m_pDuckNaked->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_pDuckNaked->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		}
 		break;
 	case PlayerState::Jumping:
 		if (m_IsWearingArmour)
 		{
-			m_JumpingArmour->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_JumpingArmour->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+			m_pJumpingArmour->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_pJumpingArmour->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		}
 		else
 		{
-			m_JumpingNaked->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_JumpingNaked->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+			m_pJumpingNaked->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_pJumpingNaked->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		}
 		break;
 	case PlayerState::Knockback:
-		m_Hit->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_Hit->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+		m_pHit->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_pHit->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		break;
 	case PlayerState::Throwing:
 		if (m_IsWearingArmour)
@@ -157,10 +154,10 @@ void Player::Draw() const
 		}
 		break;
 	case PlayerState::Dead:
-		m_Death->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_Death->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+		m_pDeath->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_pDeath->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		break;
 	case PlayerState::KnockbackDead:
-		m_DeathKnockBack->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_DeathKnockBack->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+		m_pDeathKnockBack->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_pDeathKnockBack->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		break;
 	}
 }
@@ -196,7 +193,7 @@ Vector2f Player::GetCenterPosition() const
 
 void Player::UpdateInput()
 {
-	if (m_Mystate == PlayerState::Dead || m_Mystate == PlayerState::KnockbackDead)
+	if (m_MyState == PlayerState::Dead || m_MyState == PlayerState::KnockbackDead)
 	{
 		m_InputDirectionX = 0;
 		m_InputDirectionY = 0;
@@ -232,8 +229,8 @@ void Player::UpdateInput()
 	bool isPressedNow = pStates[SDL_SCANCODE_E];
 
 	bool isOnLadder =
-		m_Mystate == PlayerState::Climbing ||
-		m_Mystate == PlayerState::ClimbingStill;
+		m_MyState == PlayerState::Climbing ||
+		m_MyState == PlayerState::ClimbingStill;
 
 	if (isPressedNow && !m_PreviousShootPressed && m_ThrowCooldownCurrent <= 0 && !isOnLadder)
 	{
@@ -263,7 +260,7 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 	{
 		if (m_DoesWantToThrow)
 		{
-			m_Mystate = PlayerState::Throwing;
+			m_MyState = PlayerState::Throwing;
 
 			if (m_IsWearingArmour)
 			{
@@ -279,11 +276,11 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 
 		if (m_InputDirectionX != 0 || m_InputDirectionY != 0)
 		{
-			m_Mystate = PlayerState::Walking;
+			m_MyState = PlayerState::Walking;
 		}
 		else
 		{
-			m_Mystate = PlayerState::Standing;
+			m_MyState = PlayerState::Standing;
 		}
 
 		return;
@@ -292,8 +289,8 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 	// While the up/down key is still being held after climbing started,
 	// ignore new vertical actions until released
 	if (m_BlockVerticalActionsUntilReleased
-		&& m_Mystate != PlayerState::Climbing
-		&& m_Mystate != PlayerState::ClimbingStill)
+		&& m_MyState != PlayerState::Climbing
+		&& m_MyState != PlayerState::ClimbingStill)
 	{
 		if (m_InputDirectionY == 0)
 		{
@@ -306,57 +303,57 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 	}
 
 	// Handle throw states first, because they should lock the player
-	if (m_Mystate == PlayerState::Throwing)
+	if (m_MyState == PlayerState::Throwing)
 	{
 		Animation& anim = m_IsWearingArmour ? m_ThrowArmour : m_ThrowNaked;
 		anim.Update(elapsedSec);
 
 		if (anim.IsFinished())
 		{
-			m_Mystate = PlayerState::Standing;
+			m_MyState = PlayerState::Standing;
 		}
 		return;
 	}
-	else if (m_Mystate == PlayerState::DuckingThrow)
+	else if (m_MyState == PlayerState::DuckingThrow)
 	{
 		Animation& anim = m_IsWearingArmour ? m_DuckThrowArmour : m_DuckThrowNaked;
 		anim.Update(elapsedSec);
 
 		if (anim.IsFinished())
 		{
-			m_Mystate = PlayerState::Ducking;
+			m_MyState = PlayerState::Ducking;
 		}
 		return;
 	}
 
 	// Keep climbing state synced with vertical input
-	if (m_Mystate == PlayerState::Climbing || m_Mystate == PlayerState::ClimbingStill)
+	if (m_MyState == PlayerState::Climbing || m_MyState == PlayerState::ClimbingStill)
 	{
 		if (m_InputDirectionY == 0)
 		{
-			m_Mystate = PlayerState::ClimbingStill;
+			m_MyState = PlayerState::ClimbingStill;
 		}
 		else
 		{
-			m_Mystate = PlayerState::Climbing;
+			m_MyState = PlayerState::Climbing;
 		}
 	}
 
 	// Up input: climb if possible, otherwise jump if on ground
 	if (m_InputDirectionY == 1)
 	{
-		if (m_Mystate != PlayerState::Climbing
-			&& m_Mystate != PlayerState::ClimbingStill
+		if (m_MyState != PlayerState::Climbing
+			&& m_MyState != PlayerState::ClimbingStill
 			&& TryClimb(ladders, true))
 		{
-			m_Mystate = PlayerState::Climbing;
+			m_MyState = PlayerState::Climbing;
 			SnapToCurrentLadderCenter();
 			m_BlockVerticalActionsUntilReleased = true;
 			return;
 		}
 		else if (m_IsOnTheGround)
 		{
-			m_Mystate = PlayerState::Jumping;
+			m_MyState = PlayerState::Jumping;
 			m_JumpTimeUpCurrent = m_JumpTimeUpMax;
 			m_JumpDirectionX = m_IsFacingRight ? 1 : -1;
 			return;
@@ -364,37 +361,37 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 	}
 
 	// Down input: climb down or duck
-	if ((m_Mystate == PlayerState::Standing || m_Mystate == PlayerState::Walking)
+	if ((m_MyState == PlayerState::Standing || m_MyState == PlayerState::Walking)
 		&& m_InputDirectionY == -1)
 	{
-		if (m_Mystate != PlayerState::Climbing
-			&& m_Mystate != PlayerState::ClimbingStill
+		if (m_MyState != PlayerState::Climbing
+			&& m_MyState != PlayerState::ClimbingStill
 			&& TryClimb(ladders, false))
 		{
-			m_Mystate = PlayerState::Climbing;
+			m_MyState = PlayerState::Climbing;
 			SnapToCurrentLadderCenter();
 			m_BlockVerticalActionsUntilReleased = true;
 			return;
 		}
 		else
 		{
-			m_Mystate = PlayerState::Ducking;
+			m_MyState = PlayerState::Ducking;
 			return;
 		}
 	}
 
 	// Stop ducking when down is released
-	if (m_Mystate == PlayerState::Ducking && m_InputDirectionY != -1)
+	if (m_MyState == PlayerState::Ducking && m_InputDirectionY != -1)
 	{
-		m_Mystate = PlayerState::Standing;
+		m_MyState = PlayerState::Standing;
 	}
 
 	// Start throwing
 	if (m_DoesWantToThrow)
 	{
-		if (m_Mystate == PlayerState::Ducking)
+		if (m_MyState == PlayerState::Ducking)
 		{
-			m_Mystate = PlayerState::DuckingThrow;
+			m_MyState = PlayerState::DuckingThrow;
 
 			if (m_IsWearingArmour)
 			{
@@ -406,9 +403,9 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 				m_DuckThrowNaked.Reset();
 			}
 		}
-		else if (m_Mystate != PlayerState::Climbing && m_Mystate != PlayerState::ClimbingStill)
+		else if (m_MyState != PlayerState::Climbing && m_MyState != PlayerState::ClimbingStill)
 		{
-			m_Mystate = PlayerState::Throwing;
+			m_MyState = PlayerState::Throwing;
 
 			if (m_IsWearingArmour)
 			{
@@ -424,7 +421,7 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 	}
 
 	// Update looping movement animations
-	switch (m_Mystate)
+	switch (m_MyState)
 	{
 	case PlayerState::Walking:
 		if (m_IsWearingArmour)
@@ -486,7 +483,7 @@ void Player::UpdateTimers(float elapsedSec)
 	{
 		m_KnockbackTimeCurrent -= elapsedSec;
 	}
-	if (m_Mystate == PlayerState::Dead)
+	if (m_MyState == PlayerState::Dead)
 	{
 		if (m_DeathTimeCurrent >= 0)
 		{
@@ -512,31 +509,31 @@ void Player::UpdateMovementHorizontal(
 
 	float xSpeed{ 0.f };
 
-	if (m_Mystate == PlayerState::Standing || m_Mystate == PlayerState::Walking)
+	if (m_MyState == PlayerState::Standing || m_MyState == PlayerState::Walking)
 	{
 		xSpeed = m_InputDirectionX * m_MovementSpeed * elapsedSec;
 	}
-	else if (m_Mystate == PlayerState::Knockback || m_Mystate == PlayerState::KnockbackDead)
+	else if (m_MyState == PlayerState::Knockback || m_MyState == PlayerState::KnockbackDead)
 	{
 		xSpeed = m_KnockBackDirectionX * m_KnockBackSpeed * elapsedSec;
 	}
-	else if (m_Mystate == PlayerState::Jumping)
+	else if (m_MyState == PlayerState::Jumping)
 	{
 		xSpeed = m_JumpDirectionX * m_JumpSpeed * elapsedSec;
 	}
 
 	if (xSpeed == 0.f
-		&& m_Mystate != PlayerState::Ducking
-		&& m_Mystate != PlayerState::Climbing
-		&& m_Mystate != PlayerState::ClimbingStill
-		&& m_Mystate != PlayerState::Throwing
-		&& m_Mystate != PlayerState::DuckingThrow
-		&& m_Mystate != PlayerState::Jumping
-		&& m_Mystate != PlayerState::Knockback
-		&& m_Mystate != PlayerState::KnockbackDead
-		&& m_Mystate != PlayerState::Dead)
+		&& m_MyState != PlayerState::Ducking
+		&& m_MyState != PlayerState::Climbing
+		&& m_MyState != PlayerState::ClimbingStill
+		&& m_MyState != PlayerState::Throwing
+		&& m_MyState != PlayerState::DuckingThrow
+		&& m_MyState != PlayerState::Jumping
+		&& m_MyState != PlayerState::Knockback
+		&& m_MyState != PlayerState::KnockbackDead
+		&& m_MyState != PlayerState::Dead)
 	{
-		m_Mystate = PlayerState::Standing;
+		m_MyState = PlayerState::Standing;
 		return;
 	}
 
@@ -566,9 +563,9 @@ void Player::UpdateMovementHorizontal(
 		m_Collider.left += xSpeed;
 
 		if (xSpeed != 0.f
-			&& (m_Mystate == PlayerState::Standing || m_Mystate == PlayerState::Walking))
+			&& (m_MyState == PlayerState::Standing || m_MyState == PlayerState::Walking))
 		{
-			m_Mystate = PlayerState::Walking;
+			m_MyState = PlayerState::Walking;
 		}
 	}
 }
@@ -588,7 +585,7 @@ void Player::UpdateMovementVertical(
 
 	float ySpeed{ 0.f };
 
-	if (m_Mystate == PlayerState::Climbing || m_Mystate == PlayerState::ClimbingStill)
+	if (m_MyState == PlayerState::Climbing || m_MyState == PlayerState::ClimbingStill)
 	{
 		m_Collider.bottom += m_ClimbSpeed * elapsedSec * m_InputDirectionY;
 	}
@@ -621,7 +618,7 @@ void Player::UpdateMovementVertical(
 			hitGround = true;
 		}
 	}
-	if (!hitGround || ySpeed > 0.f || m_Mystate == PlayerState::Climbing || m_Mystate == PlayerState::ClimbingStill)
+	if (!hitGround || ySpeed > 0.f || m_MyState == PlayerState::Climbing || m_MyState == PlayerState::ClimbingStill)
 	{
 		m_Collider.bottom += ySpeed;
 		m_IsOnTheGround = false;
@@ -629,32 +626,32 @@ void Player::UpdateMovementVertical(
 	else
 	{
 
-		if (m_Mystate == PlayerState::Jumping)
+		if (m_MyState == PlayerState::Jumping)
 		{
-			m_Mystate = PlayerState::Standing;
+			m_MyState = PlayerState::Standing;
 		}
-		if (m_Mystate == PlayerState::Knockback)
+		if (m_MyState == PlayerState::Knockback)
 		{
-			m_Mystate = PlayerState::Standing;
+			m_MyState = PlayerState::Standing;
 		}
-		if (m_Mystate == PlayerState::KnockbackDead)
+		if (m_MyState == PlayerState::KnockbackDead)
 		{
-			m_Mystate = PlayerState::Dead;
+			m_MyState = PlayerState::Dead;
 		}
 		m_Collider.bottom = BottomHitInfo.intersectPoint.y;
 		m_IsOnTheGround = true;
 	}
 
-	if (m_Mystate == PlayerState::Climbing && !IsStillOnLadder())
+	if (m_MyState == PlayerState::Climbing && !IsStillOnLadder())
 	{
-		m_Mystate = PlayerState::Standing;
+		m_MyState = PlayerState::Standing;
 	}
 }
 
 //getters/ setters
 Rectf Player::GetHitbox() const
 {
-	if (m_Mystate == PlayerState::Ducking)
+	if (m_MyState == PlayerState::Ducking)
 	{
 		return Rectf{ m_Collider.left, m_Collider.bottom, m_Collider.width, m_Collider.height - 16 };
 	}
@@ -666,7 +663,7 @@ Rectf Player::GetHitbox() const
 
 void Player::TakeDamage()
 {
-	if (m_Mystate == PlayerState::Dead)
+	if (m_MyState == PlayerState::Dead)
 	{
 		return;
 	}
@@ -675,7 +672,7 @@ void Player::TakeDamage()
 		return;
 	}
 
-	m_Mystate = PlayerState::Knockback;
+	m_MyState = PlayerState::Knockback;
 	if (m_IsWearingArmour)
 	{
 		m_IsWearingArmour = false;
@@ -684,7 +681,7 @@ void Player::TakeDamage()
 	{
 		if (m_IsImmortal == false)
 		{
-			m_Mystate = PlayerState::KnockbackDead;
+			m_MyState = PlayerState::KnockbackDead;
 			m_DeathTimeCurrent = m_DeathTimerMax;
 		}
 	}
@@ -742,7 +739,7 @@ bool Player::TryClimb(const std::vector<Rectf>& ladders, bool isGoingUp)
 
 bool Player::IsDeathAnimationFinished() const
 {
-	return (m_Mystate == PlayerState::Dead || m_Mystate == PlayerState::KnockbackDead)
+	return (m_MyState == PlayerState::Dead || m_MyState == PlayerState::KnockbackDead)
 		&& m_DeathTimeCurrent <= 0.f;
 }
 
@@ -814,7 +811,7 @@ void Player::SetPlayerScore(int newScore)
 void Player::Respawn(const Vector2f& pos)
 {
 	m_Collider = Rectf{ pos.x, pos.y, 16.f, 24.f };
-	m_Mystate = PlayerState::Standing;
+	m_MyState = PlayerState::Standing;
 	m_IsWearingArmour = true;
 
 	m_DeathTimeCurrent = m_DeathTimerMax;
@@ -862,7 +859,7 @@ Vector2f Player::GetThrowPosition() const
 
 	float yOffset = 16.f;
 
-	if (m_Mystate == PlayerState::Ducking || m_Mystate == PlayerState::DuckingThrow)
+	if (m_MyState == PlayerState::Ducking || m_MyState == PlayerState::DuckingThrow)
 	{
 		yOffset = 8.f;
 	}

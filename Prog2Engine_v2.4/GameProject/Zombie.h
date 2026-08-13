@@ -20,7 +20,7 @@ private:
 		Spawning,
 		Walking
 	};
-	ZombieState m_State;
+	ZombieState m_MyState;
 
 	Animation m_WalkAnimation;
 	Animation m_SpawnAnimation;

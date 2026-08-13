@@ -6,7 +6,7 @@
 
 Bird::Bird(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 12.f, 13.f }, facingRight ? 25.f : -25.f, facingRight),
-	m_State{ BirdState::Spawning },
+	m_MyState{ BirdState::Spawning },
 	m_StartY{ startPos.y },
 	m_FlyTime{0.f},
 	m_Amplitude{8.f},
@@ -18,18 +18,18 @@ Bird::Bird(Vector2f startPos, bool facingRight)
 
 void Bird::Update(float elapsedSec)
 {
-	if (m_State == BirdState::Spawning)
+	if (m_MyState == BirdState::Spawning)
 	{
 		m_SpawnAnimation.Update(elapsedSec);
 		if (m_SpawnAnimation.IsFinished())
 		{
-			m_State = BirdState::Flying;
+			m_MyState = BirdState::Flying;
 			m_FlyTime = 0.f;
 		}
 		return;
 	}
 
-	if (m_State == BirdState::Flying)
+	if (m_MyState == BirdState::Flying)
 	{
 		m_FlyAnimation.Update(elapsedSec);
 		m_FlyTime += elapsedSec;
@@ -41,11 +41,11 @@ void Bird::Update(float elapsedSec)
 
 void Bird::Draw() const
 {
-	if (m_State == BirdState::Spawning)
+	if (m_MyState == BirdState::Spawning)
 	{
 		m_SpawnAnimation.Draw(m_Collider, false, false);
 	}
-	else if (m_State == BirdState::Flying)
+	else if (m_MyState == BirdState::Flying)
 	{
 		m_FlyAnimation.Draw(m_Collider, m_IsFacingRight);
 	}
@@ -53,6 +53,6 @@ void Bird::Draw() const
 
 bool Bird::IsSpawning() const
 {
-	return m_State == BirdState::Spawning;
+	return m_MyState == BirdState::Spawning;
 }
 

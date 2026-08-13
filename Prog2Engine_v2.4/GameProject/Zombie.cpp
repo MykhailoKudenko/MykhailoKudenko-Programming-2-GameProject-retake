@@ -6,7 +6,7 @@
 
 Zombie::Zombie(const Vector2f& startPos, bool facingRight, const std::vector<std::vector<Vector2f>>* vertices)
 	: Enemy(Rectf{ startPos.x, startPos.y, 19, 27 }, facingRight ? 30.f : -30.f, facingRight),
-	m_State{ ZombieState::Spawning },
+	m_MyState{ ZombieState::Spawning },
 	m_WalkAnimation{ "ZombieWalk.png", 2, 0.13f, true }, 
 	m_SpawnAnimation{"ZombieSpawn.png", 3, 0.39f, false },
 	m_pVertices{ vertices }
@@ -21,13 +21,13 @@ void Zombie::Update(float elapsedSec)
 		return;
 	}
 
-	switch (m_State)
+	switch (m_MyState)
 	{
 	case ZombieState::Spawning:
 		m_SpawnAnimation.Update(elapsedSec);
 		if (m_SpawnAnimation.IsFinished())
 		{
-			m_State = ZombieState::Walking;
+			m_MyState = ZombieState::Walking;
 		}
 		break;
 	case ZombieState::Walking:
@@ -92,7 +92,7 @@ void Zombie::Update(float elapsedSec)
 
 void Zombie::Draw() const
 {
-	switch (m_State)
+	switch (m_MyState)
 	{
 	case ZombieState::Spawning:
 		m_SpawnAnimation.Draw(m_Collider, m_IsFacingRight, false);
@@ -105,5 +105,5 @@ void Zombie::Draw() const
 
 bool Zombie::IsSpawning() const
 {
-	return m_State == ZombieState::Spawning;
+	return m_MyState == ZombieState::Spawning;
 }

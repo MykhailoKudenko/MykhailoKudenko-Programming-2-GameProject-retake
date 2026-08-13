@@ -4,9 +4,9 @@
 #include "EntityManager.h"
 
 
-Ghost::Ghost(Vector2f startPos, bool facingRight)
+Ghost::Ghost(Vector2f startPos, bool facingRight, EntityManager* manager)
 	: Enemy(Rectf{ startPos.x, startPos.y, 24, 13.f }, facingRight ? 40.f : -40.f, facingRight, 100, false, Effect::EffectType::Blood, SoundManager::SFX::Ghost),
-	m_State{ GhostState::Spawning },
+	m_MyState{ GhostState::Spawning },
 	m_DropDistance{ 30.f },
 	m_DropSpeed{ 20.f },
 	m_ExtraPastPlayer{ 80.f },
@@ -14,7 +14,7 @@ Ghost::Ghost(Vector2f startPos, bool facingRight)
 	m_TargetBottomAfterDrop{ 0.f },
 	m_FlyAnimation{ "GhostFly.png", 2, 0.13f, true },
 	m_SpawnAnimation{ "GhostSpawn.png", 2, 0.39f, false },
-	m_pEntityManager{nullptr}
+	m_pEntityManager{ manager }
 {	
 }
 
@@ -22,18 +22,18 @@ Ghost::Ghost(Vector2f startPos, bool facingRight)
 void Ghost::Update(float elapsedSec)
 {
 
-	if (m_State == GhostState::Spawning)
+	if (m_MyState == GhostState::Spawning)
 	{
 		m_SpawnAnimation.Update(elapsedSec);
 		if (m_SpawnAnimation.IsFinished())
 		{
-			m_State = GhostState::Flying;
+			m_MyState = GhostState::Flying;
 			m_HasPassedPlayerX = false;
 		}
 		return;
 	}
 
-	if (m_State == GhostState::Flying)
+	if (m_MyState == GhostState::Flying)
 	{
 		m_FlyAnimation.Update(elapsedSec);
 		m_Collider.left += m_Speed * elapsedSec;
@@ -75,7 +75,7 @@ void Ghost::Update(float elapsedSec)
 			{
 				if (ghostCenterY > playerCenterY + yTolerance)
 				{
-					m_State = GhostState::Dropping;
+					m_MyState = GhostState::Dropping;
 					m_TargetBottomAfterDrop = m_Collider.bottom - m_DropDistance;
 				}
 				else
@@ -90,7 +90,7 @@ void Ghost::Update(float elapsedSec)
 		return;
 	}
 
-	if (m_State == GhostState::Dropping)
+	if (m_MyState == GhostState::Dropping)
 	{
 		m_FlyAnimation.Update(elapsedSec);
 
@@ -103,30 +103,23 @@ void Ghost::Update(float elapsedSec)
 			m_Speed *= -1.f;
 			m_IsFacingRight = (m_Speed > 0.f);
 			m_HasPassedPlayerX = false;
-			m_State = GhostState::Flying;
+			m_MyState = GhostState::Flying;
 		}
 	}
 }
 void Ghost::Draw() const
 {
-	if (m_State == GhostState::Spawning)
+	if (m_MyState == GhostState::Spawning)
 	{
 		m_SpawnAnimation.Draw(m_Collider, false, false);
 	}
-	else if (m_State == GhostState::Flying || m_State == GhostState::Dropping)
+	else if (m_MyState == GhostState::Flying || m_MyState == GhostState::Dropping)
 	{
 		m_FlyAnimation.Draw(m_Collider, m_IsFacingRight);
 		
 	}
 }
-
-void Ghost::SetEntityManager(EntityManager* manager)
-{
-	m_pEntityManager = manager;
-}
-
-
 bool Ghost::IsSpawning() const
 {
-	return m_State == GhostState::Spawning;
+	return m_MyState == GhostState::Spawning;
 }

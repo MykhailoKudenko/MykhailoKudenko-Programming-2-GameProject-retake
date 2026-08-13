@@ -10,6 +10,12 @@ public:
 
     static SoundManager& GetInstance();
 
+    ~SoundManager() = default;
+    SoundManager(const SoundManager&) = delete;
+    SoundManager& operator=(const SoundManager&) = delete;
+    SoundManager(SoundManager&&) = delete;
+    SoundManager& operator=(SoundManager&&) = delete;
+
     enum class SFX
     {
         None,

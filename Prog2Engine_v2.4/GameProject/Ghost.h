@@ -9,12 +9,10 @@ class EntityManager;
 class Ghost final : public Enemy
 {
 public:
-	Ghost(Vector2f startPos, bool facingRight);
+	Ghost(Vector2f startPos, bool facingRight, EntityManager* manager);
 
 	virtual void Update(float elapsedSec) override;
 	virtual void Draw() const override;
-
-	void SetEntityManager(EntityManager* manager);
 
 	virtual bool IsSpawning() const override;
 
@@ -29,7 +27,7 @@ private:
 	};
 
 
-	GhostState m_State;
+	GhostState m_MyState;
 
 	float m_DropDistance;
 	float m_DropSpeed;

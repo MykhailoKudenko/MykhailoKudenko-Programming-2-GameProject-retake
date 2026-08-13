@@ -44,8 +44,8 @@ void HUD::Draw(int score, Player::PlayerWeapon weapon) const
 
     displacement += DrawNumber(minutes, Vector2f{ 100.f, 720 });
         
-    m_pcolonSymbol->Draw(Vector2f{ 100.f + displacement, 720 });
-    displacement += m_pcolonSymbol->GetWidth();
+    m_pColonSymbol->Draw(Vector2f{ 100.f + displacement, 720 });
+    displacement += m_pColonSymbol->GetWidth();
 
      DrawNumber(seconds, Vector2f{ 100.f+ displacement, 720 });
 
@@ -142,5 +142,5 @@ void HUD::InitNumbersAndSymbols()
     m_pDigitTextures[8] = TextureManager::GetInstance().GetTextTexture("8", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
     m_pDigitTextures[9] = TextureManager::GetInstance().GetTextTexture("9", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
 
-    m_pcolonSymbol = TextureManager::GetInstance().GetTextTexture(":", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
+    m_pColonSymbol = TextureManager::GetInstance().GetTextTexture(":", "LowresPixel-Regular.otf", 60, Color4f{ 1,1,1,1 });
 }

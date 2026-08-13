@@ -53,12 +53,12 @@ private:
 		DeathMenu
 	};
 
-	Camera m_pCamera;
-	Player* m_pPlayer;
-	Level* m_pLevel1;
-	EntityManager* m_pEntityManager;
+	Camera m_Camera;
+	Player m_pPlayer;
+	Level* m_pLevel;
+	EntityManager m_pEntityManager;
 
-	HUD* m_pHud;
+	HUD m_pHud;
 
 	GameState m_MyState;
 	const int m_PlayerLivesMax;

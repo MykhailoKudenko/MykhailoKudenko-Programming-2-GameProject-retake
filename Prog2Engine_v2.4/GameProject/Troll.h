@@ -26,8 +26,8 @@ private:
 
 	void Fire();
 
-	void ApplyVerticalmovement(float elapsedSec);
-	void ApplyHorisontalMovement(float elapsedSec);
+	void ApplyVerticalMovement(float elapsedSec);
+	void ApplyHorizontalMovement(float elapsedSec);
 
 	Animation m_JumpAnimation;
 	Animation m_ShootAnimation;
@@ -46,7 +46,7 @@ private:
 	bool m_IsGrounded;
 
 	const float m_JumpTimeMax;
-	float m_JumpTimCurrent;
+	float m_JumpTimeCurrent;
 	const float m_JumpSpeed;
 
 };

@@ -125,25 +125,25 @@ private:
 	Animation m_ThrowArmour;
 	Animation m_DuckThrowArmour;
 
-	const Texture* m_JumpingArmour;
-	const Texture* m_DuckArmour;
+	const Texture* m_pJumpingArmour;
+	const Texture* m_pDuckArmour;
 
 	Animation m_WalkingNaked;
 	Animation m_ClimbingNaked;
 	Animation m_ThrowNaked;
 	Animation m_DuckThrowNaked;
 
-	const Texture* m_JumpingNaked;
-	const Texture* m_DuckNaked;
+	const Texture* m_pJumpingNaked;
+	const Texture* m_pDuckNaked;
 
-	const Texture* m_Hit;
+	const Texture* m_pHit;
 
-	const Texture* m_DeathKnockBack;
-	const Texture* m_Death;
+	const Texture* m_pDeathKnockBack;
+	const Texture* m_pDeath;
 
 	//State machine
 	bool m_IsWearingArmour;
-	PlayerState m_Mystate;
+	PlayerState m_MyState;
 
 	//Throwing
 	bool m_PreviousShootPressed;

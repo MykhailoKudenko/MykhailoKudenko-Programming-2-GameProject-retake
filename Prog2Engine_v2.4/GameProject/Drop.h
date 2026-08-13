@@ -42,7 +42,7 @@ private:
 
 	const Texture* m_pTexture;
 
-	State m_Mystate;
+	State m_MyState;
 
 	const std::vector<std::vector<Vector2f>>* m_pVertices;
 

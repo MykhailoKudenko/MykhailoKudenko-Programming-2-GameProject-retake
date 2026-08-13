@@ -26,5 +26,5 @@ private:
     const Texture* m_pTimeLabel;
 
     const Texture* m_pDigitTextures[10];
-    const Texture* m_pcolonSymbol;
+    const Texture* m_pColonSymbol;
 };

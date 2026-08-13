@@ -8,7 +8,7 @@ Drop::Drop(const Vector2f& pos, DropType type, const std::vector<std::vector<Vec
 	, m_Type{ type },
 	m_IsDead{ false },
 	m_pTexture{ nullptr },
-	m_Mystate{ State::Falling },
+	m_MyState{ State::Falling },
 	m_pVertices{vertices}
 {
 	
@@ -45,13 +45,13 @@ void Drop::Update(float elapsedSec)
 	{
 		return;
 	}
-	if (m_Mystate == State::Falling && !utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom))
+	if (m_MyState == State::Falling && !utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom))
 	{
 		m_Collider.bottom += utils::g_Gravity * elapsedSec;
 	}
 	else
 	{
-		m_Mystate = State::NotFalling;
+		m_MyState = State::NotFalling;
 	}
 }
 

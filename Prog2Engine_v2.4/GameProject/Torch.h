@@ -32,6 +32,6 @@ private:
 
 	TorchStates m_MyState;
 
-	float m_TimeFliyngUp;
+	float m_TimeFlyingUp;
 };
 

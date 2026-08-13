@@ -64,6 +64,8 @@ public:
     
     friend std::ostream& operator<<(std::ostream& out, const EntityManager& manager);
 
+    void Reset();
+
 private:
     void SpawnTorch(const Vector2f& pos, bool isRight);
     void KillProjectilesOutsideSpawnArea();
@@ -74,6 +76,7 @@ private:
 
     void RemoveDeadEntities();
     void DebugSpawnDraw() const;
+    void DeleteAllEntities();
 
     Player* m_pPlayer;
     Level* m_pLevel;

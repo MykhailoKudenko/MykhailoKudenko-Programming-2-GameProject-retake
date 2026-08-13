@@ -28,8 +28,6 @@ int SDL_main(int argv, char** args)
 	}
 	delete pGame;
 
-	//DumpMemoryLeaks();
-
 	return returnValue;
 }
 

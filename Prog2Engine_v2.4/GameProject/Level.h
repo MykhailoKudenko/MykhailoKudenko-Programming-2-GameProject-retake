@@ -38,7 +38,7 @@ public:
 	{
 		EnemyType type;
 		Rectf area;
-		bool SpawnAtTheGround{true};
+		bool spawnAtTheGround{true};
 		float timerMax{ 1.f };
 		float timer{ 0.f };
 
@@ -59,13 +59,13 @@ public:
 	const std::vector<Rectf>& GetLadders() const;
 
 	const std::vector<EnemySpawnPoint>& GetEnemySpawnPoints() const;
-	void markEnemySpawnPointSpawned(int index);
+	void MarkEnemySpawnPointSpawned(int index);
 
 	const std::vector<EnemySpawnArea>& GetEnemySpawnAreas() const;
 	bool IsEnemyAreaReadyToSpawn(int index);
 
 	const std::vector<DropSpawnPoint>& GetDropSpawnPoints() const;
-	void markDropSpawnPointSpawned(int inde);
+	void MarkDropSpawnPointSpawned(int index);
 
 	const std::vector<std::vector<Vector2f>>& GetPlayerOnlyVertices() const;
 	const Vector2f& GetPlayerPosition() const;

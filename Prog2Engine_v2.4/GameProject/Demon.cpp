@@ -3,9 +3,6 @@
 #include "EntityManager.h"
 #include <cmath>
 
-#include <iostream>
-#include <ctime>
-
 Demon::Demon(Vector2f startPos, EntityManager* manager)
 	: Enemy(Rectf{ startPos.x, startPos.y, 24, 26 }, 80, false, 200, false, Effect::EffectType::Fire, SoundManager::SFX::None, true, 5),
 	m_FlyAnimation{ "DemonFly.png", 2, 0.13f, true},

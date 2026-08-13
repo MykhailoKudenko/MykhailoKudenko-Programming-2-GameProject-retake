@@ -21,7 +21,7 @@ private:
 		Flying
 	};
 
-	BirdState m_State;
+	BirdState m_MyState;
 	float m_StartY;
 	float m_FlyTime;
 
