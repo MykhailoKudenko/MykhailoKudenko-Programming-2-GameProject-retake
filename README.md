@@ -7,7 +7,7 @@
   <h2 align="center">Ghosts 'n Goblins (nes)</h2>
 
   <p align="center">
-    Short description of the game.
+    A single-level C++ recreation of the Ghosts 'n Goblins
     <br />
     <strong>Original game : Ghosts 'n Goblins (NES) </strong>
     <a href="https://ghostsngoblins.fandom.com/wiki/Ghosts_%27n_Goblins"><strong>General info »</strong></a>
@@ -59,23 +59,19 @@ Here's why:
 
 This section gives a clear and detailed overview of which parts of the original game I planned to make.
 
-### The minimum I will most certainly develop:
-* Player Movement
-* Player Lance
-* Two enemy type (Zombie/Plant)
-* Miniboss (Flying Demon)
-* Sounds
-* MovingPlatforms
+### Implemented:
+* Player movement: walking, jumping, ducking, and climbing ladders
+* Three throwable weapons: Lance, Knife and Torch (Torch has its own logic)
+* Seven enemy types, each with its own separate logic
+* Two bosses Demon and Troll which have more complex logic compared to normal enemies
+* There are pickups player can pickup to get score, or new weapon 
+* Level class reads data from a txt file and stores it.
+* Animation class automatically manages texture timers
+* A HUD class shows data as in the original game
+* Sound manager can play different effects, and background music
+* Entity manager manages entities and their interactions
+* Debug tools: collider overlay, immortal mode, free mode, EntityManager Information dump, camera zoom
 
-### What I will probably make as well:
-* Final boss (Cyclops)
-* All enemy types (Crows, Flying Knights, Flying Monsters)
-* Different weapons
-* Respawn System
-
-
-### What I plan to create if I have enough time left:
-* Easter eggs
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -100,22 +96,27 @@ Open the solution in Visual Studio 2022 and run the project in Debug x64 mode.
 <!-- HOW TO PLAY -->
 ## How to play
 
-Purpouse of the game is to get to the end of the game, and beat the final boss, and get as many points as possible.
+Purpouse of the game is to get to the end of the game, and beat the final boss, and get as high score as possible.
 
 ### Controls
 
-* Enter - Start the game
+**Start / continue**
+* Enter (or numpad Enter) - start the game from the main menu, or continue to the next life from the death screen
 
-* A/D - move left/right
-* W - jump
-* S - Crouch
-* E - Shoot your current Projectile
+**Movement**
+* A / D or Left/Right arrow -> move left / right
+* W / Up arrow / Space -> jump
+* S / down arrow -> duck, or climb down a ladder
 
+**Combat**
+* E — throw your currently equipped weapon (Lance, Knife or Torch — whichever you last picked up)
 
-Debug:
-* F1 - Toggle Collider Visibility 
-* F2 - Toggle Immortality
-* F3 - Toggle Flying
+**Debug (development only)**
+* F1 — toggle collider visibility
+* F2 — toggle immortality
+* F3 — toggle flying
+* F4 — print live data from entity manager
+* F5 / F6 — zoom the camera in / out (default scale is 4)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -125,125 +126,31 @@ Debug:
 ## Class structure 
 
 ### Object composition 
-Game
-Game is composed of:
+Dynamic-memory owners - only these three classes manage the life time of anything, and are responsible for deleting it:
 
-Camera
-Player
-Level
-EntityManager
-SoundManager
-HUD
-Menu textures
+TextureManager - every cached Texture*
+EntityManager - every Enemy* / Projectile* / Drop* / Effect*
+Game — its own Level*
 
-Purpose:
-Main controller class that manages all game systems.
+Every other class either holds value memberse:
+(Animation, Camera, SoundStream/SoundEffect, ect..) or a pointer into memory one of the three above (const Texture*, EntityManager*, ect..) and none of them call new or delete
 
-Player
+Enemy (abstract)
+-> Zombie 
+-> Bird 
+-> Flying Knight 
+-> Ghost 
+-> Plant 
+-> Demon 
+-> Troll 
 
-Player is composed of:
+All enemies share the same parrent abstract class, they overwride some of enemy base function
 
-Multiple Animation objects
-Multiple Texture objects
-Collider (Rectf)
-State variables
-Weapon/state enums
+Projectile (abstract)
+-> SimpleProjectile
+-> Torch
 
-Purpose:
-To Store movement, animations, combat state, and rendering data inside one object.
-
-Level
-
-Level is composed of:
-
-Vertices
-Ladders
-Platforms
-Enemy spawn points
-Enemy spawn areas
-Drop spawn points
-Textures
-
-Purpose:
-Store all level geometry and spawn data.
-
-EntityManager
-
-EntityManager is composed of:
-
-std::vector<Enemy*>
-std::vector<Projectile*>
-std::vector<Drop*>
-std::vector<Effect*>
-
-Purpose:
-Responsible for spawning, updating, drawing, and deleting gameplay entities.
-
-SoundManager
-
-SoundManager is composed of:
-
-SoundStream
-Multiple SoundEffect objects
-
-Purpose:
-Handles music and sound effects.
-
-Animation
-
-Animation is composed of:
-
-Texture
-Frame data
-Timing/playback variables
-
-Purpose:
-Handles sprite animation playback.
-
-Other class relationships / design choices
-Shared static resources
-
-Some classes use static shared resources to avoid loading the same asset multiple times.
-
-Examples:
-
-Zombie
-Effect
-Drop
-
-These classes use shared static textures/animations and an instance counter system.
-
-Purpose:
-
-Reduce memory usage
-Prevent loading duplicate textures
-
-### Inheritance 
-Enemy hierarchy
-Enemy
- ->Zombie
- -> Bird
- -> FlyingKnight
- -> Ghost
- -> Plant
- -> Demon
- -> Troll
-
-Projectile hierarchy
-Projectile
- -> Lance
- -> Knife
- -> Torch
- -> PlantProjectile
- -> DemonProjectile
-
-Purpose:
-All projectiles share movement/collision/death logic while each projectile has its own behavior and rendering.
-
-Purpose:
-All enemies share common enemy behavior while still having unique AI/attacks/animations.
-
-
+All projectiles share the same parrent abstract class, they overwride some of enemy base function
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -251,20 +158,17 @@ All enemies share common enemy behavior while still having unique AI/attacks/ani
 <!-- CHECKLIST -->
 ## Checklist
 
-- [x] Accept / set up github project
-- [x] week 01 topics applied
-    - [x] const keyword applied proactively (variables, functions,..)
-    - [x] static keyword applied proactively (class variables, static functions,..)
-    - [x] object composition (optional)
-- [x] week 02 topics applied
-- [x] week 03 topics applied
-- [x] week 04 topics applied
-- [x] week 05 topics applied
-- [x] week 06 topics applied
-- [x] week 07 topics applied
-- [x] week 08 topics applied
-- [x] week 09 topics applied (optional)
-- [x] week 10 topics applied (optional)
+- [x] week 01 topics applied (const used throughout, structs like MovingPlatform/EnemySpawnArea carry their own behaviour, not just data)
+- [x] week 02 topics applied (every class has private data + public interface)
+- [x] week 03 topics applied (init lists used throughout, every class that manages memory has a destructor that frees it)
+- [x] week 04 topics applied (this used to assign EntityManager to some of the enemies so they can call back into it, static keyword is applied for TextureManager/SoundManager)
+- [x] week 05 topics applied (composition + association + inheritance used throughout the project)
+- [x] week 06 topics applied (pure virtual functions + override used throughout the project, static_cast used for conversions when they are needed)
+- [x] week 07 topics applied (friend used on EntityManager for operator<<, explicit used where needed)
+- [x] week 08 topics applied (member objects vs pointers distinction applied throughout the project)
+- [x] week 09 topics applied (object slicing is avoided by using polymorphism)
+- [x] week 10 topics applied (Rule of 5: copy AND move constructor/assignment explicitly deleted on every class that owns raw pointers, since those objects should never be duplicated or moved)
+- [x] week 11 topics applied (Level reads a custom text-based level format using ifstream + istringstream)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
