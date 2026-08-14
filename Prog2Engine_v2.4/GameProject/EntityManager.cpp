@@ -84,14 +84,10 @@ void EntityManager::DeleteAllEntities()
     { 
         delete proj;
     }
-    for (Drop* drop : m_pDrops) 
-    { 
-        delete drop; 
-    }
-    for (Effect* effect : m_pEffects) 
-    { 
-        delete effect; 
-    }
+
+    m_pDrops.clear();
+
+    m_pEffects.clear();
 }
 
 
@@ -106,9 +102,9 @@ void EntityManager::Update(float elapsedSec)
     SpawnPointDrops();
     SpawnAreaEnemies(elapsedSec);
 
-    for (Effect* effect : m_pEffects)
+    for (Effect& effect : m_pEffects)
     {
-        effect->Update(elapsedSec);
+        effect.Update(elapsedSec);
     }
 
     Vector2f playerPos = m_pPlayer->GetCenterPosition();
@@ -196,15 +192,15 @@ void EntityManager::Update(float elapsedSec)
         }
     }
 
-    for (Drop* drop : m_pDrops)
+    for (Drop& drop : m_pDrops)
     {
-        drop->Update(elapsedSec);
-        if (utils::IsOverlapping(m_pPlayer->GetHitbox(), drop->GetHitbox()))
+        drop.Update(elapsedSec);
+        if (utils::IsOverlapping(m_pPlayer->GetHitbox(), drop.GetHitbox()))
         {
             
             SoundManager::GetInstance().PlayEffect(SoundManager::SFX::PickUp);
             
-            switch (drop->GetType())
+            switch (drop.GetType())
             {
             case Drop::DropType::Lance:
                 m_pPlayer->SetPlayerWeapon(Player::PlayerWeapon::Lance);
@@ -222,7 +218,7 @@ void EntityManager::Update(float elapsedSec)
                 m_pPlayer->AddToPLayerScore(500);
                 break;
             }
-            drop->Kill();
+            drop.Kill();
         }
     }
 
@@ -277,9 +273,9 @@ void EntityManager::Update(float elapsedSec)
 
 void EntityManager::Draw(bool isDebug) const
 {
-    for (const Effect* effect : m_pEffects)
+    for (const Effect& effect : m_pEffects)
     {
-        effect->Draw();
+        effect.Draw();
     }
 
     for (const Enemy* enemy : m_pEnemies)
@@ -306,10 +302,10 @@ void EntityManager::Draw(bool isDebug) const
         DrawGreenRectIfDebug(proj->GetHitbox(), isDebug);
 
     }
-    for (const Drop* drop : m_pDrops)
+    for (const Drop& drop : m_pDrops)
     {
-        drop->Draw();
-        DrawGreenRectIfDebug(drop->GetHitbox(), isDebug);
+        drop.Draw();
+        DrawGreenRectIfDebug(drop.GetHitbox(), isDebug);
 
     }
 
@@ -620,14 +616,19 @@ void EntityManager::AddDrop(const Vector2f& pos, Drop::DropType type)
 {
     if (m_pLevel != nullptr)
     {
-        Drop* drop = new Drop(pos, type, &m_pLevel->GetVertices());
-        m_pDrops.push_back(drop);
+        //Drop* drop = new Drop(pos, type, &m_pLevel->GetVertices());
+        //m_pDrops.push_back(drop);
+
+        m_pDrops.emplace_back(pos, type, &m_pLevel->GetVertices());
+
     }
 }
 void EntityManager::SpawnEffect(const Vector2f& pos, Effect::EffectType type, bool isMirrored)
 {
-    Effect* effect = new Effect(pos, type, isMirrored);
-    m_pEffects.push_back(effect);
+    //Effect* effect = new Effect(pos, type, isMirrored);
+    //m_pEffects.push_back(effect);
+
+    m_pEffects.emplace_back(pos, type, isMirrored);
 }
 void EntityManager::RemoveDeadEntities()
 {
@@ -636,7 +637,8 @@ void EntityManager::RemoveDeadEntities()
         if (m_pEnemies[i]->IsDead())
         {
             delete m_pEnemies[i];
-            m_pEnemies.erase(m_pEnemies.begin() + i);
+            m_pEnemies[i] = m_pEnemies.back();
+            m_pEnemies.pop_back();
             --i;
         }
     }
@@ -645,36 +647,36 @@ void EntityManager::RemoveDeadEntities()
         if (m_pPlayerProjectiles[i]->IsDead())
         {
             delete m_pPlayerProjectiles[i];
-            m_pPlayerProjectiles.erase(m_pPlayerProjectiles.begin() + i);
+            m_pPlayerProjectiles[i] = m_pPlayerProjectiles.back();
+            m_pPlayerProjectiles.pop_back();
             --i;
         }
     }
-
     for (size_t i = 0; i < m_pEnemyProjectiles.size(); ++i)
     {
         if (m_pEnemyProjectiles[i]->IsDead())
         {
             delete m_pEnemyProjectiles[i];
-            m_pEnemyProjectiles.erase(m_pEnemyProjectiles.begin() + i);
+            m_pEnemyProjectiles[i] = m_pEnemyProjectiles.back();
+            m_pEnemyProjectiles.pop_back();
             --i;
         }
     }
     for (size_t i = 0; i < m_pDrops.size(); ++i)
     {
-        if (m_pDrops[i]->IsDead())
+        if (m_pDrops[i].IsDead())
         {
-            delete m_pDrops[i];
-            m_pDrops.erase(m_pDrops.begin() + i);
+            m_pDrops[i] = m_pDrops.back();
+            m_pDrops.pop_back();
             --i;
         }
     }
-
     for (size_t i = 0; i < m_pEffects.size(); ++i)
     {
-        if (m_pEffects[i]->IsFinished())
+        if (m_pEffects[i].IsFinished())
         {
-            delete m_pEffects[i];
-            m_pEffects.erase(m_pEffects.begin() + i);
+            m_pEffects[i] = m_pEffects.back();
+            m_pEffects.pop_back();
             --i;
         }
     }

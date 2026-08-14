@@ -84,8 +84,8 @@ private:
     std::vector<Enemy*> m_pEnemies;
     std::vector<Projectile*> m_pPlayerProjectiles;
     std::vector<Projectile*> m_pEnemyProjectiles;
-    std::vector<Drop*> m_pDrops;
-    std::vector<Effect*> m_pEffects;
+    std::vector<Drop> m_pDrops;
+    std::vector<Effect> m_pEffects;
 
     float m_UpdateLenth;
 
