@@ -4,6 +4,8 @@
 #include <cmath>
 
 
+
+
 Bird::Bird(Vector2f startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 12.f, 13.f }, facingRight ? 25.f : -25.f, facingRight),
 	m_MyState{ BirdState::Spawning },

@@ -25,8 +25,8 @@ private:
 	float m_StartY;
 	float m_FlyTime;
 
-	float m_Amplitude;
-	float m_Frequency;
+	const float m_Amplitude;
+	const float m_Frequency;
 
 	Animation m_FlyAnimation;
 	Animation m_SpawnAnimation;

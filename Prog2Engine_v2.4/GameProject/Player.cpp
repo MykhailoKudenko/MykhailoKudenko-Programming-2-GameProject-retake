@@ -2,63 +2,58 @@
 #include "Player.h"
 
 #include "TextureManager.h"
+#include "EntityManager.h"
 
-Player::Player(Vector2f startPos) :
-m_WalkingArmour{ "WalkKnight.png", 3,  0.10f, true },
-m_WalkingNaked{ "WalkKnightNaked.png", 3, 0.10f, true },
-
-m_ClimbingArmour{ "ClimbKnight.png", 2,  0.10f, true },
-m_ClimbingNaked{ "ClimbKnightNaked.png", 2,  0.10f, true },
-
-m_ThrowArmour{ "ThrowKnight.png", 2,  0.10f, false },
-m_ThrowNaked{ "ThrowKnightNaked.png", 2,  0.10f, false },
-
-m_DuckThrowArmour{ "DuckThrowKnight.png", 2,  0.10f, false },
-m_DuckThrowNaked{ "DuckThrowKnightNaked.png", 2,  0.10f, false },
-
-m_pDuckArmour{ TextureManager::GetInstance().GetTexture("DuckKnight.png") },
-m_pDuckNaked{ TextureManager::GetInstance().GetTexture("DuckKnightNaked.png") },
-
-m_pJumpingArmour{ TextureManager::GetInstance().GetTexture("JumpKnight.png") },
-m_pJumpingNaked{ TextureManager::GetInstance().GetTexture("JumpKnightNaked.png") },
-
-m_pHit{ TextureManager::GetInstance().GetTexture("HitKnight.png") },
-m_pDeathKnockBack{ TextureManager::GetInstance().GetTexture("DeadKnockBack.png") },
-m_pDeath{ TextureManager::GetInstance().GetTexture("DeadGround.png") },
-
-m_MovementSpeed{ 50 },
-m_JumpSpeed{ 60 },
-m_KnockBackSpeed{ 80 },
-m_ClimbSpeed{ 60.f },
-m_InputDirectionX{ 0 },
-m_InputDirectionY{ 0 },
-m_IsShootButtonPressed{ false },
-m_IsFacingRight{ true },
-m_IsOnTheGround{ false },
-m_Collider{ startPos.x, startPos.y, 16, 24 },
-m_JumpDirectionX{ 0.f },
-m_JumpTimeUpMax{ 0.3f },
-m_JumpTimeUpCurrent{ 0.f },
-m_InvulnerableTimeMax{ 1.f },
-m_InvulnerableTimeCurrent{ 0.f },
-m_KnockbackTimeMax{ 0.2f },
-m_KnockbackTimeCurrent{ 0.f },
-m_KnockBackDirectionX{ -1.f },
-m_pCurrentLadder {nullptr},
-m_BlockVerticalActionsUntilReleased{ false },
-m_IsWearingArmour{true},
- m_MyState{ PlayerState::Standing },
-m_PreviousShootPressed{ false },
-m_DoesWantToThrow{ false },
-m_ThrowCooldownMax{ 0.2f },
-m_ThrowCooldownCurrent{ 0.0f },
-m_MyWeapon{ PlayerWeapon::Lance },
-m_Score{ 0 },
-m_IsImmortal{ false },
-m_DeathTimerMax{ 1.f },
-m_DeathTimeCurrent{ 1.f },
-m_IsFlying{ false },
-m_FlySpeed{ 120.f }
+Player::Player(Vector2f startPos, EntityManager* manager) :
+	m_pEntityManager{ manager },
+	m_MovementSpeed{ 50 },
+	m_JumpSpeed{ 60 },
+	m_KnockbackSpeed{ 80 },
+	m_ClimbSpeed{ 60.f },
+	m_InputDirectionX{ 0 },
+	m_InputDirectionY{ 0 },
+	m_IsShootButtonPressed{ false },
+	m_IsFacingRight{ true },
+	m_IsOnTheGround{ false },
+	m_Collider{ startPos.x, startPos.y, 16, 24 },
+	m_JumpDirectionX{ 0.f },
+	m_JumpTimeUpMax{ 0.3f },
+	m_JumpTimeUpCurrent{ 0.f },
+	m_InvulnerableTimeMax{ 1.f },
+	m_InvulnerableTimeCurrent{ 0.f },
+	m_KnockbackTimeMax{ 0.2f },
+	m_KnockbackTimeCurrent{ 0.f },
+	m_KnockbackDirectionX{ -1.f },
+	m_pCurrentLadder{ nullptr },
+	m_BlockVerticalActionsUntilReleased{ false },
+	m_WalkingArmour{ "WalkKnight.png", 3, 0.10f, true },
+	m_ClimbingArmour{ "ClimbKnight.png", 2, 0.10f, true },
+	m_ThrowArmour{ "ThrowKnight.png", 2, 0.10f, false },
+	m_DuckThrowArmour{ "DuckThrowKnight.png", 2, 0.10f, false },
+	m_pJumpingArmour{ TextureManager::GetInstance().GetTexture("JumpKnight.png") },
+	m_pDuckArmour{ TextureManager::GetInstance().GetTexture("DuckKnight.png") },
+	m_WalkingNaked{ "WalkKnightNaked.png", 3, 0.10f, true },
+	m_ClimbingNaked{ "ClimbKnightNaked.png", 2, 0.10f, true },
+	m_ThrowNaked{ "ThrowKnightNaked.png", 2, 0.10f, false },
+	m_DuckThrowNaked{ "DuckThrowKnightNaked.png", 2, 0.10f, false },
+	m_pJumpingNaked{ TextureManager::GetInstance().GetTexture("JumpKnightNaked.png") },
+	m_pDuckNaked{ TextureManager::GetInstance().GetTexture("DuckKnightNaked.png") },
+	m_pHit{ TextureManager::GetInstance().GetTexture("HitKnight.png") },
+	m_pDeathKnockback{ TextureManager::GetInstance().GetTexture("DeadKnockBack.png") },
+	m_pDeath{ TextureManager::GetInstance().GetTexture("DeadGround.png") },
+	m_IsWearingArmour{ true },
+	m_MyState{ PlayerState::Standing },
+	m_PreviousShootPressed{ false },
+	m_DoesWantToThrow{ false },
+	m_ThrowCooldownMax{ 0.2f },
+	m_ThrowCooldownCurrent{ 0.0f },
+	m_MyWeapon{ PlayerWeapon::Lance },
+	m_Score{ 0 },
+	m_IsImmortal{ false },
+	m_DeathTimerMax{ 1.f },
+	m_DeathTimeCurrent{ 1.f },
+	m_IsFlying{ false },
+	m_FlySpeed{ 120.f }
 {
 }
 
@@ -157,7 +152,7 @@ void Player::Draw() const
 		m_pDeath->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_pDeath->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		break;
 	case PlayerState::KnockbackDead:
-		m_pDeathKnockBack->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_pDeathKnockBack->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
+		m_pDeathKnockback->Draw(Vector2f{ m_IsFacingRight ? m_Collider.left : m_Collider.left - m_pDeathKnockback->GetWidth() + m_Collider.width , m_Collider.bottom }, !m_IsFacingRight);
 		break;
 	}
 }
@@ -270,7 +265,7 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 			{
 				m_ThrowNaked.Reset();
 			}
-
+			Throw();
 			return;
 		}
 
@@ -402,6 +397,8 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 			{
 				m_DuckThrowNaked.Reset();
 			}
+			Throw();
+
 		}
 		else if (m_MyState != PlayerState::Climbing && m_MyState != PlayerState::ClimbingStill)
 		{
@@ -415,6 +412,7 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 			{
 				m_ThrowNaked.Reset();
 			}
+			Throw();
 		}
 
 		return;
@@ -468,7 +466,14 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 		break;
 	}
 }
-
+void Player::Throw()
+{
+	if (m_pEntityManager == nullptr)
+	{
+		return;
+	}
+	m_pEntityManager->SpawnPlayerWeapon(GetThrowPosition(), m_IsFacingRight, m_MyWeapon);
+}
 void Player::UpdateTimers(float elapsedSec)
 {
 	if (m_JumpTimeUpCurrent >= 0)
@@ -515,7 +520,7 @@ void Player::UpdateMovementHorizontal(
 	}
 	else if (m_MyState == PlayerState::Knockback || m_MyState == PlayerState::KnockbackDead)
 	{
-		xSpeed = m_KnockBackDirectionX * m_KnockBackSpeed * elapsedSec;
+		xSpeed = m_KnockbackDirectionX * m_KnockbackSpeed * elapsedSec;
 	}
 	else if (m_MyState == PlayerState::Jumping)
 	{
@@ -591,7 +596,7 @@ void Player::UpdateMovementVertical(
 	}
 	else if (m_KnockbackTimeCurrent > 0.f)
 	{
-		ySpeed = m_KnockBackSpeed * elapsedSec;
+		ySpeed = m_KnockbackSpeed * elapsedSec;
 	}
 	else if (m_JumpTimeUpCurrent > 0.f)
 	{
@@ -690,24 +695,13 @@ void Player::TakeDamage()
 	m_KnockbackTimeCurrent = m_KnockbackTimeMax;
 	if (m_IsFacingRight)
 	{
-		m_KnockBackDirectionX = -1;
+		m_KnockbackDirectionX = -1;
 	}
 	else
 	{
-		m_KnockBackDirectionX = 1;
+		m_KnockbackDirectionX = 1;
 	}
 
-}
-
-
-bool Player::DoesWantToThrow() const
-{
-	return m_DoesWantToThrow;
-}
-
-bool Player::IsFacingRight() const
-{
-	return m_IsFacingRight;
 }
 
 bool Player::TryClimb(const std::vector<Rectf>& ladders, bool isGoingUp)
@@ -787,10 +781,6 @@ void Player::SnapToCurrentLadderCenter()
 		+ (m_pCurrentLadder->width - m_Collider.width) / 2.0f;
 }
 
-Player::PlayerWeapon Player::GetPlayerWeapon() const
-{
-	return m_MyWeapon;
-}
 void Player::SetPlayerWeapon(Player::PlayerWeapon weapon)
 {
 	m_MyWeapon = weapon;
@@ -799,7 +789,7 @@ int Player::GetPlayerScore() const
 {
 	return m_Score;
 }
-void Player::AddToPLayerScore(int score)
+void Player::AddToPlayerScore(int score)
 {
 	m_Score += score;
 }
@@ -868,4 +858,8 @@ Vector2f Player::GetThrowPosition() const
 		m_Collider.left + xOffset,
 		m_Collider.bottom + yOffset
 	};
+}
+Player::PlayerWeapon Player::GetPlayerWeapon() const
+{
+	return m_MyWeapon;
 }

@@ -29,6 +29,9 @@ public:
 	bool IsDead() const;
 	void Kill();
 
+	bool GetIsActive() const;
+	void SetIsActive(bool isActive);
+
 private:
 	enum class State
 	{
@@ -39,7 +42,7 @@ private:
 	Rectf m_Collider;
 	DropType m_Type;
 	bool m_IsDead;
-
+	bool m_IsActive;
 	const Texture* m_pTexture;
 
 	State m_MyState;

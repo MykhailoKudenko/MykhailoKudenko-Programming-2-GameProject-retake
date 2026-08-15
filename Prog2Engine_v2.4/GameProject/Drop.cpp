@@ -7,6 +7,7 @@ Drop::Drop(const Vector2f& pos, DropType type, const std::vector<std::vector<Vec
 	: m_Collider{ pos.x, pos.y, 10.f, 10.f }
 	, m_Type{ type },
 	m_IsDead{ false },
+	m_IsActive{ false },
 	m_pTexture{ nullptr },
 	m_MyState{ State::Falling },
 	m_pVertices{vertices}
@@ -81,4 +82,14 @@ bool Drop::IsDead() const
 void Drop::Kill()
 {
 	m_IsDead = true;
+}
+
+bool Drop::GetIsActive() const
+{
+	return m_IsActive;
+}
+
+void Drop::SetIsActive(bool isActive)
+{
+	m_IsActive = isActive;
 }

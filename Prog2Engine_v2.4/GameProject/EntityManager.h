@@ -34,7 +34,7 @@ public:
     EntityManager& operator=(EntityManager&&) = delete;
 
     void SetLevel(Level* pLevel);
-    void SetPlayer(Player* pPlayer);
+    void SetPlayer(Player* pLevel);
 
     Vector2f GetPlayerPosition() const;
 
@@ -78,23 +78,29 @@ private:
     void DebugSpawnDraw() const;
     void DeleteAllEntities();
 
+    void EnemiesUpdate(float elapsedSec);
+    void DropsUpdate(float elapsedSec);
+    void ProjectileUpdate(float elapsedSec);
+    void EffectUpdate(float elapsedSec);
+
+    void EnemiesBulletCollsion();
+
     Player* m_pPlayer;
     Level* m_pLevel;
 
     std::vector<Enemy*> m_pEnemies;
     std::vector<Projectile*> m_pPlayerProjectiles;
     std::vector<Projectile*> m_pEnemyProjectiles;
-    std::vector<Drop> m_pDrops;
-    std::vector<Effect> m_pEffects;
+    std::vector<Drop> m_Drops;
+    std::vector<Effect> m_Effects;
 
-    float m_UpdateLenth;
+    float m_UpdateLength;
+    float m_XSpawnLength;
+    float m_XKillLength;
 
-    float m_XSpawnLenth;
     float m_YMinSpawnForAir;
     float m_YMaxHeight;
     //non unique sounds/ group sounds
-    bool m_IsGhostSoundPlaying;
-    bool m_IsFlyingKnightSoundPlaying;
 
     float m_GhostSoundTimer;
     float m_FlyingKnightSoundTimer;

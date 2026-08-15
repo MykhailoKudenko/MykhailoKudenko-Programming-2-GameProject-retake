@@ -2,6 +2,8 @@
 #include "HUD.h"
 #include "TextureManager.h"
 
+#include<iostream>
+
 HUD::HUD()
     : m_TimeLeft{ 240.f },
     m_StartingTime{ 240.f }
@@ -29,7 +31,6 @@ void HUD::Update(float elapsedSec)
 
 void HUD::Draw(int score, Player::PlayerWeapon weapon) const
 {
-    
 
     m_pVpLabel->Draw(Vector2f{ 100.f, 885.f });
 

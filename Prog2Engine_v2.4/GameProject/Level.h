@@ -8,10 +8,10 @@ public:
 
 	struct MovingPlatform
 	{
-		Rectf rect;
-		float speedX;
-		float minX;
-		float maxX;
+		Rectf rect{};
+		float speedX{};
+		float minX{};
+		float maxX{};
 	
 		void Update(float elapsedSec);
 	};
@@ -29,15 +29,15 @@ public:
 
 	struct EnemySpawnPoint
 	{
-		EnemyType type;
-		Vector2f position;
+		EnemyType type{};
+		Vector2f position{};
 		bool spawned{ false };
 	};
 
 	struct EnemySpawnArea
 	{
-		EnemyType type;
-		Rectf area;
+		EnemyType type{};
+		Rectf area{};
 		bool spawnAtTheGround{true};
 		float timerMax{ 1.f };
 		float timer{ 0.f };
@@ -47,8 +47,8 @@ public:
 
 	struct DropSpawnPoint
 	{
-		Drop::DropType type;
-		Vector2f position;
+		Drop::DropType type{};
+		Vector2f position{};
 		bool spawned{ false };
 	};
 
@@ -59,13 +59,13 @@ public:
 	const std::vector<Rectf>& GetLadders() const;
 
 	const std::vector<EnemySpawnPoint>& GetEnemySpawnPoints() const;
-	void MarkEnemySpawnPointSpawned(int index);
+	void MarkEnemySpawnPointSpawned(size_t index);
 
 	const std::vector<EnemySpawnArea>& GetEnemySpawnAreas() const;
-	bool IsEnemyAreaReadyToSpawn(int index);
+	bool IsEnemyAreaReadyToSpawn(size_t index);
 
 	const std::vector<DropSpawnPoint>& GetDropSpawnPoints() const;
-	void MarkDropSpawnPointSpawned(int index);
+	void MarkDropSpawnPointSpawned(size_t index);
 
 	const std::vector<std::vector<Vector2f>>& GetPlayerOnlyVertices() const;
 	const Vector2f& GetPlayerPosition() const;

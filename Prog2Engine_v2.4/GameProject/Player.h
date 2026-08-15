@@ -5,7 +5,7 @@
 #include "Animation.h"
 
 
-
+class EntityManager;
 
 class Player final
 {
@@ -18,7 +18,7 @@ public:
 		Torch
 	};
 
-	explicit Player(Vector2f startPos);
+	Player(Vector2f startPos, EntityManager* manager);
 	~Player() = default;
 	//rule of 5
 	Player(const Player&) = delete;
@@ -30,20 +30,18 @@ public:
 	void Update(float elapsedSec, const std::vector<std::vector<Vector2f>>& vertices, 
 		const std::vector<std::vector<Vector2f>>& playerOnlyVertices,
 		const std::vector<Rectf>& ladders, 
-		const std::vector<std::vector<Vector2f>>& platfroms);
+		const std::vector<std::vector<Vector2f>>& platforms);
 
 	Vector2f GetCenterPosition() const;
 	Rectf GetHitbox() const;
 	void TakeDamage();
-
-	bool DoesWantToThrow() const;
-	bool IsFacingRight() const;
-
-	Player::PlayerWeapon GetPlayerWeapon() const;
+	void Throw();
 	void SetPlayerWeapon(Player::PlayerWeapon weapon);
 
 	int GetPlayerScore() const;
-	void AddToPLayerScore(int score);
+	PlayerWeapon GetPlayerWeapon() const;
+
+	void AddToPlayerScore(int score);
 	void SetPlayerScore(int newScore);
 
 	bool IsDeathAnimationFinished() const;
@@ -55,6 +53,8 @@ public:
 	bool IsImmortal() const;
 
 	void SetFlying(bool isFlying);
+
+
 
 	bool IsFlying() const;
 
@@ -91,10 +91,15 @@ private:
 	bool TryClimb(const std::vector<Rectf>& ladders, bool isGoingUp);
 	bool IsStillOnLadder() const;
 	void SnapToCurrentLadderCenter();
+
+
+	//
+	EntityManager* m_pEntityManager;
+
 	//movement(speeds)
 	float m_MovementSpeed;
 	float m_JumpSpeed;
-	float m_KnockBackSpeed;
+	float m_KnockbackSpeed;
 	float m_ClimbSpeed;
 
 	//input
@@ -115,7 +120,7 @@ private:
 	float m_InvulnerableTimeCurrent;
 	const float	m_KnockbackTimeMax;
 	float m_KnockbackTimeCurrent;
-	float m_KnockBackDirectionX;
+	float m_KnockbackDirectionX;
 	//climbing 
 	const Rectf* m_pCurrentLadder;
 	bool m_BlockVerticalActionsUntilReleased;
@@ -138,7 +143,7 @@ private:
 
 	const Texture* m_pHit;
 
-	const Texture* m_pDeathKnockBack;
+	const Texture* m_pDeathKnockback;
 	const Texture* m_pDeath;
 
 	//State machine

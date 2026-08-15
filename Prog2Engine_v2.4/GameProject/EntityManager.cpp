@@ -32,8 +32,8 @@ std::ostream& operator<<(std::ostream& out, const EntityManager& manager)
     out << "Enemy: " << manager.m_pEnemies.size()
     << " PlayerProj: " << manager.m_pPlayerProjectiles.size()
     << " EnemyProj: " << manager.m_pEnemyProjectiles.size()
-    << " Drops: " << manager.m_pDrops.size()
-    << " Effects: " << manager.m_pEffects.size();
+    << " Drops: " << manager.m_Drops.size()
+    << " Effects: " << manager.m_Effects.size();
     return out;
 }
 
@@ -45,17 +45,16 @@ m_pLevel{ nullptr },
 m_pEnemies{ },
 m_pPlayerProjectiles{ },
 m_pEnemyProjectiles{ },
-m_pDrops{ },
-m_pEffects{ },
+m_Drops{ },
+m_Effects{ },
 
-m_UpdateLenth{ 256 / 2.f + 50 },
+m_UpdateLength{ 200.0 },
 
-m_XSpawnLenth{ 256 / 2.f + 50 },
+m_XSpawnLength{ 200.0 },
+m_XKillLength{ 400.0 },
+
 m_YMinSpawnForAir{ 37.f },
 m_YMaxHeight{ 200.f },
-
-m_IsGhostSoundPlaying{ false },
-m_IsFlyingKnightSoundPlaying{ false },
 
 m_GhostSoundTimer{ 0.f },
 m_FlyingKnightSoundTimer{ 0.f },
@@ -63,6 +62,7 @@ m_FlyingKnightSoundTimer{ 0.f },
 m_GhostSoundCooldown{ 2.0f },
 m_FlyingKnightSoundCooldown{ 2.0f }
 {
+
 }
 
 EntityManager::~EntityManager()
@@ -85,9 +85,9 @@ void EntityManager::DeleteAllEntities()
         delete proj;
     }
 
-    m_pDrops.clear();
+    m_Drops.clear();
 
-    m_pEffects.clear();
+    m_Effects.clear();
 }
 
 
@@ -102,170 +102,12 @@ void EntityManager::Update(float elapsedSec)
     SpawnPointDrops();
     SpawnAreaEnemies(elapsedSec);
 
-    for (Effect& effect : m_pEffects)
-    {
-        effect.Update(elapsedSec);
-    }
+    EnemiesUpdate(elapsedSec);
+    EnemiesBulletCollsion();
 
-    Vector2f playerPos = m_pPlayer->GetCenterPosition();
-
-    m_GhostSoundTimer -= elapsedSec;
-    m_FlyingKnightSoundTimer -= elapsedSec;
-
-    bool hasGhostInRange{ false };
-    bool hasFlyingKnightInRange{ false };
-
-    for (Enemy* enemy : m_pEnemies)
-    {
-        float dx = std::abs(enemy->GetCenterPosition().x - playerPos.x);
-
-
-        if (dx <= m_UpdateLenth)
-        {
-            enemy->SetIsActive(true);
-        }
-        else
-        {
-            if (enemy->IsBoss() == false)
-            {
-                enemy->SetIsActive(false);
-            }
-        }
-
-        if (enemy->GetIsActive())
-        {
-            if (enemy->GetSoundType() == SoundManager::SFX::Ghost)
-            {
-                hasGhostInRange = true;
-            }
-
-            if (enemy->GetSoundType() == SoundManager::SFX::FlyingKnight)
-            {
-                hasFlyingKnightInRange = true;
-            }
-
-            enemy->Update(elapsedSec);
-
-            if (utils::IsOverlapping(enemy->GetHitbox(), m_pPlayer->GetHitbox()))
-            {
-                if (!enemy->IsSpawning())
-                {
-                    m_pPlayer->TakeDamage();
-                }
-            }
-        }
-
-        if (enemy->GetCenterPosition().y < -20.f)
-        {
-            enemy->Kill();
-        }
-    }
-
-    if (hasGhostInRange && m_GhostSoundTimer <= 0.f)
-    {
-        
-        SoundManager::GetInstance().PlayEffect(SoundManager::SFX::Ghost);
-        
-        m_GhostSoundTimer = m_GhostSoundCooldown;
-    }
-
-    if (hasFlyingKnightInRange && m_FlyingKnightSoundTimer <= 0.f)
-    {
-        
-        SoundManager::GetInstance().PlayEffect(SoundManager::SFX::FlyingKnight);
-        
-        m_FlyingKnightSoundTimer = m_FlyingKnightSoundCooldown;
-    }
-
-    for (Projectile* proj : m_pPlayerProjectiles)
-    {
-        proj->Update(elapsedSec);
-    }
-
-    for (Projectile* proj : m_pEnemyProjectiles)
-    {
-        proj->Update(elapsedSec);
-        if (utils::IsOverlapping(m_pPlayer->GetHitbox(), proj->GetHitbox()))
-        {
-            m_pPlayer->TakeDamage();
-            proj->Kill();
-        }
-    }
-
-    for (Drop& drop : m_pDrops)
-    {
-        drop.Update(elapsedSec);
-        if (utils::IsOverlapping(m_pPlayer->GetHitbox(), drop.GetHitbox()))
-        {
-            
-            SoundManager::GetInstance().PlayEffect(SoundManager::SFX::PickUp);
-            
-            switch (drop.GetType())
-            {
-            case Drop::DropType::Lance:
-                m_pPlayer->SetPlayerWeapon(Player::PlayerWeapon::Lance);
-                break;
-            case Drop::DropType::Knife:
-                m_pPlayer->SetPlayerWeapon(Player::PlayerWeapon::Knife);
-                break;
-            case Drop::DropType::Torch:
-                m_pPlayer->SetPlayerWeapon(Player::PlayerWeapon::Torch);
-                break;
-            case Drop::DropType::Doll:
-                m_pPlayer->AddToPLayerScore(200);
-                break;
-            case Drop::DropType::MoneyBag:
-                m_pPlayer->AddToPLayerScore(500);
-                break;
-            }
-            drop.Kill();
-        }
-    }
-
-    if (m_pPlayer->DoesWantToThrow())
-    {
-        SpawnPlayerWeapon(m_pPlayer->GetThrowPosition(),
-            m_pPlayer->IsFacingRight(),
-            m_pPlayer->GetPlayerWeapon());
-    }
-    
-
-    for (Enemy* enemy : m_pEnemies)
-    {
-        if (enemy->IsDead()) { continue; }
-        for (Projectile* proj : m_pPlayerProjectiles)
-        {
-            if (proj->IsDead()) { continue; }
-            if (enemy->IsDead()) { continue; }
-
-            if (utils::IsOverlapping(enemy->GetHitbox(), proj->GetHitbox()))
-            {
-                enemy->TakeDamage();
-
-                if (enemy->IsDead())
-                {
-                    m_pPlayer->AddToPLayerScore(enemy->GetScore());
-
-                    if (enemy->HasBag())
-                    {
-                        AddDrop(enemy->GetCenterPosition(), GetRandomBagDrop());
-                    }
-
-                    SpawnEffect(enemy->GetCenterPosition(),enemy->GetEffectType(),enemy->IsFacingRight());
-                    if (enemy->GetEffectType() == Effect::EffectType::Fire)
-                    {
-                        SoundManager::GetInstance().PlayEffect(SoundManager::SFX::FireDead);
-                    }
-                }
-                else if (enemy->IsBoss())
-                {
-                    SpawnEffect(proj->GetCenterPosition(), Effect::EffectType::Blink, false);
-                }
-
-                proj->Kill();
-            }
-        }
-    }
+    EffectUpdate(elapsedSec);
+    ProjectileUpdate(elapsedSec);
+    DropsUpdate(elapsedSec);
 
     RemoveDeadEntities();
     KillProjectilesOutsideSpawnArea();
@@ -273,7 +115,7 @@ void EntityManager::Update(float elapsedSec)
 
 void EntityManager::Draw(bool isDebug) const
 {
-    for (const Effect& effect : m_pEffects)
+    for (const Effect& effect : m_Effects)
     {
         effect.Draw();
     }
@@ -302,7 +144,7 @@ void EntityManager::Draw(bool isDebug) const
         DrawGreenRectIfDebug(proj->GetHitbox(), isDebug);
 
     }
-    for (const Drop& drop : m_pDrops)
+    for (const Drop& drop : m_Drops)
     {
         drop.Draw();
         DrawGreenRectIfDebug(drop.GetHitbox(), isDebug);
@@ -315,6 +157,205 @@ void EntityManager::Draw(bool isDebug) const
     if (isDebug)
     {
         DebugSpawnDraw();
+    }
+}
+
+void EntityManager::EnemiesUpdate(float elapsedSec)
+{
+    Vector2f playerPos = m_pPlayer->GetCenterPosition();
+    m_GhostSoundTimer -= elapsedSec;
+    m_FlyingKnightSoundTimer -= elapsedSec;
+
+    bool hasGhostInRange{ false };
+    bool hasFlyingKnightInRange{ false };
+    for (Enemy* enemy : m_pEnemies)
+    {
+        float dx = std::abs(enemy->GetCenterPosition().x - playerPos.x);
+
+
+        if (dx <= m_UpdateLength)
+        {
+            enemy->SetIsActive(true);
+        }
+        else
+        {
+            if (enemy->IsBoss() == false)
+            {
+                enemy->SetIsActive(false);
+            }
+        }
+        if (enemy->GetCenterPosition().y < -20.f)
+        {
+            enemy->Kill();
+            continue;
+        }
+        if (dx > m_XKillLength && enemy->IsBoss() == false)
+        {
+            enemy->Kill();
+            continue;
+        }
+
+        if (enemy->GetIsActive())
+        {
+            if (enemy->GetSoundType() == SoundManager::SFX::Ghost)
+            {
+                hasGhostInRange = true;
+            }
+
+            if (enemy->GetSoundType() == SoundManager::SFX::FlyingKnight)
+            {
+                hasFlyingKnightInRange = true;
+            }
+
+            enemy->Update(elapsedSec);
+
+            if (utils::IsOverlapping(enemy->GetHitbox(), m_pPlayer->GetHitbox()))
+            {
+                if (!enemy->IsSpawning())
+                {
+                    m_pPlayer->TakeDamage();
+                }
+            }
+        }
+
+
+
+    }
+
+    if (hasGhostInRange && m_GhostSoundTimer <= 0.f)
+    {
+
+        SoundManager::GetInstance().PlayEffect(SoundManager::SFX::Ghost);
+
+        m_GhostSoundTimer = m_GhostSoundCooldown;
+    }
+
+    if (hasFlyingKnightInRange && m_FlyingKnightSoundTimer <= 0.f)
+    {
+
+        SoundManager::GetInstance().PlayEffect(SoundManager::SFX::FlyingKnight);
+
+        m_FlyingKnightSoundTimer = m_FlyingKnightSoundCooldown;
+    }
+}
+void EntityManager::EnemiesBulletCollsion()
+{
+    for (Enemy* enemy : m_pEnemies)
+    {
+        if (enemy->IsDead()) { continue; }
+        for (Projectile* proj : m_pPlayerProjectiles)
+        {
+            if (proj->IsDead()) { continue; }
+            if (enemy->IsDead()) { continue; }
+
+            if (utils::IsOverlapping(enemy->GetHitbox(), proj->GetHitbox()))
+            {
+                enemy->TakeDamage();
+
+                if (enemy->IsDead())
+                {
+                    m_pPlayer->AddToPlayerScore(enemy->GetScore());
+
+                    if (enemy->HasBag())
+                    {
+                        AddDrop(enemy->GetCenterPosition(), GetRandomBagDrop());
+                    }
+
+                    SpawnEffect(enemy->GetCenterPosition(), enemy->GetEffectType(), enemy->IsFacingRight());
+                    if (enemy->GetEffectType() == Effect::EffectType::Fire)
+                    {
+                        SoundManager::GetInstance().PlayEffect(SoundManager::SFX::FireDead);
+                    }
+                }
+                else if (enemy->IsBoss())
+                {
+                    SpawnEffect(proj->GetCenterPosition(), Effect::EffectType::Blink, false);
+                }
+
+                proj->Kill();
+            }
+        }
+    }
+}
+void EntityManager::DropsUpdate(float elapsedSec)
+{
+    Vector2f playerPos = m_pPlayer->GetCenterPosition();
+
+    for (Drop& drop : m_Drops)
+    {
+        float dx = std::abs(drop.GetHitbox().left+ drop.GetHitbox().width/2 - playerPos.x);
+
+        if (dx <= m_UpdateLength)
+        {
+            drop.SetIsActive(true);
+        }
+        else
+        {
+            drop.SetIsActive(false);
+        }
+        if (drop.GetHitbox().bottom < -20.f)
+        {
+            drop.Kill();
+            continue;
+        }
+        if (dx > m_XKillLength)
+        {
+            drop.Kill();
+            continue;
+        }
+        drop.Update(elapsedSec);
+
+
+        if (utils::IsOverlapping(m_pPlayer->GetHitbox(), drop.GetHitbox()))
+        {
+
+            SoundManager::GetInstance().PlayEffect(SoundManager::SFX::PickUp);
+
+            switch (drop.GetType())
+            {
+            case Drop::DropType::Lance:
+                m_pPlayer->SetPlayerWeapon(Player::PlayerWeapon::Lance);
+                break;
+            case Drop::DropType::Knife:
+                m_pPlayer->SetPlayerWeapon(Player::PlayerWeapon::Knife);
+                break;
+            case Drop::DropType::Torch:
+                m_pPlayer->SetPlayerWeapon(Player::PlayerWeapon::Torch);
+                break;
+            case Drop::DropType::Doll:
+                m_pPlayer->AddToPlayerScore(200);
+                break;
+            case Drop::DropType::MoneyBag:
+                m_pPlayer->AddToPlayerScore(500);
+                break;
+            }
+            drop.Kill();
+        }
+    }
+}
+void EntityManager::ProjectileUpdate(float elapsedSec)
+{
+    for (Projectile* proj : m_pPlayerProjectiles)
+    {
+        proj->Update(elapsedSec);
+    }
+
+    for (Projectile* proj : m_pEnemyProjectiles)
+    {
+        proj->Update(elapsedSec);
+        if (utils::IsOverlapping(m_pPlayer->GetHitbox(), proj->GetHitbox()))
+        {
+            m_pPlayer->TakeDamage();
+            proj->Kill();
+        }
+    }
+
+}
+void EntityManager::EffectUpdate(float elapsedSec)
+{
+    for (Effect& effect : m_Effects)
+    {
+        effect.Update(elapsedSec);
     }
 }
 
@@ -336,7 +377,7 @@ void EntityManager::DebugSpawnDraw() const
     }
     Vector2f playerPos = m_pPlayer->GetCenterPosition();
 
-    utils::DrawEllipse(playerPos, m_XSpawnLenth, m_XSpawnLenth);
+    utils::DrawEllipse(playerPos, m_XSpawnLength, m_XSpawnLength);
 
     const std::vector<Level::DropSpawnPoint>& dropspawnPoints = m_pLevel->GetDropSpawnPoints();
 
@@ -378,7 +419,6 @@ void EntityManager::SpawnPointEnemies()
     {
         return;
     }
-
     const std::vector<Level::EnemySpawnPoint>& spawnPoints = m_pLevel->GetEnemySpawnPoints();
     Vector2f playerPos = m_pPlayer->GetCenterPosition();
 
@@ -389,7 +429,7 @@ void EntityManager::SpawnPointEnemies()
             continue;
         }
         float dx = std::abs(spawnPoints[i].position.x - playerPos.x);
-        if (dx <= m_UpdateLenth)
+        if (dx <= m_UpdateLength)
         {
             bool faceRight = playerPos.x > spawnPoints[i].position.x;
             SpawnEnemyByType(spawnPoints[i].type, spawnPoints[i].position, faceRight);
@@ -416,7 +456,7 @@ void EntityManager::SpawnPointDrops()
 
         float dx = std::abs(dropSpawnPoints[i].position.x - playerPos.x);
 
-        if (dx <= m_UpdateLenth)
+        if (dx <= m_UpdateLength)
         {
             AddDrop(dropSpawnPoints[i].position, dropSpawnPoints[i].type);
             m_pLevel->MarkDropSpawnPointSpawned(i);
@@ -442,8 +482,8 @@ void EntityManager::SpawnAreaEnemies(float elapsedSec)
             continue;
         }
         Rectf targetSpawnArea{};
-        targetSpawnArea.left = playerPos.x - m_XSpawnLenth;
-        targetSpawnArea.width = m_XSpawnLenth * 2.f;
+        targetSpawnArea.left = playerPos.x - m_XSpawnLength;
+        targetSpawnArea.width = m_XSpawnLength * 2.f;
         targetSpawnArea.bottom = m_YMinSpawnForAir;
         targetSpawnArea.height = m_YMaxHeight;
 
@@ -548,9 +588,9 @@ void EntityManager::AddFlyingKnight(const Vector2f& spawnPos, bool startsFacingR
 
     m_pEnemies.push_back(knight);
 }
-void EntityManager::AddGhost(const Vector2f& SpawnPos, bool startsFacingRight)
+void EntityManager::AddGhost(const Vector2f& spawnPos, bool startsFacingRight)
 {
-    Ghost* ghost = new Ghost(SpawnPos, startsFacingRight, this);
+    Ghost* ghost = new Ghost(spawnPos, startsFacingRight, this);
     ghost->SetBag(RollBagDrop());
     m_pEnemies.push_back(ghost);
 }
@@ -616,19 +656,13 @@ void EntityManager::AddDrop(const Vector2f& pos, Drop::DropType type)
 {
     if (m_pLevel != nullptr)
     {
-        //Drop* drop = new Drop(pos, type, &m_pLevel->GetVertices());
-        //m_pDrops.push_back(drop);
-
-        m_pDrops.emplace_back(pos, type, &m_pLevel->GetVertices());
+        m_Drops.emplace_back(pos, type, &m_pLevel->GetVertices());
 
     }
 }
 void EntityManager::SpawnEffect(const Vector2f& pos, Effect::EffectType type, bool isMirrored)
 {
-    //Effect* effect = new Effect(pos, type, isMirrored);
-    //m_pEffects.push_back(effect);
-
-    m_pEffects.emplace_back(pos, type, isMirrored);
+    m_Effects.emplace_back(pos, type, isMirrored);
 }
 void EntityManager::RemoveDeadEntities()
 {
@@ -662,21 +696,21 @@ void EntityManager::RemoveDeadEntities()
             --i;
         }
     }
-    for (size_t i = 0; i < m_pDrops.size(); ++i)
+    for (size_t i = 0; i < m_Drops.size(); ++i)
     {
-        if (m_pDrops[i].IsDead())
+        if (m_Drops[i].IsDead())
         {
-            m_pDrops[i] = m_pDrops.back();
-            m_pDrops.pop_back();
+            m_Drops[i] = m_Drops.back();
+            m_Drops.pop_back();
             --i;
         }
     }
-    for (size_t i = 0; i < m_pEffects.size(); ++i)
+    for (size_t i = 0; i < m_Effects.size(); ++i)
     {
-        if (m_pEffects[i].IsFinished())
+        if (m_Effects[i].IsFinished())
         {
-            m_pEffects[i] = m_pEffects.back();
-            m_pEffects.pop_back();
+            m_Effects[i] = m_Effects.back();
+            m_Effects.pop_back();
             --i;
         }
     }
@@ -685,14 +719,10 @@ void EntityManager::SetLevel(Level* pLevel)
 {
     m_pLevel = pLevel;
 }
-
-
-void EntityManager::SetPlayer(Player* pPlayer)
+void EntityManager::SetPlayer(Player* pLevel)
 {
-    m_pPlayer = pPlayer;
+    m_pPlayer = pLevel;
 }
-
-
 Vector2f EntityManager::GetPlayerPosition() const
 {
     if (m_pPlayer != nullptr)
@@ -709,11 +739,9 @@ void EntityManager::Reset()
     m_pEnemies.clear();
     m_pPlayerProjectiles.clear();
     m_pEnemyProjectiles.clear();
-    m_pDrops.clear();
-    m_pEffects.clear();
+    m_Drops.clear();
+    m_Effects.clear();
 
-    m_IsGhostSoundPlaying = false;
-    m_IsFlyingKnightSoundPlaying = false;
     m_GhostSoundTimer = 0.f;
     m_FlyingKnightSoundTimer = 0.f;
 }
@@ -724,10 +752,10 @@ void EntityManager::KillProjectilesOutsideSpawnArea()
 
     Rectf activeArea
     {
-        playerPos.x - m_UpdateLenth,
-        playerPos.y - m_UpdateLenth,
-        m_UpdateLenth * 2.f,
-        m_UpdateLenth * 2.f
+        playerPos.x - m_UpdateLength,
+        playerPos.y - m_UpdateLength,
+        m_UpdateLength * 2.f,
+        m_UpdateLength * 2.f
     };
 
     for (Projectile* proj : m_pPlayerProjectiles)

@@ -181,7 +181,7 @@ const std::vector<Level::EnemySpawnPoint>& Level::GetEnemySpawnPoints()const
 {
 	return m_EnemySpawnPoints;
 }
- void Level::MarkEnemySpawnPointSpawned(int index)
+ void Level::MarkEnemySpawnPointSpawned(size_t index)
  {
 	 m_EnemySpawnPoints.at(index).spawned = true;
  }
@@ -194,7 +194,7 @@ const std::vector<Level::EnemySpawnPoint>& Level::GetEnemySpawnPoints()const
 {
 	return m_DropSpawnPoints;
 }
- void Level::MarkDropSpawnPointSpawned(int index)
+ void Level::MarkDropSpawnPointSpawned(size_t index)
  {
 	 m_DropSpawnPoints.at(index).spawned = true;
  }
@@ -291,7 +291,7 @@ void Level::EnemySpawnArea::Update(float elapsedSec)
 		timer += elapsedSec;
 	}
 }
-bool Level::IsEnemyAreaReadyToSpawn(int index)
+bool Level::IsEnemyAreaReadyToSpawn(size_t index)
 {
 	if (m_EnemySpawnAreas[index].timer >= m_EnemySpawnAreas[index].timerMax)
 	{
@@ -310,12 +310,12 @@ void Level::UpdatePlatformTopEdges()
 {
 	for (size_t i{ 0 }; i < m_Platforms.size(); ++i)
 	{
-		const Rectf& platfromRect{ m_Platforms[i].rect };
-		const float platfromTop{ platfromRect.bottom + platfromRect.height };
+		const Rectf& platformRect{ m_Platforms[i].rect };
+		const float platformTop{ platformRect.bottom + platformRect.height };
 
 		std::vector<Vector2f>& edge{ m_PlatformTopEdges[i] };
-		edge[0] = Vector2f{ platfromRect.left, platfromTop };
-		edge[1] = Vector2f{ platfromRect.left + platfromRect.width, platfromTop };
+		edge[0] = Vector2f{ platformRect.left, platformTop };
+		edge[1] = Vector2f{ platformRect.left + platformRect.width, platformTop };
 	}
 }
 

@@ -5,15 +5,15 @@
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window },
+m_EntityManager{ },
 m_Camera{ utils::g_WindowSize },
-m_pPlayer{ Vector2f{ 0,0 } },
+m_Player{ Vector2f{ 0,0 }, &m_EntityManager },
 m_pLevel{ nullptr },
-m_pEntityManager{ },
 
 m_pHud{},
 m_MyState{ GameState::DeathMenu },
 m_PlayerLivesMax{ 3 },
-m_PLayerLivesCurrent{ 3 },
+m_PlayerLivesCurrent{ 3 },
 
 m_pMainMenu{ nullptr },
 m_pDeathMenu{ nullptr },
@@ -35,7 +35,7 @@ void Game::Initialize()
 	m_pDeathMenu = TextureManager::GetInstance().GetTexture("DeathMenu.png");
 	m_pLevel = nullptr;
 
-	m_PLayerLivesCurrent = m_PlayerLivesMax;
+	m_PlayerLivesCurrent = m_PlayerLivesMax;
 	m_MyState = GameState::MainMenu;
 
 	SoundManager::GetInstance().SetMusicVolume(20);
@@ -59,7 +59,7 @@ void Game::Update(float elapsedSec)
 
 	case GameState::Playing:
 		// Always update player, so death animation/physics can continue
-		m_pPlayer.Update(
+		m_Player.Update(
 			elapsedSec,
 			m_pLevel->GetVertices(),
 			m_pLevel->GetPlayerOnlyVertices(),
@@ -69,7 +69,7 @@ void Game::Update(float elapsedSec)
 
 		
 		m_pLevel->Update(elapsedSec);
-		m_pEntityManager.Update(elapsedSec);
+		m_EntityManager.Update(elapsedSec);
 		m_pHud.Update(elapsedSec);
 		
 		if (m_pHud.DidTimerFinish())
@@ -79,13 +79,13 @@ void Game::Update(float elapsedSec)
 			m_pHud.ResetTimer();
 		}
 
-		if (m_pPlayer.IsDeathAnimationFinished() || m_pPlayer.GetCenterPosition().y < 0)
+		if (m_Player.IsDeathAnimationFinished() || m_Player.GetCenterPosition().y < 0)
 		{
-			m_PLayerLivesCurrent -= 1;
+			m_PlayerLivesCurrent -= 1;
 
 			SoundManager::GetInstance().StopMusic();
 
-			if (m_PLayerLivesCurrent > 0)
+			if (m_PlayerLivesCurrent > 0)
 			{
 				m_MyState = GameState::DeathMenu;
 				SoundManager::GetInstance().PlayEffect(SoundManager::SFX::Death);
@@ -112,7 +112,7 @@ void Game::Draw() const
 		if (m_pMainMenu != nullptr)
 		{
 			glPushMatrix();
-			glScalef(m_CameraScale, m_CameraScale, 1.0f);
+			glScalef(static_cast<float>(m_CameraScale), static_cast<float>(m_CameraScale), 1.0f);
 			m_pMainMenu->Draw(Vector2f{ 0.f, 0.f });
 			glPopMatrix();
 
@@ -122,18 +122,18 @@ void Game::Draw() const
 	case GameState::Playing:
 		m_Camera.Aim(
 			m_pLevel->GetWidth(), m_pLevel->GetHeight(), 0, 20,
-			Vector2f{ m_pPlayer.GetCenterPosition().x, 0 }, static_cast<float>(m_CameraScale)
+			Vector2f{ m_Player.GetCenterPosition().x, 0 }, static_cast<float>(m_CameraScale)
 		);
 
 		m_pLevel->Draw(m_DebugShowColliders);
-		m_pEntityManager.Draw(m_DebugShowColliders);
-		m_pPlayer.Draw();
+		m_EntityManager.Draw(m_DebugShowColliders);
+		m_Player.Draw();
 
 		m_Camera.Reset();
-		glPushMatrix();
-		glScalef(m_CameraScale, m_CameraScale, 1.0f);
-		m_pHud.Draw(m_pPlayer.GetPlayerScore(), m_pPlayer.GetPlayerWeapon());
-		glPopMatrix();
+		//glPushMatrix();
+		//glScalef(static_cast<float>(m_CameraScale), static_cast<float>(m_CameraScale), 1.0f);
+		m_pHud.Draw(m_Player.GetPlayerScore(), m_Player.GetPlayerWeapon());
+		//glPopMatrix();
 
 		break;
 
@@ -141,7 +141,7 @@ void Game::Draw() const
 		if (m_pDeathMenu != nullptr)
 		{
 			glPushMatrix();
-			glScalef(m_CameraScale, m_CameraScale, 1.0f);
+			glScalef(static_cast<float>(m_CameraScale), static_cast<float>(m_CameraScale), 1.0f);
 			m_pDeathMenu->Draw(Vector2f{ 0.f, 0.f });
 			glPopMatrix();
 		}
@@ -188,8 +188,8 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		break;
 	case SDLK_F2:
 		
-		m_pPlayer.SetImmortal(!m_pPlayer.IsImmortal());
-		if (m_pPlayer.IsImmortal())
+		m_Player.SetImmortal(!m_Player.IsImmortal());
+		if (m_Player.IsImmortal())
 		{
 			std::cout << "DEBUG: IMMORTALITY ON" << std::endl;
 		}
@@ -200,8 +200,8 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		break;
 	case SDLK_F3:
 
-		m_pPlayer.SetFlying(!m_pPlayer.IsFlying());
-		if (m_pPlayer.IsFlying())
+		m_Player.SetFlying(!m_Player.IsFlying());
+		if (m_Player.IsFlying())
 		{
 			std::cout << "DEBUG: FLYING ON" << std::endl;
 
@@ -213,7 +213,7 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		}
 		break;
 	case SDLK_F4:
-		std::cout << m_pEntityManager << std::endl;
+		std::cout << m_EntityManager << std::endl;
 		break;
 	case SDLK_F5:
 		if (m_CameraScale < 10)
@@ -276,26 +276,26 @@ void Game::LoadLevel1()
 
 void Game::ResetLevel()
 {
-	int savedScore = m_pPlayer.GetPlayerScore();
+	int savedScore = m_Player.GetPlayerScore();
 
-	m_pEntityManager.Reset();
+	m_EntityManager.Reset();
 
 	LoadLevel1();
 
-	m_pPlayer.Respawn(m_pLevel->GetPlayerPosition());
+	m_Player.Respawn(m_pLevel->GetPlayerPosition());
 
-	m_pPlayer.SetPlayerScore(savedScore);
+	m_Player.SetPlayerScore(savedScore);
 
 	m_pHud.ResetTimer();
 
-	m_pEntityManager.SetLevel(m_pLevel);
-	m_pEntityManager.SetPlayer(&m_pPlayer);
-	m_pEntityManager.SpawnPointEnemies();
+	m_EntityManager.SetLevel(m_pLevel);
+	m_EntityManager.SetPlayer(&m_Player);
+	m_EntityManager.SpawnPointEnemies();
 }
 void Game::StartNewRun()
 {
-	m_PLayerLivesCurrent = m_PlayerLivesMax;
-	m_pPlayer.SetPlayerScore(0);
+	m_PlayerLivesCurrent = m_PlayerLivesMax;
+	m_Player.SetPlayerScore(0);
 	ResetLevel();
 	m_MyState = GameState::Playing;
 	m_pHud.ResetTimer();
