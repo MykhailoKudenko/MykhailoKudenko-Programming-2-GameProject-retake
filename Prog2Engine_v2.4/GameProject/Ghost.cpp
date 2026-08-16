@@ -21,8 +21,9 @@ Ghost::Ghost(const Vector2f& startPos, bool facingRight, EntityManager* manager)
 
 void Ghost::Update(float elapsedSec)
 {
-
-	if (m_MyState == GhostState::Spawning)
+	switch (m_MyState)
+	{
+	case GhostState::Spawning:
 	{
 		m_SpawnAnimation.Update(elapsedSec);
 		if (m_SpawnAnimation.IsFinished())
@@ -30,10 +31,9 @@ void Ghost::Update(float elapsedSec)
 			m_MyState = GhostState::Flying;
 			m_HasPassedPlayerX = false;
 		}
-		return;
+		break;
 	}
-
-	if (m_MyState == GhostState::Flying)
+	case GhostState::Flying:
 	{
 		m_FlyAnimation.Update(elapsedSec);
 		m_Collider.left += m_Speed * elapsedSec;
@@ -87,11 +87,10 @@ void Ghost::Update(float elapsedSec)
 			}
 		}
 
-		return;
+		break;
 	}
-
-	if (m_MyState == GhostState::Dropping)
-	{
+	case GhostState::Dropping:
+		{
 		m_FlyAnimation.Update(elapsedSec);
 
 		m_Collider.bottom -= m_DropSpeed * elapsedSec;
@@ -105,18 +104,25 @@ void Ghost::Update(float elapsedSec)
 			m_HasPassedPlayerX = false;
 			m_MyState = GhostState::Flying;
 		}
+		break;
+		}
+	default:
+		break;
 	}
 }
 void Ghost::Draw() const
 {
-	if (m_MyState == GhostState::Spawning)
+	switch (m_MyState)
 	{
+	case GhostState::Spawning:
 		m_SpawnAnimation.Draw(m_Collider, false, false);
-	}
-	else if (m_MyState == GhostState::Flying || m_MyState == GhostState::Dropping)
-	{
+		break;
+	case GhostState::Flying:
+	case GhostState::Dropping:
 		m_FlyAnimation.Draw(m_Collider, m_IsFacingRight);
-		
+		break;
+	default:
+		break;
 	}
 }
 bool Ghost::IsSpawning() const

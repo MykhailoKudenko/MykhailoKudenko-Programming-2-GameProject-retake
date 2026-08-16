@@ -100,7 +100,7 @@ void EntityManager::Update(float elapsedSec)
 
     SpawnPointEnemies();
     SpawnPointDrops();
-    SpawnAreaEnemies(elapsedSec);
+    SpawnAreaEnemies();
 
     EnemiesUpdate(elapsedSec);
     EnemiesBulletCollsion();
@@ -465,7 +465,7 @@ void EntityManager::SpawnPointDrops()
     }
 }
 
-void EntityManager::SpawnAreaEnemies(float elapsedSec)
+void EntityManager::SpawnAreaEnemies()
 {
     if (m_pLevel == nullptr || m_pPlayer == nullptr)
     {
@@ -719,9 +719,9 @@ void EntityManager::SetLevel(Level* pLevel)
 {
     m_pLevel = pLevel;
 }
-void EntityManager::SetPlayer(Player* pLevel)
+void EntityManager::SetPlayer(Player* pPlayer)
 {
-    m_pPlayer = pLevel;
+    m_pPlayer = pPlayer;
 }
 Vector2f EntityManager::GetPlayerPosition() const
 {

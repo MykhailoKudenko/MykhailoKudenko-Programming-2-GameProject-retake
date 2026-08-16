@@ -34,7 +34,7 @@ public:
     EntityManager& operator=(EntityManager&&) = delete;
 
     void SetLevel(Level* pLevel);
-    void SetPlayer(Player* pLevel);
+    void SetPlayer(Player* pPlayer);
 
     Vector2f GetPlayerPosition() const;
 
@@ -72,7 +72,7 @@ private:
 
     void SpawnEnemyByType(Level::EnemyType type, const Vector2f& pos, bool startsFacingRight);
     bool FindGroundBelow(const Vector2f& pos, float& outGroundY) const;
-    void SpawnAreaEnemies(float elapsedSec);
+    void SpawnAreaEnemies();
 
     void RemoveDeadEntities();
     void DebugSpawnDraw() const;

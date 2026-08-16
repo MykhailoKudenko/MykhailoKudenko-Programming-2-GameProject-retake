@@ -9,7 +9,6 @@ Demon::Demon(const Vector2f& startPos, EntityManager* manager)
 	m_ShootAnimation{ "DemonShoot.png", 1, 0.52f, false},
 	m_SpawnAnimation{ "DemonSpawn.png", 3, 0.26f, false},
 	m_TopRightModifier{ 100.f, 80.f },
-	m_ParabolaProgress{ 0.f },
 	m_ParabolaHorizontalSpeed{ 60.f },
 	m_ParabolaLockedPlayerPos{ 0.f, 0.f},
 	m_HasLockedParabolaTarget{ false },
@@ -277,4 +276,9 @@ bool Demon::UpdateShooting(float elapsedSec, const Vector2f& playerPos)
 	}
 
 	return false;
+}
+
+bool Demon::IsSpawning() const
+{
+	return m_MyState == DemonState::Spawning;
 }

@@ -76,3 +76,4 @@ void Torch::Kill()
 		m_IsDead = true;
 	}
 }
+

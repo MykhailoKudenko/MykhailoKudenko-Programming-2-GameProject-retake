@@ -13,6 +13,8 @@ public:
 
 	virtual void Update(float elapsedSec) override;
 	virtual void Draw() const override;
+	virtual bool IsSpawning() const override;
+
 private:
 
 	enum class TrollState

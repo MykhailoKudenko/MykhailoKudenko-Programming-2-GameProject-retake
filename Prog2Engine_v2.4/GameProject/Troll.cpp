@@ -252,3 +252,7 @@ void Troll::Fire()
 	m_pEntityManager->SpawnEnemyProjectile(spawnPos, direction.Normalized(), SimpleProjectile::SimpleProjectileType::Troll);
 }
 
+bool Troll::IsSpawning() const
+{
+	return m_MyState == TrollState::Spawning;
+}

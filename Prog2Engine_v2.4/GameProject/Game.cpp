@@ -130,10 +130,7 @@ void Game::Draw() const
 		m_Player.Draw();
 
 		m_Camera.Reset();
-		//glPushMatrix();
-		//glScalef(static_cast<float>(m_CameraScale), static_cast<float>(m_CameraScale), 1.0f);
 		m_pHud.Draw(m_Player.GetPlayerScore(), m_Player.GetPlayerWeapon());
-		//glPopMatrix();
 
 		break;
 
@@ -235,28 +232,6 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 	
 	
 }
-
-void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
-{
-	//	break;
-
-}
-
-void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
-{
-}
-
-void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
-{
-	
-	
-}
-
-void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
-{
-	
-}
-
 void Game::ClearBackground( ) const
 {
 	glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
@@ -270,7 +245,6 @@ void Game::LoadLevel1()
 		delete m_pLevel;
 		m_pLevel = nullptr;
 	}
-	// make it readabl for a file svg (game technique)
 	m_pLevel = new Level("Level1Data.txt");
 }
 
@@ -298,7 +272,6 @@ void Game::StartNewRun()
 	m_Player.SetPlayerScore(0);
 	ResetLevel();
 	m_MyState = GameState::Playing;
-	m_pHud.ResetTimer();
 }
 
 void Game::StartNextLife()

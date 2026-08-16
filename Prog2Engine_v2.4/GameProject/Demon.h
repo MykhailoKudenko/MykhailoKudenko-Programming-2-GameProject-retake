@@ -13,6 +13,7 @@ public:
 
 	virtual void Update(float elapsedSec) override;
 	virtual void Draw() const override;
+	virtual bool IsSpawning() const override;
 
 private:
 
@@ -40,8 +41,6 @@ private:
 
 	Vector2f m_TopRightModifier;
 
-
-	float m_ParabolaProgress;
 	float m_ParabolaHorizontalSpeed;
 
 	Vector2f m_ParabolaLockedPlayerPos;
