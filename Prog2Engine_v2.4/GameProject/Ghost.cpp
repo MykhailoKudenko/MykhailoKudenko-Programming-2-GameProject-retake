@@ -4,7 +4,7 @@
 #include "EntityManager.h"
 
 
-Ghost::Ghost(Vector2f startPos, bool facingRight, EntityManager* manager)
+Ghost::Ghost(const Vector2f& startPos, bool facingRight, EntityManager* manager)
 	: Enemy(Rectf{ startPos.x, startPos.y, 24, 13.f }, facingRight ? 40.f : -40.f, facingRight, 100, false, Effect::EffectType::Blood, SoundManager::SFX::Ghost),
 	m_MyState{ GhostState::Spawning },
 	m_DropDistance{ 30.f },

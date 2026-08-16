@@ -113,7 +113,7 @@ bool HUD::DidTimerFinish() const
     
 }
 
-float HUD::DrawNumber(int number, Vector2f location) const
+float HUD::DrawNumber(int number, const Vector2f& location) const
 {
     int absNumber = std::abs(number);
     float displacement = 0;

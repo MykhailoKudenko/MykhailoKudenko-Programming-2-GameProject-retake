@@ -4,7 +4,7 @@
 #include "TextureManager.h"
 #include "EntityManager.h"
 
-Player::Player(Vector2f startPos, EntityManager* manager) :
+Player::Player(const Vector2f& startPos, EntityManager* manager) :
 	m_pEntityManager{ manager },
 	m_MovementSpeed{ 50 },
 	m_JumpSpeed{ 60 },
@@ -350,7 +350,7 @@ void Player::UpdateStates(const std::vector<Rectf>& ladders, float elapsedSec)
 		{
 			m_MyState = PlayerState::Jumping;
 			m_JumpTimeUpCurrent = m_JumpTimeUpMax;
-			m_JumpDirectionX = m_IsFacingRight ? 1 : -1;
+			m_JumpDirectionX = m_IsFacingRight ? 1.f : -1.f;
 			return;
 		}
 	}

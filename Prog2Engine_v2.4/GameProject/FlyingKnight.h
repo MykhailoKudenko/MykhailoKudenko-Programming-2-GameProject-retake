@@ -7,7 +7,7 @@
 class FlyingKnight final : public Enemy
 {
 public:
-	FlyingKnight(Vector2f startPos, bool facingRight);
+	FlyingKnight(const Vector2f& startPos, bool facingRight);
 
 	virtual void Update(float elapsedSec) override;
 	virtual void Draw() const override;

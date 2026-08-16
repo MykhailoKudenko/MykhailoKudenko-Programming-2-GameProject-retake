@@ -24,7 +24,7 @@ public:
 	void Update(float elapsedSec);
 	void Draw() const;
 
-	Rectf GetHitbox() const;
+	const Rectf& GetHitbox() const;
 	DropType GetType() const;
 	bool IsDead() const;
 	void Kill();

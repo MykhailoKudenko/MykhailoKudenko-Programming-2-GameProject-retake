@@ -18,7 +18,7 @@ public:
 		Torch
 	};
 
-	Player(Vector2f startPos, EntityManager* manager);
+	Player(const Vector2f& startPos, EntityManager* manager);
 	~Player() = default;
 	//rule of 5
 	Player(const Player&) = delete;

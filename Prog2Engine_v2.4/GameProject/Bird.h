@@ -6,7 +6,7 @@
 class Bird final : public Enemy
 {
 public:
-	Bird(Vector2f startPos, bool facingRight);
+	Bird(const Vector2f& startPos, bool facingRight);
 
 	virtual void Update(float elapsedSec) override;
 	virtual void Draw() const override;

@@ -4,7 +4,7 @@
 class Projectile
 {
 public:
-	Projectile(Rectf startPos, Vector2f direction, float speed);
+	Projectile(const Rectf& startPos, const Vector2f& direction, float speed);
 	virtual ~Projectile() = default;
 	Projectile(const Projectile&) = delete;
 	Projectile& operator=(const Projectile&) = delete;
@@ -14,7 +14,7 @@ public:
 	void virtual Update(float elapsedSec);
 
 	void virtual Draw() const = 0;
-	Rectf GetHitbox() const;
+	const Rectf& GetHitbox() const;
 	Vector2f GetCenterPosition() const;
 
 	void virtual Kill();

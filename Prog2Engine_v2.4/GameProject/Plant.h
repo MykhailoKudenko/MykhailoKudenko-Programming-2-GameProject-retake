@@ -8,7 +8,7 @@ class EntityManager;
 class Plant final : public Enemy
 {
 public:
-	Plant(Vector2f startPos,EntityManager* manager);
+	Plant(const Vector2f& startPos,EntityManager* manager);
 	virtual void Update(float elapsedSec) override;
 	virtual void Draw() const override;
 

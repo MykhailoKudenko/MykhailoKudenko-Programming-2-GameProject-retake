@@ -9,7 +9,7 @@ class EntityManager;
 class Ghost final : public Enemy
 {
 public:
-	Ghost(Vector2f startPos, bool facingRight, EntityManager* manager);
+	Ghost(const Vector2f& startPos, bool facingRight, EntityManager* manager);
 
 	virtual void Update(float elapsedSec) override;
 	virtual void Draw() const override;

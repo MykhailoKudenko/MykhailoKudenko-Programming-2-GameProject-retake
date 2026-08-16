@@ -9,7 +9,7 @@ class EntityManager;
 class Troll final : public Enemy
 {
 public:
-	Troll(Vector2f startPos, const std::vector<std::vector<Vector2f>>* vertices, EntityManager* manager);
+	Troll(const Vector2f& startPos, const std::vector<std::vector<Vector2f>>* vertices, EntityManager* manager);
 
 	virtual void Update(float elapsedSec) override;
 	virtual void Draw() const override;

@@ -13,7 +13,7 @@ public:
     bool DidTimerFinish() const;
 private:
 
-    float DrawNumber(int number, Vector2f location) const;
+    float DrawNumber(int number, const Vector2f& location) const;
     void InitNumbersAndSymbols();
 
     float m_TimeLeft;

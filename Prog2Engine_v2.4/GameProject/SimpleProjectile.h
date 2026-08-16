@@ -13,7 +13,7 @@ public:
         Demon,
         Troll,
     };
-    SimpleProjectile(Vector2f pos, Vector2f direction, SimpleProjectileType type);
+    SimpleProjectile(const Vector2f& pos, const Vector2f& direction, SimpleProjectileType type);
 
     virtual void Draw() const override;
 

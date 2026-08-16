@@ -4,7 +4,7 @@
 #include "EntityManager.h"
 #include <cmath>
 
-Troll::Troll(Vector2f startPos, const std::vector<std::vector<Vector2f>>* vertices, EntityManager* manager)
+Troll::Troll(const Vector2f& startPos, const std::vector<std::vector<Vector2f>>* vertices, EntityManager* manager)
 	: Enemy(Rectf{ startPos.x, startPos.y, 43, 40 }, 30, false, 300, false, Effect::EffectType::Fire, SoundManager::SFX::None, true, 10),
 	m_JumpAnimation{ "TrollJump.png", 1, 0.13f, true },
 	m_ShootAnimation{ "TrollShoot.png", 1, 0.52f, false },

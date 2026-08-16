@@ -39,7 +39,7 @@ namespace {
 	}
 }
 
-SimpleProjectile::SimpleProjectile(Vector2f pos, Vector2f direction, SimpleProjectileType type)
+SimpleProjectile::SimpleProjectile(const Vector2f& pos, const Vector2f& direction, SimpleProjectileType type)
 	: Projectile(Rectf{ pos.x, pos.y,GetTexture(type)->GetWidth(),GetTexture(type)->GetHeight() }, direction, GetSpeed(type))
 {
 	m_pTexture = GetTexture(type);

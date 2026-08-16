@@ -2,17 +2,13 @@
 #include "TextureManager.h"
 
 
-TextureManager::TextureManager()
-{
-}
-
-
 TextureManager& TextureManager::GetInstance()
 {
     static TextureManager instance;
-    
+
     return instance;
 }
+
 
 TextureManager::~TextureManager()
 {

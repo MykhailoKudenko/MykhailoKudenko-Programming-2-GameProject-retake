@@ -3,7 +3,7 @@
 #include "EntityManager.h"
 #include <cmath>
 
-Demon::Demon(Vector2f startPos, EntityManager* manager)
+Demon::Demon(const Vector2f& startPos, EntityManager* manager)
 	: Enemy(Rectf{ startPos.x, startPos.y, 24, 26 }, 80, false, 200, false, Effect::EffectType::Fire, SoundManager::SFX::None, true, 5),
 	m_FlyAnimation{ "DemonFly.png", 2, 0.13f, true},
 	m_ShootAnimation{ "DemonShoot.png", 1, 0.52f, false},

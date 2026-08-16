@@ -11,7 +11,7 @@
 class Torch final : public Projectile
 {
 public:
-	Torch(Vector2f pos, bool isFacingRight, const std::vector<std::vector<Vector2f>>* vertices);
+	Torch(const Vector2f& pos, bool isFacingRight, const std::vector<std::vector<Vector2f>>* vertices);
 
 	virtual void Update(float elapsedSec) override;
 

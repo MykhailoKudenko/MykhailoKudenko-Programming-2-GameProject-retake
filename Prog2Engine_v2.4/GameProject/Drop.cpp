@@ -64,7 +64,7 @@ void Drop::Draw() const
 	}
 }
 
-Rectf Drop::GetHitbox() const
+const Rectf& Drop::GetHitbox() const
 {
 	return m_Collider;
 }

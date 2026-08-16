@@ -4,7 +4,7 @@
 #include <cmath>
 #include "TextureManager.h"
 
-FlyingKnight::FlyingKnight(Vector2f startPos, bool facingRight)
+FlyingKnight::FlyingKnight(const Vector2f& startPos, bool facingRight)
 	: Enemy(Rectf{ startPos.x, startPos.y, 15.f, 24.f }, facingRight ? 35.f : -35.f, facingRight, 100, false, Effect::EffectType::Fire, SoundManager::SFX::FlyingKnight),
 	m_StartY{ startPos.y },
 	m_FlyTime{ 0.f },

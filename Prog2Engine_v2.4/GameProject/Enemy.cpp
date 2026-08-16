@@ -4,7 +4,7 @@
 
 
 
-Enemy::Enemy(Rectf startPos, float speed, bool isFacingRight, int score, bool doesHaveBag, Effect::EffectType deathEffect, SoundManager::SFX soundType, bool isBoss, int health)
+Enemy::Enemy(const Rectf& startPos, float speed, bool isFacingRight, int score, bool doesHaveBag, Effect::EffectType deathEffect, SoundManager::SFX soundType, bool isBoss, int health)
 	: m_Collider{ startPos },
 	m_Speed{ speed },
 	m_Velocity{ Vector2f{0, 0} },

@@ -8,7 +8,7 @@
 class Enemy
 {
 public:
-	Enemy(Rectf startPos, float speed, bool isFacingRight, int score = 100, bool doesHaveBag = false, Effect::EffectType deathEffect = Effect::EffectType::Blood, SoundManager::SFX soundType = SoundManager::SFX::None, bool isBoss = false, int health = 1);
+	Enemy(const Rectf& startPos, float speed, bool isFacingRight, int score = 100, bool doesHaveBag = false, Effect::EffectType deathEffect = Effect::EffectType::Blood, SoundManager::SFX soundType = SoundManager::SFX::None, bool isBoss = false, int health = 1);
 	virtual ~Enemy() = default;
 
 	Enemy(const Enemy&) = delete;

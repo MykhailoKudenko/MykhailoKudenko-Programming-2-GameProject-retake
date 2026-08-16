@@ -19,14 +19,14 @@ public:
 
 private:
 
+	TextureManager() = default;
+	~TextureManager();
+
 	struct TextureEntry
 	{
 		std::string path;
 		Texture* pTexture{ nullptr };
 	};
-
-	TextureManager();
-	~TextureManager();
 
 	std::vector<TextureEntry> m_Textures;
 	std::vector<TextureEntry> m_TextTextures;

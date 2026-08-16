@@ -2,7 +2,7 @@
 #include "Projectile.h"
 #include "utils.h"
 
-Projectile::Projectile(Rectf startPos, Vector2f direction, float speed) :m_Collider{ startPos }, m_Direction{ direction }, m_Speed{ speed }, m_IsDead{false}, m_pTexture{nullptr}
+Projectile::Projectile(const Rectf& startPos, const Vector2f& direction, float speed) :m_Collider{ startPos }, m_Direction{ direction }, m_Speed{ speed }, m_IsDead{false}, m_pTexture{nullptr}
 {
 
 }
@@ -14,7 +14,7 @@ void Projectile::Update(float elapsedSec)
 	m_Collider.bottom += m_Direction.y * m_Speed* elapsedSec;
 }
 
-Rectf Projectile::GetHitbox() const
+const Rectf& Projectile::GetHitbox() const
 {
 	return m_Collider;
 }
