@@ -167,7 +167,7 @@ All projectiles share the same parrent abstract class, they overwride some of en
 - [x] week 07 topics applied (friend used on EntityManager for operator<<, explicit used where needed)
 - [x] week 08 topics applied (member objects vs pointers distinction applied throughout the project)
 - [x] week 09 topics applied (object slicing is avoided by using polymorphism)
-- [x] week 10 topics applied (Rule of 5: copy AND move constructor/assignment explicitly deleted on every class that owns raw pointers, since those objects should never be duplicated or moved)
+- [x] week 10 topics applied (Rule of 5: copy and move constructor/assignment explicitly deleted on classes that own a heap resource directly (Game, EntityManager, TextureManager), and on classes that represent unique logic which is not meant to be duplicable (Player, the Enemy/Projectile hierarchies, SoundManager)
 - [x] week 11 topics applied (Level reads a custom text-based level format using ifstream + istringstream)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
