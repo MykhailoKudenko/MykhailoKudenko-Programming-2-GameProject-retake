@@ -10,6 +10,10 @@ Camera::Camera(const Vector2f& WindowSize)
 
 void Camera::Aim(float levelWidth, float levelHeight, float xNegativeSpace, float yNegativeSpace, const Vector2f& trackCenter, float zoom) const
 {
+	if (zoom == 0)
+	{
+		return;
+	}
 	float viewWidth = m_ScreenWidth / zoom;
 	float viewHeight = m_ScreenHeight / zoom;
 

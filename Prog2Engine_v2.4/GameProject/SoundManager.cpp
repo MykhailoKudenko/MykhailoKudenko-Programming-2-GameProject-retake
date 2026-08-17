@@ -87,6 +87,8 @@ void SoundManager::PlayEffect(SoundManager::SFX effect)
             m_LevelComplete.Play(0);
         }
         break;
+    default:
+        break;
     }
 }
 

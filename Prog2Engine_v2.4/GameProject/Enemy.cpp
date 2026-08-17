@@ -88,7 +88,7 @@ void Enemy::DrawBag() const
 		return;
 	}
 	m_pBagTexture->Draw(
-		Vector2f{ m_Collider.left, m_Collider.bottom },
+		m_Collider,
 		m_IsFacingRight
 	);
 }

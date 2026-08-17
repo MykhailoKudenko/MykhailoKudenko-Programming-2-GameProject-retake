@@ -6,7 +6,7 @@ Torch::Torch(const Vector2f& pos, bool isFacingRight, const std::vector<std::vec
 	: Projectile(Rectf{ pos.x, pos.y,TextureManager::GetInstance().GetTexture("Torch.png")->GetWidth(),TextureManager::GetInstance().GetTexture("Torch.png")->GetHeight() }, Vector2f{ isFacingRight ? 0.848f : -0.848f , 0.530f }, 100),
 	m_BurningGround{ "BurningGround.png", 2, 0.26f, false },
 	m_TimeFlyingUp{ 0.5f },
-	m_MyState{ TorchStates::FlyingUp },
+	m_MyState{ TorchState::FlyingUp },
 	m_pVertices{ vertices }
 {
 	m_pTexture = TextureManager::GetInstance().GetTexture("Torch.png");
@@ -14,13 +14,13 @@ Torch::Torch(const Vector2f& pos, bool isFacingRight, const std::vector<std::vec
 
 void Torch::Draw() const
 {
-	if (m_MyState == TorchStates::Burning)
+	if (m_MyState == TorchState::Burning)
 	{
 		m_BurningGround.Draw(m_Collider, m_Direction.x >= 0, false);
 	}
 	else
 	{
-		m_pTexture->Draw(Vector2f{ m_Collider.left, m_Collider.bottom }, m_Direction.x >= 0);
+		m_pTexture->Draw(m_Collider, m_Direction.x >= 0);
 	}
 }
 
@@ -33,19 +33,19 @@ void Torch::Update(float elapsedSec)
 
 	switch (m_MyState)
 	{
-	case TorchStates::FlyingUp:
+	case TorchState::FlyingUp:
 		m_TimeFlyingUp -= elapsedSec;
 
 		if (m_TimeFlyingUp <= 0)
 		{
-			m_MyState = TorchStates::FlyingDown;
+			m_MyState = TorchState::FlyingDown;
 		}
 
 		m_Collider.left += m_Direction.x * m_Speed * elapsedSec;
 		m_Collider.bottom += m_Direction.y * m_Speed * elapsedSec;
 		break;
 
-	case TorchStates::FlyingDown:
+	case TorchState::FlyingDown:
 
 		if (utils::CheckSideCollision(*m_pVertices, m_Collider, utils::Side::bottom) == false)
 		{
@@ -54,11 +54,11 @@ void Torch::Update(float elapsedSec)
 		}
 		else
 		{
-			m_MyState = TorchStates::Burning;
+			m_MyState = TorchState::Burning;
 		}
 		break;
 
-	case TorchStates::Burning:
+	case TorchState::Burning:
 		m_BurningGround.Update(elapsedSec);
 		if (m_BurningGround.IsFinished())
 		{
@@ -71,7 +71,7 @@ void Torch::Update(float elapsedSec)
 
 void Torch::Kill()
 {
-	if (m_MyState != TorchStates::Burning)
+	if (m_MyState != TorchState::Burning)
 	{
 		m_IsDead = true;
 	}

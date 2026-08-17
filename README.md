@@ -129,7 +129,7 @@ Purpouse of the game is to get to the end of the game, and beat the final boss, 
 Dynamic-memory owners - only these three classes manage the life time of anything, and are responsible for deleting it:
 
 TextureManager - every cached Texture*
-EntityManager - every Enemy* / Projectile* / Drop* / Effect*
+EntityManager - every Enemy* / Projectile* / Drop / Effect
 Game — its own Level*
 
 Every other class either holds value memberse:

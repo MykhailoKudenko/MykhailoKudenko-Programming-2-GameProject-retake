@@ -92,8 +92,8 @@ private:
 
 	std::vector<DropSpawnPoint> m_DropSpawnPoints;
 
-	Vector2f m_PlayerSpawnPos;
-
 	const Texture* m_pTexture;
 	const Texture* m_pPlatformTexture;
+
+	Vector2f m_PlayerSpawnPos;
 };

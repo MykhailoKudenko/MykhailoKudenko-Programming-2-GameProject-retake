@@ -20,18 +20,20 @@ public:
 	virtual void Kill() override;
 private:
 
-	enum class TorchStates
+	enum class TorchState
 	{
 		FlyingUp,
 		FlyingDown,
 		Burning
 	};
-	const std::vector<std::vector<Vector2f>>* m_pVertices;
 
 	Animation m_BurningGround;
 
-	TorchStates m_MyState;
-
 	float m_TimeFlyingUp;
+
+	TorchState m_MyState;
+
+	const std::vector<std::vector<Vector2f>>* m_pVertices;
+
 };
 

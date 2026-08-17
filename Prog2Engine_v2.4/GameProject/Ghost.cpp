@@ -21,6 +21,10 @@ Ghost::Ghost(const Vector2f& startPos, bool facingRight, EntityManager* manager)
 
 void Ghost::Update(float elapsedSec)
 {
+	if (m_pEntityManager == nullptr)
+	{
+		return;
+	}
 	switch (m_MyState)
 	{
 	case GhostState::Spawning:

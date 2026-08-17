@@ -59,7 +59,7 @@ private:
 	Player m_Player;
 	Level* m_pLevel;
 
-	HUD m_pHud;
+	HUD m_Hud;
 
 	GameState m_MyState;
 	const int m_PlayerLivesMax;

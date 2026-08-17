@@ -11,13 +11,13 @@ public:
 	Projectile(Projectile&&) = delete;
 	Projectile& operator=(Projectile&&) = delete;
 
-	void virtual Update(float elapsedSec);
+	virtual void Update(float elapsedSec);
 
-	void virtual Draw() const = 0;
+	virtual void Draw() const = 0;
 	const Rectf& GetHitbox() const;
 	Vector2f GetCenterPosition() const;
 
-	void virtual Kill();
+	virtual void Kill();
 	bool IsDead() const;
 
 protected:

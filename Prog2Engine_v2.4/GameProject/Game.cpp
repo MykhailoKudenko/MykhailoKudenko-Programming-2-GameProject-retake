@@ -10,7 +10,7 @@ m_Camera{ utils::g_WindowSize },
 m_Player{ Vector2f{ 0,0 }, &m_EntityManager },
 m_pLevel{ nullptr },
 
-m_pHud{},
+m_Hud{},
 m_MyState{ GameState::DeathMenu },
 m_PlayerLivesMax{ 3 },
 m_PlayerLivesCurrent{ 3 },
@@ -33,10 +33,6 @@ void Game::Initialize()
 {
 	m_pMainMenu = TextureManager::GetInstance().GetTexture("StartScreen.png");
 	m_pDeathMenu = TextureManager::GetInstance().GetTexture("DeathMenu.png");
-	m_pLevel = nullptr;
-
-	m_PlayerLivesCurrent = m_PlayerLivesMax;
-	m_MyState = GameState::MainMenu;
 
 	SoundManager::GetInstance().SetMusicVolume(20);
 	SoundManager::GetInstance().SetEffectVolume(20);
@@ -70,13 +66,13 @@ void Game::Update(float elapsedSec)
 		
 		m_pLevel->Update(elapsedSec);
 		m_EntityManager.Update(elapsedSec);
-		m_pHud.Update(elapsedSec);
+		m_Hud.Update(elapsedSec);
 		
-		if (m_pHud.DidTimerFinish())
+		if (m_Hud.DidTimerFinish())
 		{
 			SoundManager::GetInstance().StopMusic();
 			m_MyState = GameState::MainMenu;
-			m_pHud.ResetTimer();
+			m_Hud.ResetTimer();
 		}
 
 		if (m_Player.IsDeathAnimationFinished() || m_Player.GetCenterPosition().y < 0)
@@ -130,7 +126,7 @@ void Game::Draw() const
 		m_Player.Draw();
 
 		m_Camera.Reset();
-		m_pHud.Draw(m_Player.GetPlayerScore(), m_Player.GetPlayerWeapon());
+		m_Hud.Draw(m_Player.GetPlayerScore(), m_Player.GetPlayerWeapon());
 
 		break;
 
@@ -228,9 +224,6 @@ void Game::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 		std::cout << "DEBUG: CAMERA SCALE = " << m_CameraScale << " (NORMAL SCALE IS 4)" << std::endl;
 		break;
 	}
-	
-	
-	
 }
 void Game::ClearBackground( ) const
 {
@@ -260,7 +253,7 @@ void Game::ResetLevel()
 
 	m_Player.SetPlayerScore(savedScore);
 
-	m_pHud.ResetTimer();
+	m_Hud.ResetTimer();
 
 	m_EntityManager.SetLevel(m_pLevel);
 	m_EntityManager.SetPlayer(&m_Player);

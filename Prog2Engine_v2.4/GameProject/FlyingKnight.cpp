@@ -34,7 +34,7 @@ void FlyingKnight::Draw() const
 	}
 
 	m_pTexture->Draw(
-		Vector2f{ m_Collider.left, m_Collider.bottom },
+		m_Collider,
 		m_IsFacingRight
 	);
 }

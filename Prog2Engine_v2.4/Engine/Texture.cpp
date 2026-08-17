@@ -352,37 +352,29 @@ void Texture::DrawFilledRect(const Rectf& rect) const
 
 }
 //my stuff
-void Texture::Draw(const Vector2f& dstBottomLeft, bool isMirrored) const
+void Texture::Draw(const Rectf& destRect, bool isMirrored, bool stretchToFit) const
 {
-	const Rectf dstRect
-	{
-		dstBottomLeft.x,
-		dstBottomLeft.y,
-		m_Width,
-		m_Height
-	};
-
-	if (!isMirrored)
-	{
-		Draw(dstRect);
-		return;
-	}
+	const float drawWidth{ stretchToFit ? destRect.width : m_Width };
+	const float drawHeight{ stretchToFit ? destRect.height : m_Height };
 
 	glPushMatrix();
+	glTranslatef(destRect.left, destRect.bottom, 0.f);
 
-	glTranslatef(dstRect.left, dstRect.bottom, 0.f);
-	glTranslatef(dstRect.width, 0.f, 0.f);
-	glScalef(-1.f, 1.f, 1.f);
+	if (isMirrored)
+	{
+		glTranslatef(drawWidth, 0.f, 0.f);
+		glScalef(-1.f, 1.f, 1.f);
+	}
 
-	Rectf localRect
+	const Rectf localDestRect
 	{
 		0.f,
 		0.f,
-		dstRect.width,
-		dstRect.height
+		drawWidth,
+		drawHeight
 	};
 
-	Draw(localRect);
+	Draw(localDestRect);
 
 	glPopMatrix();
 }

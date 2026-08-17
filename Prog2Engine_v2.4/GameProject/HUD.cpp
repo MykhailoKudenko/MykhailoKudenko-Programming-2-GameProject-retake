@@ -6,16 +6,13 @@
 
 HUD::HUD()
     : m_TimeLeft{ 240.f },
-    m_StartingTime{ 240.f }
+    m_StartingTime{ 240.f },
+    m_pLanceTexture{ TextureManager::GetInstance().GetTexture("Lance.png") },
+    m_pKnifeTexture{ TextureManager::GetInstance().GetTexture("Knife.png") },
+    m_pTorchTexture{ TextureManager::GetInstance().GetTexture("Torch.png") },
+    m_pVpLabel{ TextureManager::GetInstance().GetTextTexture("1   VP", "LowresPixel-Regular.otf", 60, Color4f{ 243.f / 255.f, 194.f / 255.f, 191.f / 255.f, 1.0f }) },
+    m_pTimeLabel{ TextureManager::GetInstance().GetTextTexture("TIME", "LowresPixel-Regular.otf", 60, Color4f{ 243.f / 255.f, 194.f / 255.f, 191.f / 255.f, 1.0f }) }
 {
-    m_pLanceTexture = TextureManager::GetInstance().GetTexture("Lance.png");
-    m_pKnifeTexture = TextureManager::GetInstance().GetTexture("Knife.png");
-    m_pTorchTexture = TextureManager::GetInstance().GetTexture("Torch.png");
-
-
-    m_pVpLabel = TextureManager::GetInstance().GetTextTexture("1   VP", "LowresPixel-Regular.otf", 60, Color4f{ 243.f / 255.f, 194.f / 255.f, 191.f / 255.f, 1.0f });
-    m_pTimeLabel = TextureManager::GetInstance().GetTextTexture("TIME", "LowresPixel-Regular.otf", 60, Color4f{ 243.f / 255.f, 194.f / 255.f, 191.f / 255.f, 1.0f });
-
     InitNumbersAndSymbols();
 }
 

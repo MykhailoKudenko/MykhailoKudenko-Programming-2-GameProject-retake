@@ -83,7 +83,7 @@ private:
     void ProjectileUpdate(float elapsedSec);
     void EffectUpdate(float elapsedSec);
 
-    void EnemiesBulletCollsion();
+    void EnemiesBulletCollision();
 
     Player* m_pPlayer;
     Level* m_pLevel;

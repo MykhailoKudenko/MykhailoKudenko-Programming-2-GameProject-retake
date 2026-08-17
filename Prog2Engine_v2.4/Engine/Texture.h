@@ -21,7 +21,7 @@ public:
 	bool IsCreationOk( ) const;
 
 	//my stuff
-	void Draw(const Vector2f& dstBottomLeft, bool isMirrored) const;
+	void Draw(const Rectf& destRect, bool isMirrored, bool stretchToFit = true) const;
 	//my stuff end
 private:
 	//DATA MEMBERS

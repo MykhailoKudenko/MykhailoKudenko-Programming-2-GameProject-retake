@@ -72,21 +72,13 @@ EntityManager::~EntityManager()
 
 void EntityManager::DeleteAllEntities()
 {
-    for (Enemy* enemy : m_pEnemies) 
-    { 
-        delete enemy; 
-    }
-    for (Projectile* proj : m_pPlayerProjectiles) 
-    { 
-        delete proj;
-    }
-    for (Projectile* proj : m_pEnemyProjectiles) 
-    { 
-        delete proj;
-    }
-
+    for (Enemy* enemy : m_pEnemies) { delete enemy; }
+    for (Projectile* proj : m_pPlayerProjectiles) { delete proj; }
+    for (Projectile* proj : m_pEnemyProjectiles) { delete proj; }
+    m_pEnemies.clear();
+    m_pPlayerProjectiles.clear();
+    m_pEnemyProjectiles.clear();
     m_Drops.clear();
-
     m_Effects.clear();
 }
 
@@ -103,7 +95,7 @@ void EntityManager::Update(float elapsedSec)
     SpawnAreaEnemies();
 
     EnemiesUpdate(elapsedSec);
-    EnemiesBulletCollsion();
+    EnemiesBulletCollision();
 
     EffectUpdate(elapsedSec);
     ProjectileUpdate(elapsedSec);
@@ -122,6 +114,7 @@ void EntityManager::Draw(bool isDebug) const
 
     for (const Enemy* enemy : m_pEnemies)
     {
+        if (!enemy->GetIsActive()) { continue; }
         enemy->Draw(); 
         if (enemy->HasBag())
         {
@@ -238,7 +231,7 @@ void EntityManager::EnemiesUpdate(float elapsedSec)
         m_FlyingKnightSoundTimer = m_FlyingKnightSoundCooldown;
     }
 }
-void EntityManager::EnemiesBulletCollsion()
+void EntityManager::EnemiesBulletCollision()
 {
     for (Enemy* enemy : m_pEnemies)
     {
@@ -735,12 +728,7 @@ Vector2f EntityManager::GetPlayerPosition() const
 
 void EntityManager::Reset()
 {
-    DeleteAllEntities();
-    m_pEnemies.clear();
-    m_pPlayerProjectiles.clear();
-    m_pEnemyProjectiles.clear();
-    m_Drops.clear();
-    m_Effects.clear();
+    DeleteAllEntities();;
 
     m_GhostSoundTimer = 0.f;
     m_FlyingKnightSoundTimer = 0.f;

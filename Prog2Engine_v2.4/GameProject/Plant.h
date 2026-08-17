@@ -14,9 +14,7 @@ public:
 
 private:
 	void Fire();
-
-	EntityManager* m_pEntityManager;
-
 	Animation m_PlantAnimation;
+	EntityManager* m_pEntityManager;
 };
 
