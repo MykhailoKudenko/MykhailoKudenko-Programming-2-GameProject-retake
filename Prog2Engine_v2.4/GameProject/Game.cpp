@@ -74,6 +74,13 @@ void Game::Update(float elapsedSec)
 			m_MyState = GameState::MainMenu;
 			m_Hud.ResetTimer();
 		}
+		if (m_Player.GetCenterPosition().x >= m_pLevel->GetLevelEndX())
+		{
+			SoundManager::GetInstance().StopMusic();
+			SoundManager::GetInstance().PlayEffect(SoundManager::SFX::LevelComplete);
+			m_MyState = GameState::MainMenu;
+			m_Hud.ResetTimer();
+		}
 
 		if (m_Player.IsDeathAnimationFinished() || m_Player.GetCenterPosition().y < 0)
 		{

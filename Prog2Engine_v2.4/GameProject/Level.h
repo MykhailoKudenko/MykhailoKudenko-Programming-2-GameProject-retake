@@ -76,6 +76,7 @@ public:
 	void Draw(bool isDebug) const;
 	void Update(float elapsedSec);
 
+	float GetLevelEndX() const;
 private:
 	void UpdatePlatformTopEdges();
 	void LoadFromSvg(const std::string& svgPath);
@@ -96,4 +97,5 @@ private:
 	const Texture* m_pPlatformTexture;
 
 	Vector2f m_PlayerSpawnPos;
+	float m_LevelEndX;
 };

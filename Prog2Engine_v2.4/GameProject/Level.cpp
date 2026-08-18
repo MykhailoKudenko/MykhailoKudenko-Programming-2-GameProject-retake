@@ -34,7 +34,8 @@ namespace
 
 Level::Level(const std::string& txtPath) : m_pTexture{ nullptr },
 m_pPlatformTexture{ nullptr },
-m_PlayerSpawnPos{0,0}
+m_PlayerSpawnPos{0,0},
+m_LevelEndX{ -1.f }
 {
 	std::ifstream file{ txtPath };
 	if (!file.is_open())
@@ -58,6 +59,10 @@ m_PlayerSpawnPos{0,0}
 		if (keyword == "playerStartPos")
 		{
 			iss >> m_PlayerSpawnPos.x >> m_PlayerSpawnPos.y;
+		}
+		else if (keyword == "levelEndX")
+		{
+			iss >> m_LevelEndX;
 		}
 		else if (keyword == "texture")
 		{
@@ -146,6 +151,11 @@ m_PlayerSpawnPos{0,0}
 
 	m_pTexture = TextureManager::GetInstance().GetTexture(levelTexturePath);
 	m_pPlatformTexture = TextureManager::GetInstance().GetTexture(platformTexturePath);
+	
+	if (m_LevelEndX < 0.f)
+	{
+		m_LevelEndX = m_pTexture->GetWidth() - 100.f;
+	}
 
 	m_PlatformTopEdges.assign(m_Platforms.size(), std::vector<Vector2f>(2));
 
@@ -319,4 +329,8 @@ void Level::UpdatePlatformTopEdges()
 	}
 }
 
+float Level::GetLevelEndX() const
+{
+	return m_LevelEndX;
+}
 
