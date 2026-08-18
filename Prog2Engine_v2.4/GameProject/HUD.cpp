@@ -40,12 +40,12 @@ void HUD::Draw(int score, Player::PlayerWeapon weapon) const
     int seconds = totalSeconds % 60;
     float displacement = 0;
 
-    displacement += DrawNumber(minutes, Vector2f{ 100.f, 720 });
+    displacement += DrawNumber(minutes, Vector2f{ 100.f, 720 }, 2);
         
     m_pColonSymbol->Draw(Vector2f{ 100.f + displacement, 720 });
     displacement += m_pColonSymbol->GetWidth();
 
-     DrawNumber(seconds, Vector2f{ 100.f+ displacement, 720 });
+     DrawNumber(seconds, Vector2f{ 100.f+ displacement, 720 }, 2);
 
     //weapon placement
     const float centerX = utils::g_WindowSize.x / 2.f;
@@ -110,12 +110,18 @@ bool HUD::DidTimerFinish() const
     
 }
 
-float HUD::DrawNumber(int number, const Vector2f& location) const
+float HUD::DrawNumber(int number, const Vector2f& location, int minDigits) const
 {
     int absNumber = std::abs(number);
+    std::string numberString = std::to_string(absNumber);
+
     float displacement = 0;
 
-    std::string numberString = std::to_string(absNumber);
+    if (static_cast<int>(numberString.length()) < minDigits)
+    {
+        const size_t zerosCount = static_cast<size_t>(minDigits) - numberString.length();
+        numberString = std::string(zerosCount, '0') + numberString;
+    }
 
     for (char c : numberString)
     {

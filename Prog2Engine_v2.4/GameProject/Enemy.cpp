@@ -89,7 +89,7 @@ void Enemy::DrawBag() const
 	}
 	m_pBagTexture->Draw(
 		m_Collider,
-		m_IsFacingRight
+		m_IsFacingRight, false
 	);
 }
 

@@ -17,7 +17,7 @@ Troll::Troll(const Vector2f& startPos, const std::vector<std::vector<Vector2f>>*
 	m_WalkTimerCurrent{ 0.f },
 	m_DoJumpNext{ false },
 	m_IsGrounded{ false },
-	m_JumpTimeMax{0.3f},
+	m_JumpTimeMax{0.6f},
 	m_JumpTimeCurrent{0.f},
 	m_JumpSpeed{ 60.f }
 {

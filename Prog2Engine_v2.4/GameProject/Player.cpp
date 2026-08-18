@@ -72,10 +72,10 @@ void Player::Draw() const
 		(m_IsWearingArmour ? m_ClimbingArmour : m_ClimbingNaked).Draw(m_Collider, !m_IsFacingRight);
 		break;
 	case PlayerState::Ducking:
-		(m_IsWearingArmour ? m_pDuckArmour : m_pDuckNaked)->Draw(m_Collider, !m_IsFacingRight);
+		(m_IsWearingArmour ? m_pDuckArmour : m_pDuckNaked)->Draw(m_Collider, !m_IsFacingRight, false);
 		break;
 	case PlayerState::Jumping:
-		(m_IsWearingArmour ? m_pJumpingArmour : m_pJumpingNaked)->Draw(m_Collider, !m_IsFacingRight);
+		(m_IsWearingArmour ? m_pJumpingArmour : m_pJumpingNaked)->Draw(m_Collider, !m_IsFacingRight, false);
 		break;
 	case PlayerState::Knockback:
 		m_pHit->Draw(m_Collider, !m_IsFacingRight, false);
@@ -84,7 +84,7 @@ void Player::Draw() const
 		(m_IsWearingArmour ? m_ThrowArmour : m_ThrowNaked).Draw(m_Collider, !m_IsFacingRight);
 		break;
 	case PlayerState::DuckingThrow:
-		(m_IsWearingArmour ? m_DuckThrowArmour : m_DuckThrowNaked).Draw(m_Collider, !m_IsFacingRight);
+		(m_IsWearingArmour ? m_DuckThrowArmour : m_DuckThrowNaked).Draw(m_Collider, !m_IsFacingRight, false);
 		break;
 	case PlayerState::Dead:
 		m_pDeath->Draw(m_Collider, !m_IsFacingRight, false);

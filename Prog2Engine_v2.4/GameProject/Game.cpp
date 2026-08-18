@@ -11,7 +11,7 @@ m_Player{ Vector2f{ 0,0 }, &m_EntityManager },
 m_pLevel{ nullptr },
 
 m_Hud{},
-m_MyState{ GameState::DeathMenu },
+m_MyState{ GameState::MainMenu },
 m_PlayerLivesMax{ 3 },
 m_PlayerLivesCurrent{ 3 },
 
